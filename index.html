@@ -1,0 +1,2231 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Hub · 学习主页</title>
+<style>
+:root{
+  --bg:#0f1115; --bg2:#161a22; --card:#1c2130; --card2:#232a3c;
+  --text:#e8eaf0; --text2:#9aa3b5; --line:#2a3145;
+  --accent:#6c8cff; --accent2:#8b5cf6; --ok:#4ade80; --warn:#fbbf24;
+  --bar-bg:#141821; --bar-text:#c8d0e0;
+  --radius:14px; --shadow:0 8px 30px rgba(0,0,0,.35);
+}
+html[data-theme="light"]{
+  --bg:#f5f6fa; --bg2:#eef0f6; --card:#ffffff; --card2:#f2f4f9;
+  --text:#22293a; --text2:#69708a; --line:#e3e7f0;
+  --accent:#4c6fff; --accent2:#8b5cf6;
+  --bar-bg:#1c2230; --bar-text:#d6dce8;
+  --shadow:0 8px 24px rgba(30,40,80,.10);
+}
+html[data-theme="green"]{
+  --bg:#c7e6c9; --bg2:#bcdcbf; --card:#d6ecd8; --card2:#c3e2c6;
+  --text:#22381f; --text2:#4e6b4a; --line:#a9cfae;
+  --accent:#2f7d43; --accent2:#3a8f5a;
+  --bar-bg:#1d2b1e; --bar-text:#cfe6d0;
+  --shadow:0 8px 24px rgba(20,60,30,.12);
+}
+html[data-theme="sepia"]{
+  --bg:#f0e4d0; --bg2:#e8dac2; --card:#f7edd9; --card2:#ecdfc6;
+  --text:#4a3b28; --text2:#8a7455; --line:#ddcba8;
+  --accent:#a86a2d; --accent2:#8b5cf6;
+  --bar-bg:#2b2317; --bar-text:#e3d5b8;
+  --shadow:0 8px 24px rgba(90,60,20,.12);
+}
+html[data-theme="purple"]{
+  --bg:#171226; --bg2:#1e1832; --card:#251d3e; --card2:#2e2450;
+  --text:#ece7f8; --text2:#a99ec9; --line:#3a2f5e;
+  --accent:#a78bfa; --accent2:#f472b6;
+  --bar-bg:#1a142c; --bar-text:#d5cbee;
+}
+html[data-theme="blue"]{
+  --bg:#0c1a26; --bg2:#102231; --card:#152b3d; --card2:#1b354c;
+  --text:#e2eef7; --text2:#8fa9bd; --line:#22405a;
+  --accent:#38bdf8; --accent2:#34d399;
+  --bar-bg:#0f2231; --bar-text:#c6dcec;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  font-family:"HarmonyOS Sans SC","Microsoft YaHei UI","PingFang SC",system-ui,sans-serif;
+  background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; overflow:hidden;
+  transition:background .3s,color .3s;
+}
+/* ---------- header ---------- */
+header{
+  display:flex; align-items:center; gap:16px; padding:12px 20px;
+  background:var(--bg2); border-bottom:1px solid var(--line); flex:0 0 auto;
+}
+.logo{font-weight:700; font-size:17px; letter-spacing:.5px; white-space:nowrap}
+.logo span{color:var(--accent)}
+#clock{font-size:13px; color:var(--text2); font-variant-numeric:tabular-nums; margin-left:4px}
+nav{display:flex; gap:6px; flex:1; justify-content:center}
+nav button{
+  border:none; background:transparent; color:var(--text2); font-size:13.5px;
+  padding:8px 12px; border-radius:10px; cursor:pointer; transition:.2s; font-family:inherit; white-space:nowrap;
+}
+nav button:hover{color:var(--text); background:var(--card)}
+nav button.active{color:var(--text); background:var(--card); box-shadow:inset 0 0 0 1px var(--line)}
+/* 右上角设置：默认隐形，鼠标移到右上角才浮现 */
+.corner{
+  display:flex; align-items:center; justify-content:flex-end;
+  margin:-12px -8px -12px 0; padding:12px 14px; min-width:96px;
+}
+.actions{display:flex; gap:8px; opacity:0; pointer-events:none; transition:.25s}
+.corner:hover .actions{opacity:1; pointer-events:auto}
+@media(hover:none){ .actions{opacity:1; pointer-events:auto} }
+.actions button{
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  padding:7px 14px; border-radius:10px; cursor:pointer; font-size:13px; font-family:inherit; transition:.2s;
+}
+.actions button:hover{border-color:var(--accent); color:var(--accent)}
+/* ---------- main ---------- */
+main{flex:1; overflow-y:auto; padding:22px clamp(16px,4vw,48px) 30px}
+.pane{display:none}
+.pane.active{display:block}
+.card{
+  background:var(--card); border-radius:var(--radius); padding:20px 24px;
+  margin-bottom:18px; box-shadow:var(--shadow); border:1px solid var(--line);
+}
+.card h2{font-size:16px; margin-bottom:14px; display:flex; align-items:center; gap:8px}
+.card h2::before{content:""; width:4px; height:16px; border-radius:2px; background:var(--accent)}
+.card h3{font-size:14px; color:var(--accent); margin:16px 0 8px}
+.card p, .card li{font-size:13.5px; line-height:1.9; color:var(--text2)}
+.card ul{padding-left:20px}
+.card code{
+  background:var(--card2); color:var(--accent2); padding:1px 6px; border-radius:6px;
+  font-size:12.5px; font-family:Consolas,Menlo,monospace;
+}
+.card pre{
+  background:var(--bg); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; overflow-x:auto; margin:10px 0 4px;
+}
+.card pre code{background:none; color:var(--text); font-size:12.5px; line-height:1.7; padding:0}
+.tip{font-size:12px; color:var(--warn); margin-top:8px}
+#noteArea{
+  width:100%; min-height:52vh; background:var(--card2); border:1px solid var(--line);
+  border-radius:10px; color:var(--text); padding:16px; font-size:14px; line-height:1.9;
+  font-family:inherit; resize:vertical; outline:none;
+}
+#noteArea:focus{border-color:var(--accent)}
+.save-hint{font-size:12px; color:var(--ok); margin-top:8px; opacity:0; transition:.4s}
+.save-hint.show{opacity:1}
+/* ---------- layout & sidebar ---------- */
+.layout{display:grid; grid-template-columns:210px minmax(0,1fr) 300px; gap:18px; max-width:1400px; margin:0 auto; align-items:start}
+.content{min-width:0}
+@media(max-width:1200px){ .layout{grid-template-columns:minmax(0,1fr) 300px} .sidebar.left{display:none} }
+@media(max-width:960px){ .layout{grid-template-columns:minmax(0,1fr)} }
+.sidebar{position:sticky; top:0; display:flex; flex-direction:column; gap:14px}
+/* marquee 公告 */
+.marquee-wrap{background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; height:34px; display:flex; align-items:center; padding:0 10px; box-shadow:var(--shadow)}
+.marquee{white-space:nowrap; display:inline-block; padding-left:100%; animation:mq 36s linear infinite; font-size:12.5px; color:var(--text2)}
+.marquee-wrap:hover .marquee{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-100%)}}
+/* 广告卡片 */
+.ad-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow)}
+.ad-card h4{font-size:14px; margin-bottom:10px; display:flex; align-items:center; gap:6px}
+.ad-banner{
+  border-radius:var(--radius); padding:16px 20px; margin-bottom:18px; color:#fff;
+  background:linear-gradient(120deg,#ff5f6d,#ffc371); display:flex; align-items:center; justify-content:space-between; gap:14px;
+  box-shadow:var(--shadow); cursor:pointer; font-size:14px; user-select:none;
+}
+.ad-banner:hover{filter:brightness(1.05)}
+.ad-banner .big{font-weight:700; font-size:15px}
+.ad-banner .sub{font-size:12px; opacity:.92; margin-top:3px}
+.ad-banner .cta{background:rgba(255,255,255,.24); padding:6px 14px; border-radius:20px; font-size:12px; white-space:nowrap; flex:0 0 auto}
+.ad-banner.purple{background:linear-gradient(120deg,#6a11cb,#2575fc)}
+.ad-banner.teal{background:linear-gradient(120deg,#0f9b8e,#38ef7d)}
+.ad-banner.navy{background:linear-gradient(120deg,#2b5876,#4e4376)}
+/* 榜单 / 列表 */
+.rank-item{display:flex; gap:10px; padding:7px 0; font-size:13px; color:var(--text2); border-bottom:1px dashed var(--line); cursor:pointer; line-height:1.5}
+.rank-item:last-child{border-bottom:none}
+.rank-item:hover{color:var(--accent)}
+.rank-item .t{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rank-item .n{color:var(--text2); font-size:11px; flex:0 0 auto; margin-top:1px}
+.rank-num{width:18px; height:18px; border-radius:4px; background:var(--card2); color:var(--text2); font-size:11px; display:flex; align-items:center; justify-content:center; flex:0 0 auto; margin-top:2px}
+.rank-num.top1{background:#ff5f6d; color:#fff}
+.rank-num.top2{background:#ff8f3c; color:#fff}
+.rank-num.top3{background:#fbbf24; color:#fff}
+.course{display:flex; gap:10px; padding:10px 0; border-bottom:1px dashed var(--line); cursor:pointer; align-items:flex-start}
+.course:last-child{border-bottom:none}
+.course .cover{width:52px; height:52px; border-radius:8px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:22px}
+.course .info{flex:1; min-width:0}
+.course .name{font-size:12.5px; font-weight:600; line-height:1.45; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+.course .price{margin-top:4px; font-size:13px; color:#ff5f6d; font-weight:700}
+.course .price s{color:var(--text2); font-weight:400; font-size:11px; margin-left:6px}
+.tag{font-size:10px; padding:1px 6px; border-radius:4px; background:rgba(255,95,109,.14); color:#ff5f6d; white-space:nowrap}
+.tag.green{background:rgba(74,222,128,.16); color:var(--ok)}
+.tag.blue{background:rgba(108,140,255,.16); color:var(--accent)}
+.tag.orange{background:rgba(251,191,36,.18); color:var(--warn)}
+.tag.gray{background:var(--card2); color:var(--text2)}
+/* 资讯 / 面经 feed */
+.feed-item{padding:13px 0; border-bottom:1px dashed var(--line); cursor:pointer}
+.feed-item:last-child{border-bottom:none; padding-bottom:2px}
+.feed-item:hover .feed-title{color:var(--accent)}
+.feed-title{font-size:14px; font-weight:600; margin-bottom:5px; line-height:1.5}
+.feed-meta{font-size:11.5px; color:var(--text2); display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.feed-excerpt{font-size:12.5px; color:var(--text2); margin-top:6px; line-height:1.75}
+/* 表格 */
+.card table{width:100%; border-collapse:collapse; font-size:12.5px; color:var(--text2); margin:8px 0}
+.card th,.card td{padding:7px 10px; border-bottom:1px solid var(--line); text-align:left}
+.card th{color:var(--text); font-weight:600; font-size:12px; background:var(--card2)}
+/* 图片广告位（本地 SVG 图片，仅展示不跳转） */
+.imgad{position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); cursor:pointer}
+.imgad img{display:block; width:100%; height:auto}
+.imgad .adtag{position:absolute; right:6px; top:6px; font-size:10px; color:#fff; background:rgba(0,0,0,.35); padding:1px 7px; border-radius:4px; z-index:2}
+/* 签到 */
+.sign-btn{
+  width:100%; border:none; border-radius:10px; padding:9px 0; margin-top:4px;
+  background:linear-gradient(120deg,#ff5f6d,#ff8f3c); color:#fff; font-size:13px; font-weight:600;
+  cursor:pointer; font-family:inherit; transition:.2s;
+}
+.sign-btn:disabled{opacity:.65; cursor:default}
+.sign-dots{display:flex; gap:4px; margin:10px 0 8px}
+.sign-dots i{flex:1; height:8px; border-radius:4px; background:var(--card2)}
+.sign-dots i.done{background:linear-gradient(120deg,#ff5f6d,#ff8f3c)}
+/* 二维码 */
+.qr-box{text-align:center}
+#qrSvg{width:112px; height:112px; margin:8px auto 4px; display:block; padding:6px; background:#fff; border-radius:8px}
+#qrSvg rect,#qrSvg path{fill:#1a1a1a}
+.qr-box .d{font-size:12px; color:var(--text2)}
+/* 友链 */
+.fl-links{display:flex; flex-wrap:wrap; gap:6px}
+.fl-links span{font-size:11.5px; color:var(--text2); border:1px solid var(--line); border-radius:6px; padding:3px 9px; cursor:pointer}
+.fl-links span:hover{color:var(--accent); border-color:var(--accent)}
+.toc-item{padding:8px 12px; font-size:13px; color:var(--text2); border-radius:8px; cursor:pointer; line-height:1.5; border-bottom:1px dashed var(--line)}
+.toc-item:hover{background:var(--card2); color:var(--text)}
+.toc-item.cur{color:var(--accent); font-weight:600; background:var(--card2)}
+#tocSearch{
+  width:100%; background:var(--card2); border:1px solid var(--line); border-radius:10px;
+  color:var(--text); padding:8px 12px; font-size:13px; font-family:inherit; outline:none;
+}
+#tocSearch:focus{border-color:var(--accent)}
+/* 内容配置 chips */
+#packGrid{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+.pack-chip{
+  padding:6px 14px; border:1px solid var(--line); border-radius:999px; font-size:12.5px;
+  cursor:pointer; color:var(--text2); user-select:none; transition:.15s;
+}
+.pack-chip.on{background:var(--accent); color:#fff; border-color:var(--accent)}
+/* ---------- novel bar（VS Code 风格底部状态栏，固定最底） ---------- */
+#novelBar{
+  flex:0 0 auto; height:30px; display:flex; align-items:stretch;
+  background:var(--bar-bg); color:var(--bar-text); border-top:1px solid var(--line);
+  user-select:none; position:relative; overflow:hidden; font-size:12px;
+  font-family:Consolas,Menlo,"HarmonyOS Sans SC",monospace;
+}
+#novelBar.hidden-bar{height:0; overflow:hidden; border:none}
+#novelBar .seg{
+  display:flex; align-items:center; gap:5px; padding:0 10px;
+  white-space:nowrap; flex:0 0 auto; cursor:default;
+}
+#novelBar .seg.dim{opacity:.78}
+#novelBar .seg.accent{background:var(--accent); color:#fff; padding:0 12px}
+#novelBar .seg.click:hover{background:rgba(255,255,255,.12); cursor:pointer}
+#segNovel{
+  flex:1 1 auto; min-width:0; position:relative;
+  font-family:"HarmonyOS Sans SC","Microsoft YaHei UI",system-ui,sans-serif;
+  font-size:var(--bar-fs,13px);
+}
+#segNovel .zone{position:absolute; top:0; bottom:0; cursor:pointer; z-index:3}
+#zonePrev{left:0; width:15%}
+#zoneNext{left:15%; right:0}
+#barTextWrap{
+  position:absolute; inset:0; display:flex; align-items:center;
+  padding:0 12px; pointer-events:none; z-index:1; overflow:hidden;
+}
+#barText{
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;
+  letter-spacing:.5px; transition:opacity .25s;
+}
+#barText.flip{animation:flipIn .28s ease}
+@keyframes flipIn{from{opacity:0; transform:translateX(var(--flip-x,12px))}to{opacity:1; transform:none}}
+#barMeta{
+  position:relative; z-index:4; display:flex; align-items:center; gap:1px;
+  padding-right:6px; flex:0 0 auto;
+}
+#barMeta .mbtn{
+  border:none; background:transparent; color:var(--bar-text); cursor:pointer;
+  font-size:13px; padding:4px 6px; border-radius:6px; opacity:.75; font-family:inherit;
+}
+#barMeta .mbtn:hover{opacity:1; background:rgba(255,255,255,.12)}
+/* 伪装时：仅隐藏中间小说段（换正常文案），其余分段原样保留 */
+#novelBar.info #segNovel{cursor:default}
+#novelBar.info #segNovel .zone{display:none}
+/* ---------- 阅读浮窗（透明无边框，融入页面；悬停才显形） ---------- */
+#floatBar{
+  position:fixed; z-index:80; width:520px; height:120px;
+  background:transparent; border:none; border-radius:12px;
+  box-shadow:none; display:none; flex-direction:column; overflow:hidden;
+  font-size:14px; line-height:1.9; min-width:260px; min-height:90px;
+  transition:background .15s, border-color .15s, box-shadow .15s;
+}
+#floatBar:hover{
+  background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow);
+}
+#floatBar.open{display:flex}
+#floatBar.hidden-bar{display:none !important}   /* 老板键伪装时整体隐藏 */
+#floatBar.fb-drag{cursor:grabbing}
+#fbText{
+  flex:1 1 auto; min-height:0; overflow-y:auto; padding:8px 14px; cursor:pointer;
+  font-family:"HarmonyOS Sans SC","Microsoft YaHei UI",system-ui,sans-serif;
+  font-size:var(--bar-fs,13px); letter-spacing:.4px; user-select:none;
+  text-shadow:0 1px 4px var(--bg), 0 0 8px var(--bg), 0 0 12px var(--bg);  /* 同底色光晕，透明背景上也能看清 */
+}
+#fbText.flip{animation:flipIn .28s ease}
+#fbClose{
+  position:absolute; top:3px; right:4px; z-index:6;
+  border:none; background:transparent; color:var(--text2); cursor:pointer; font-size:11px;
+  padding:2px 6px; border-radius:6px; opacity:0; transition:opacity .15s; font-family:inherit;
+}
+#floatBar:hover #fbClose{opacity:.45}
+#fbClose:hover{opacity:1; background:var(--card2)}
+#fbResize{
+  position:absolute; right:0; bottom:0; width:16px; height:16px; cursor:nwse-resize; z-index:5;
+}
+#fbResize::after{
+  content:""; position:absolute; right:3px; bottom:3px; width:8px; height:8px;
+  border-right:2px solid var(--text2); border-bottom:2px solid var(--text2);
+  border-radius:0 0 3px 0; opacity:.45;
+}
+#floatBar:hover #fbResize::after{opacity:.7}
+/* 伪装时：底栏小说段和页码段整体隐藏（保留布局，看起来是干净的编辑器状态栏） */
+#novelBar.info #segNovel, #novelBar.info #segPage{visibility:hidden}
+#novelBar.info #segNovel .zone{display:none}
+/* 浮窗打开时：底栏不再重复显示小说，只在浮窗里看 */
+#novelBar.fb-only #segNovel, #novelBar.fb-only #segPage{visibility:hidden}
+#novelBar.fb-only #segNovel .zone{display:none}
+/* ---------- modal ---------- */
+.modal-mask{
+  position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(3px);
+  display:none; align-items:center; justify-content:center; z-index:100;
+}
+.modal-mask.open{display:flex}
+.modal{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  width:min(640px,92vw); max-height:84vh; display:flex; flex-direction:column; box-shadow:var(--shadow);
+}
+.modal header{
+  background:none; border:none; border-bottom:1px solid var(--line); padding:16px 22px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.modal header h1{font-size:16px; font-weight:600}
+.modal .close{border:none; background:none; color:var(--text2); font-size:20px; cursor:pointer}
+.modal .body{padding:18px 22px 22px; overflow-y:auto}
+.sect{margin-bottom:22px}
+.sect h3{font-size:13px; color:var(--text2); margin-bottom:10px; font-weight:600; letter-spacing:1px}
+/* themes */
+.theme-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.theme-item{
+  border:2px solid var(--line); border-radius:12px; padding:10px; cursor:pointer; text-align:center;
+  font-size:12px; color:var(--text2); transition:.2s;
+}
+.theme-item:hover{border-color:var(--accent)}
+.theme-item.active{border-color:var(--accent); color:var(--text)}
+.theme-item .swatch{display:flex; gap:4px; justify-content:center; margin-bottom:6px}
+.theme-item .swatch i{width:14px; height:14px; border-radius:50%; display:block}
+/* hotkeys */
+.hk-row{display:flex; align-items:center; justify-content:space-between; padding:9px 12px; border-radius:10px; background:var(--card2); margin-bottom:8px}
+.hk-row label{font-size:13px; color:var(--text)}
+.hk-key{
+  min-width:130px; text-align:center; border:1px dashed var(--line); border-radius:8px;
+  padding:5px 12px; font-size:12px; cursor:pointer; color:var(--accent); font-family:Consolas,monospace;
+}
+.hk-key.listen{border-color:var(--accent2); color:var(--accent2); animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.hk-key kbd{background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:1px 5px; margin:0 1px; font-size:11px}
+/* range / rows */
+.set-row{display:flex; align-items:center; justify-content:space-between; padding:8px 0; font-size:13.5px}
+.set-row input[type=range]{width:180px; accent-color:var(--accent)}
+.set-row .val{color:var(--accent); font-variant-numeric:tabular-nums; min-width:46px; text-align:right}
+.switch{position:relative; width:40px; height:22px; flex:0 0 auto}
+.switch input{opacity:0; width:0; height:0}
+.switch em{
+  position:absolute; inset:0; background:var(--card2); border:1px solid var(--line);
+  border-radius:20px; cursor:pointer; transition:.2s; font-style:normal;
+}
+.switch em::before{
+  content:""; position:absolute; width:16px; height:16px; left:2px; top:2px;
+  border-radius:50%; background:var(--text2); transition:.2s;
+}
+.switch input:checked+em{background:var(--accent); border-color:var(--accent)}
+.switch input:checked+em::before{left:20px; background:#fff}
+/* novel panel */
+.np-book{font-size:14px; font-weight:600; margin-bottom:12px; display:flex; align-items:center; gap:8px}
+.np-btns{display:flex; gap:8px; margin:12px 0}
+.np-btns button, .np-import button{
+  flex:1; border:1px solid var(--line); background:var(--card2); color:var(--text);
+  padding:8px 0; border-radius:10px; cursor:pointer; font-size:13px; font-family:inherit; transition:.2s;
+}
+.np-btns button:hover, .np-import button:hover{border-color:var(--accent); color:var(--accent)}
+#chapterSelect{
+  width:100%; background:var(--card2); color:var(--text); border:1px solid var(--line);
+  border-radius:10px; padding:9px 12px; font-size:13px; font-family:inherit; outline:none; margin-top:6px;
+}
+.np-import{margin-top:16px; border-top:1px dashed var(--line); padding-top:14px}
+select option{background:var(--card); color:var(--text)}
+::-webkit-scrollbar{width:9px; height:9px}
+::-webkit-scrollbar-thumb{background:var(--line); border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+::-webkit-scrollbar-track{background:transparent}
+.empty-tip{color:var(--text2); font-size:13px; text-align:center; padding:30px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">📚 Study<span>Hub</span></div>
+  <div id="clock">--:--:--</div>
+  <nav>
+    <button data-tab="js" class="active">JavaScript</button>
+    <button data-tab="py">Python</button>
+    <button data-tab="java">Java</button>
+    <button data-tab="algo">算法</button>
+    <button data-tab="interview">面经</button>
+    <button data-tab="news">技术资讯</button>
+    <button data-tab="note">笔记</button>
+  </nav>
+  <div class="corner">
+    <div class="actions">
+      <button id="btnSettings">⚙️ 设置</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="layout">
+<aside class="sidebar left">
+  <div class="ad-card" style="background:linear-gradient(135deg,#2575fc,#6a11cb); color:#fff; border:none">
+    <div style="font-weight:700; font-size:14px">☁️ 云服务器 1 折起</div>
+    <div style="font-size:11.5px; opacity:.92; margin:4px 0 8px">2核2G3M 轻量服务器 · 新用户专享</div>
+    <div style="font-size:22px; font-weight:800">¥45<span style="font-size:11px; font-weight:400"> /年起</span></div>
+    <div class="fake-act" style="margin-top:8px; background:rgba(255,255,255,.26); padding:5px 0; border-radius:16px; font-size:12px; text-align:center; cursor:pointer">立即抢购</div>
+  </div>
+
+  <div class="ad-card">
+    <h4>🗓 考试倒计时</h4>
+    <div style="text-align:center; padding:2px 0 4px">
+      <div style="font-size:30px; font-weight:800; color:var(--accent)" id="kaoyanDays">--</div>
+      <div style="font-size:11.5px; color:var(--text2)">距离 2027 考研初试</div>
+    </div>
+    <div class="rank-item" style="justify-content:space-between"><span class="t">CET 笔试报名</span><span class="n">9 月中</span></div>
+    <div class="rank-item" style="justify-content:space-between"><span class="t">软考（下半年）</span><span class="n">11 月上</span></div>
+    <div class="rank-item" style="justify-content:space-between"><span class="t">教资面试</span><span class="n">12 月</span></div>
+  </div>
+
+  <div class="ad-card">
+    <h4>📮 今日内推快报</h4>
+    <div class="rank-item"><span class="t">字节 · 前端开发</span><span class="tag">急招</span></div>
+    <div class="rank-item"><span class="t">腾讯 · 后端 Go 方向</span><span class="tag blue">内推</span></div>
+    <div class="rank-item"><span class="t">美团 · 数据分析</span><span class="tag green">直通卡</span></div>
+    <div class="rank-item"><span class="t">阿里 · 测试开发</span><span class="tag orange">热招</span></div>
+    <div style="font-size:11px; color:var(--text2); margin-top:8px">使用内推码 <b style="color:var(--accent)">STUDY2026</b> 可免筛选直推</div>
+  </div>
+
+  <div class="ad-card">
+    <h4>🌎 每日英语</h4>
+    <div style="font-size:12.5px; line-height:1.7">"The best way to predict the future is to invent it."</div>
+    <div style="font-size:11.5px; color:var(--text2); margin:4px 0 8px">预测未来的最好方式，就是亲手创造它。</div>
+    <button class="sign-btn" id="enBtn" style="background:linear-gradient(120deg,#38bdf8,#0f9b8e)">完成今日打卡 +1</button>
+  </div>
+
+  <div class="ad-card" style="text-align:center; padding:12px">
+    <div style="font-size:11.5px; color:var(--text2)">—— 广告位招租 ——</div>
+    <div style="font-size:11px; color:var(--text2); margin-top:4px; line-height:1.7">日均曝光 50w+<br>商务合作 bd@studyhub.cn</div>
+  </div>
+
+  <div class="imgad" id="adImgLeft" data-w="600" data-h="780"></div>
+</aside>
+<div class="content">
+  <div class="imgad" id="adImgTop" data-w="1200" data-h="170" style="margin-bottom:18px"></div>
+  <!-- ============ JS 学习内容 ============ -->
+  <section class="pane active" data-pane="js">
+    <div class="card">
+      <h2>JavaScript 核心速览</h2>
+      <h3>1. 变量与类型</h3>
+      <pre><code>let a = 1;          // 可重新赋值（块级作用域）
+const b = [1,2];    // 常量引用（内容仍可变）
+typeof a;           // 'number' / 'string' / 'boolean' / 'object' / 'undefined' / 'function'
+null == undefined;  // true   null === undefined  // false</code></pre>
+      <h3>2. 数组常用方法</h3>
+      <pre><code>const nums = [1, 2, 3, 4, 5];
+nums.map(n =&gt; n * 2);            // [2,4,6,8,10]       映射
+nums.filter(n =&gt; n % 2 === 0);   // [2,4]              过滤
+nums.reduce((s, n) =&gt; s + n, 0); // 15                 累计
+nums.find(n =&gt; n &gt; 3);           // 4                  查找第一个
+nums.some(n =&gt; n &gt; 4);           // true               是否存在
+nums.every(n =&gt; n &gt; 0);          // true               是否全部满足
+[...nums, 6];                    // [1,2,3,4,5,6]      展开
+nums.at(-1);                     // 5                  倒数取值</code></pre>
+      <h3>3. 解构与展开</h3>
+      <pre><code>const { name, age = 18 } = user;        // 对象解构 + 默认值
+const [first, ...rest] = arr;           // 数组解构 + 剩余
+const merged = { ...obj1, ...obj2 };    // 合并对象（后者覆盖）</code></pre>
+      <h3>4. 异步：Promise 与 async/await</h3>
+      <pre><code>// fetch + async/await 是最常用组合
+async function getUser(id) {
+  try {
+    const res = await fetch(`/api/user/${id}`);
+    if (!res.ok) throw new Error(res.status);
+    return await res.json();
+  } catch (err) {
+    console.error('请求失败', err);
+  }
+}
+// 并发等待多个
+const [a, b] = await Promise.all([p1, p2]);</code></pre>
+      <h3>5. 高频易忘点</h3>
+      <ul>
+        <li><code>==</code> 会隐式转换，永远用 <code>===</code></li>
+        <li><code>this</code> 由调用方式决定；箭头函数不绑定自己的 <code>this</code></li>
+        <li>闭包 = 函数 + 它定义时的词法作用域</li>
+        <li>事件循环：同步代码 → 微任务(Promise.then) → 宏任务(setTimeout)</li>
+        <li><code>?. </code>可选链 <code>obj?.a?.b</code>，<code>??</code> 空值合并（只对 null/undefined 生效）</li>
+      </ul>
+      <p class="tip">💡 建议配合浏览器 DevTools 的 Sources 断点练习，比只看记得牢。</p>
+    </div>
+    <div class="ad-banner">
+      <div><div class="big">⏰ 618 学习狂欢 · 会员 5 折起</div><div class="sub">前端体系课 + 面试刷题营，限时立减 ¥200，仅剩最后 2 天</div></div>
+      <div class="cta">立即抢购 &gt;</div>
+    </div>
+    <div class="card">
+      <h2>今日练习建议</h2>
+      <ul>
+        <li>手写一个 <code>debounce</code> 和 <code>throttle</code></li>
+        <li>用 <code>fetch</code> + <code>async/await</code> 请求一个公开 API 并渲染列表</li>
+        <li>看一遍事件循环，说出下面代码输出顺序：<pre><code>console.log(1);
+setTimeout(() =&gt; console.log(2));
+Promise.resolve().then(() =&gt; console.log(3));
+console.log(4);          // 1 4 3 2</code></pre></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Python 学习内容 ============ -->
+  <section class="pane" data-pane="py">
+    <div class="card">
+      <h2>Python 核心速览</h2>
+      <h3>1. 数据结构</h3>
+      <pre><code>lst = [1, 2, 3]            # 列表（有序可变）
+tup = (1, 2, 3)            # 元组（不可变）
+dic = {"a": 1, "b": 2}     # 字典
+st  = {1, 2, 3}            # 集合（去重）
+
+lst.append(4); lst.extend([5, 6])
+dic.get("c", 0)            # 带默认值取值
+{v: k for k, v in dic.items()}   # 字典反转</code></pre>
+      <h3>2. 推导式</h3>
+      <pre><code>squares = [x**2 for x in range(10) if x % 2 == 0]
+matrix_t = [[row[i] for row in matrix] for i in range(3)]
+flat = [x for row in matrix for x in row]
+gen  = (x**2 for x in range(10))     # 生成器：惰性求值省内存</code></pre>
+      <h3>3. 函数进阶</h3>
+      <pre><code>def func(a, b=2, *args, **kwargs): ...
+lambda x: x * 2
+
+# 装饰器
+import functools, time
+def timer(fn):
+    @functools.wraps(fn)
+    def wrap(*args, **kw):
+        t0 = time.time()
+        r = fn(*args, **kw)
+        print(f"{fn.__name__} 耗时 {time.time()-t0:.3f}s")
+        return r
+    return wrap</code></pre>
+      <h3>4. 文件与异常</h3>
+      <pre><code>with open("data.txt", encoding="utf-8") as f:
+    for line in f:
+        print(line.rstrip())
+
+try:
+    risky()
+except (ValueError, KeyError) as e:
+    print("捕获:", e)
+else:
+    print("没异常才执行")
+finally:
+    print("无论如何都执行")</code></pre>
+      <h3>5. 常用标准库</h3>
+      <ul>
+        <li><code>pathlib.Path</code> — 现代路径操作，别再用 os.path 拼字符串</li>
+        <li><code>collections.Counter / defaultdict / deque</code></li>
+        <li><code>datetime</code> + <code>zoneinfo</code> — 时间处理</li>
+        <li><code>json / csv / sqlite3</code> — 数据交换三件套</li>
+        <li><code>requests</code>（三方）— HTTP 请求事实标准</li>
+      </ul>
+      <p class="tip">💡 记不住就用 <code>help(list)</code> 或 <code>dir(str)</code> 现场查，比背快。</p>
+    </div>
+    <div class="card">
+      <h2>今日练习建议</h2>
+      <ul>
+        <li>用推导式重写一个你以前写的双层 for 循环</li>
+        <li>写一个带装饰器的函数计时器，并跑通</li>
+        <li>用 <code>Counter</code> 统计一段英文的词频 Top5</li>
+      </ul>
+    </div>
+    <div class="ad-banner navy">
+      <div><div class="big">🎁 新人专享 · 0 元领 7 天 VIP</div><div class="sub">全场 3000+ 门课程免费看，含 200+ 小时视频教程</div></div>
+      <div class="cta fake-act" style="cursor:pointer">0 元领取</div>
+    </div>
+  </section>
+
+  <!-- ============ Java ============ -->
+  <section class="pane" data-pane="java">
+    <div class="card">
+      <h2>Java 核心速览</h2>
+      <h3>1. 集合框架</h3>
+      <pre><code>List&lt;String&gt; list = new ArrayList&lt;&gt;();     // 随机访问 O(1)
+Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("a", 1);
+map.getOrDefault("b", 0);
+map.computeIfAbsent("c", k -&gt; 0);
+
+// TreeMap 有序 / LinkedHashMap 保持插入序
+// ConcurrentHashMap 并发安全（CAS + synchronized 锁桶头）</code></pre>
+      <h3>2. Stream 流式处理</h3>
+      <pre><code>List&lt;Integer&gt; nums = List.of(1, 2, 3, 4, 5);
+int sum = nums.stream()
+        .filter(n -&gt; n % 2 == 0)
+        .mapToInt(Integer::intValue)
+        .sum();                       // 6
+
+Map&lt;Boolean, List&lt;Integer&gt;&gt; g = nums.stream()
+        .collect(Collectors.partitioningBy(n -&gt; n &gt; 2));</code></pre>
+      <h3>3. JVM 内存区域</h3>
+      <ul>
+        <li><code>堆</code>：对象实例，GC 主战场（Eden / S0 / S1 + 老年代）</li>
+        <li><code>虚拟机栈</code>：栈帧（局部变量表、操作数栈），StackOverflowError 来源</li>
+        <li><code>元空间</code>：类元数据（JDK8 起取代永久代）</li>
+        <li><code>程序计数器</code>：线程私有，记录字节码行号</li>
+      </ul>
+      <h3>4. 高频易忘点</h3>
+      <ul>
+        <li><code>String</code> 不可变；大量拼接用 <code>StringBuilder</code></li>
+        <li>重写 <code>equals</code> 必须同时重写 <code>hashCode</code></li>
+        <li><code>synchronized</code> 锁升级：偏向 → 轻量级 → 重量级</li>
+        <li>线程池<b>不要用 Executors 快捷方法</b>，手动 new ThreadPoolExecutor 并指定拒绝策略</li>
+      </ul>
+      <p class="tip">💡 面试高频：HashMap 扩容、volatile 与内存屏障、G1 与 CMS 区别。</p>
+    </div>
+    <div class="ad-banner purple">
+      <div><div class="big">🎓 Java 全栈进阶营 · 第 42 期报名中</div><div class="sub">大厂导师 1v1 简历诊断 + 3 次模拟面试，本期仅剩 23 席</div></div>
+      <div class="cta">立即占座 &gt;</div>
+    </div>
+    <div class="card">
+      <h2>今日练习建议</h2>
+      <ul>
+        <li>手写 <code>LRU Cache</code>（LinkedHashMap 一行版 + 手写双向链表版各一遍）</li>
+        <li>用 <code>CompletableFuture</code> 并发调 3 个模拟接口并统计总耗时</li>
+        <li>默写线程池执行流程：提交 → 核心线程 → 阻塞队列 → 最大线程 → 拒绝策略</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 算法 ============ -->
+  <section class="pane" data-pane="algo">
+    <div class="card">
+      <h2>算法模板速查</h2>
+      <h3>1. 复杂度 & 数据结构选型</h3>
+      <table>
+        <tr><th>结构</th><th>查询</th><th>插入/删除</th><th>典型场景</th></tr>
+        <tr><td>数组 / ArrayList</td><td>O(1) 下标</td><td>O(n)</td><td>随机访问、双指针</td></tr>
+        <tr><td>链表</td><td>O(n)</td><td>O(1) 已知位置</td><td>频繁头尾插删</td></tr>
+        <tr><td>HashMap</td><td>O(1) 均摊</td><td>O(1)</td><td>计数、两数之和</td></tr>
+        <tr><td>堆 / PriorityQueue</td><td>O(1) 堆顶</td><td>O(log n)</td><td>TopK、合并 K 链表</td></tr>
+        <tr><td>二叉搜索树</td><td>O(log n)</td><td>O(log n)</td><td>有序数据、范围查询</td></tr>
+      </table>
+      <h3>2. 二分查找模板</h3>
+      <pre><code>function lowerBound(arr, target) {   // 第一个 &gt;= target 的下标
+  let l = 0, r = arr.length;
+  while (l &lt; r) {
+    const mid = (l + r) &gt;&gt; 1;
+    if (arr[mid] &gt;= target) r = mid; else l = mid + 1;
+  }
+  return l;
+}</code></pre>
+      <h3>3. 滑动窗口模板</h3>
+      <pre><code>def max_sub_no_repeat(s: str) -&gt; int:
+    win, l, ans = set(), 0, 0
+    for r, ch in enumerate(s):
+        while ch in win:          # 收缩左边界
+            win.remove(s[l]); l += 1
+        win.add(ch)
+        ans = max(ans, r - l + 1)
+    return ans</code></pre>
+      <h3>4. DP 套路</h3>
+      <ul>
+        <li>先想<b>状态定义</b>，再想<b>转移方程</b>，最后定<b>初始化与遍历方向</b></li>
+        <li>背包：0-1 背包容量倒序，完全背包正序</li>
+        <li>区间 DP：按区间长度枚举，<code>dp[i][j] = min(dp[i][k] + dp[k+1][j] + cost)</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>📝 每日一题</h2>
+      <div class="feed-item">
+        <div class="feed-title">560. 和为 K 的子数组 <span class="tag orange">中等</span> <span class="tag blue">前缀和 + HashMap</span></div>
+        <div class="feed-excerpt">给你一个整数数组和一个整数 k，统计并返回该数组中和恰好为 k 的连续子数组的个数。提示：用前缀和Map记录每个前缀和出现次数，ans += map[pre - k]。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">3. 无重复字符的最长子串 <span class="tag orange">中等</span> <span class="tag green">滑动窗口</span></div>
+        <div class="feed-excerpt">经典双指针，注意窗口内字符集合的维护方式（set 或 计数数组）。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 面经 ============ -->
+  <section class="pane" data-pane="interview">
+    <div class="card">
+      <h2>🔥 最新面经</h2>
+      <div class="feed-item">
+        <div class="feed-title">字节跳动 · 后端开发 二面（挂了但学到很多）</div>
+        <div class="feed-meta"><span class="tag orange">流程中</span><span>牛友@努力摸鱼</span><span>3 小时前</span><span>1.2w 浏览</span><span>186 评论</span></div>
+        <div class="feed-excerpt">Redis 持久化 RDB/AOF 混合、MySQL 索引下推、Kafka 消息不丢失配置、JVM 调优经历被追问了 15 分钟……手撕：LRU + 无重复最长子串。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">腾讯 · 前端开发 一面凉经</div>
+        <div class="feed-meta"><span class="tag gray">未通过</span><span>牛友@码上飞</span><span>6 小时前</span><span>8643 浏览</span><span>92 评论</span></div>
+        <div class="feed-excerpt">事件循环输出题、Vue3 响应式与 Vue2 差异、HTTP/2 多路复用、跨域方案汇总。手写：Promise.allSettled + 函数柯里化。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">美团 · 测开 三面过，等 offer 中</div>
+        <div class="feed-meta"><span class="tag green">已OC</span><span>牛友@奶茶三分糖</span><span>昨天 21:40</span><span>2.1w 浏览</span><span>341 评论</span></div>
+        <div class="feed-excerpt">SQL 窗口函数、接口自动化框架设计、弱网测试思路。三面聊天为主，聊了职业规划和加班看法。整体体验很好，面试官全程微笑。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">阿里 · 客户端 一面（40 分钟速通）</div>
+        <div class="feed-meta"><span class="tag blue">已结束</span><span>牛友@安卓小菜鸡</span><span>昨天 14:05</span><span>6571 浏览</span><span>48 评论</span></div>
+        <div class="feed-excerpt">Activity 生命周期、Handler 机制、内存泄漏排查（LeakCanary 原理）、TCP 三次握手为什么不是两次。基础要牢，项目深挖。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">拼多多 · 服务端 二面 + HR 面 面经</div>
+        <div class="feed-meta"><span class="tag green">已完成</span><span>牛友@不想加班</span><span>10-29</span><span>1.8w 浏览</span><span>274 评论</span></div>
+        <div class="feed-excerpt">分布式锁三种实现对比、秒杀系统设计（缓存预热 + 限流 + 削峰）、分库分表后的分页问题。HR 面主要问稳定性接受度和薪资结构。</div>
+      </div>
+    </div>
+    <div class="ad-banner teal">
+      <div><div class="big">📄 简历诊断 · 48 小时内出报告</div><div class="sub">前大厂面试官 1v1 改简历，改完投递回复率平均提升 3 倍</div></div>
+      <div class="cta">免费诊断 &gt;</div>
+    </div>
+    <div class="card">
+      <h2>💬 今晚热聊</h2>
+      <div class="feed-item">
+        <div class="feed-excerpt"><b style="color:var(--text)">@debug一整天：</b>兄弟们，秋招 0 offer，春招还有救吗？在线等，挺急的 😭</div>
+        <div class="feed-meta"><span>231 条回复</span><span>刚刚</span></div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-excerpt"><b style="color:var(--text)">@卷不动了：</b>组长今天说「年轻人要多学习不要计较加班」，我该怎么优雅回应？</div>
+        <div class="feed-meta"><span>87 条回复</span><span>12 分钟前</span></div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-excerpt"><b style="color:var(--text)">@算法搬运工：</b>背了 300 题模板，面试手撕还是写不出来，问题出在哪？</div>
+        <div class="feed-meta"><span>154 条回复</span><span>28 分钟前</span></div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-excerpt"><b style="color:var(--text)">@offer收割机：</b>晒一下今年的 offer：字节 35w / 美团 32w / 拼多多 45w，选哪个在线等。</div>
+        <div class="feed-meta"><span>1024 条回复</span><span>1 小时前</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 技术资讯 ============ -->
+  <section class="pane" data-pane="news">
+    <div class="card">
+      <h2>📰 今日技术资讯</h2>
+      <div class="feed-item">
+        <div class="feed-title">2026 前端趋势报告发布：响应式框架进入「信号时代」，虚拟 DOM 争议再起</div>
+        <div class="feed-meta"><span class="tag blue">前端</span><span>技术周刊</span><span>2 小时前</span><span>1.2w 阅读</span><span>236 评论</span></div>
+        <div class="feed-excerpt">报告显示，基于细粒度响应式（Signals）的方案已进入主流框架核心，编译时优化成为新战场。文末附 12 家大厂技术栈使用率统计。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">Node.js 24 LTS 发布：内置 TypeScript 类型剥离，性能再提升 18%</div>
+        <div class="feed-meta"><span class="tag green">后端</span><span>开源日报</span><span>5 小时前</span><span>8934 阅读</span><span>142 评论</span></div>
+        <div class="feed-excerpt">无需 tsx/ts-node 即可直接运行 .ts 文件；权限模型默认启用；原生 fetch/ws 稳定性大幅增强。升级指南见正文。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">深度解析：为什么大模型时代的数据库都在拥抱向量检索？</div>
+        <div class="feed-meta"><span class="tag orange">数据库</span><span>架构师社区</span><span>8 小时前</span><span>6712 阅读</span><span>89 评论</span></div>
+        <div class="feed-excerpt">从 HNSW 索引原理讲到 RAG 场景的混合检索实践，附 PGVector / Milvus / Elasticsearch 三方案压测对比数据。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">某大厂开源内部 DevOps 平台：CI/CD 流水线 + 混沌工程一体化</div>
+        <div class="feed-meta"><span class="tag gray">开源</span><span>GitWeek</span><span>10-31</span><span>1.5w 阅读</span><span>301 评论</span></div>
+        <div class="feed-excerpt">支持 K8s 多集群发布、自动化故障演练、发布卡点策略配置。上线首日破 8k Star，评论区吵翻了。</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-title">程序员健康白皮书：久坐、熬夜与颈椎病，我们采访了 2000 名开发者</div>
+        <div class="feed-meta"><span class="tag blue">职场</span><span>码农周刊</span><span>10-30</span><span>2.3w 阅读</span><span>512 评论</span></div>
+        <div class="feed-excerpt">78% 的受访者日均坐姿超过 9 小时；坚持每周 3 次运动的开发者，bug 率反而更低（样本偏差警告）。文末附工位拉伸图解。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>⏱ 24 小时热帖榜</h2>
+      <div class="rank-item"><span class="rank-num top1">1</span><span class="t">35 岁被裁之后，我在县城开了家文具店</span><span class="n">4.6w</span></div>
+      <div class="rank-item"><span class="rank-num top2">2</span><span class="t">浅谈：大模型会不会取代初级程序员？</span><span class="n">3.8w</span></div>
+      <div class="rank-item"><span class="rank-num top3">3</span><span class="t">用 Python 给领导写了个自动周报生成器</span><span class="n">3.1w</span></div>
+      <div class="rank-item"><span class="rank-num">4</span><span class="t">求救！线上 OOM 排查三天了毫无头绪</span><span class="n">2.7w</span></div>
+      <div class="rank-item"><span class="rank-num">5</span><span class="t">2026 年还要不要学 jQuery？（认真提问）</span><span class="n">2.2w</span></div>
+      <div class="rank-item"><span class="rank-num">6</span><span class="t">收入破百万的自由职业程序员，都做对了什么</span><span class="n">1.9w</span></div>
+      <div class="rank-item"><span class="rank-num">7</span><span class="t">公司要用低代码平台重写核心系统，我该怎么办</span><span class="n">1.5w</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 自定义笔记 ============ -->
+  <section class="pane" data-pane="note">
+    <div class="card">
+      <h2>我的笔记</h2>
+      <textarea id="noteArea" placeholder="在这里写你的学习笔记，自动保存到本地浏览器…&#10;&#10;例如：&#10;- 今天学的：Promise 链的错误冒泡&#10;- 明天要复习：Vue 响应式原理"></textarea>
+      <div class="save-hint" id="saveHint">✓ 已自动保存</div>
+    </div>
+  </section>
+</div>
+
+<aside class="sidebar">
+  <div class="marquee-wrap"><div class="marquee">🎉 恭喜用户 138****2217 抽中 AirPods Pro 一副&nbsp;&nbsp;|&nbsp;&nbsp;📣 系统将于本周日 02:00-04:00 例行维护&nbsp;&nbsp;|&nbsp;&nbsp;🔥 新版「学习周报」功能上线，快去生成你的专属报告&nbsp;&nbsp;|&nbsp;&nbsp;🎁 邀请好友注册，双方各得 500 积分&nbsp;&nbsp;|&nbsp;&nbsp;📢 今日全站累计学习 1,284,306 人次，超越昨日的你了吗？</div></div>
+
+  <div class="ad-card" style="background:linear-gradient(135deg,#ff5f6d,#ffc371); color:#fff; border:none">
+    <div style="font-weight:700; font-size:15px">⏰ 限时秒杀 · 全场 5 折</div>
+    <div style="font-size:12px; opacity:.93; margin:4px 0 10px">会员课程大促倒计时 <b id="seckillTimer">23:59:47</b></div>
+    <div style="display:flex; gap:8px">
+      <span class="fake-act" style="background:rgba(255,255,255,.26); padding:5px 14px; border-radius:18px; font-size:12px; cursor:pointer">立即抢购</span>
+      <span class="fake-act" style="background:rgba(255,255,255,.26); padding:5px 14px; border-radius:18px; font-size:12px; cursor:pointer">领券中心</span>
+    </div>
+  </div>
+
+  <div class="ad-card">
+    <h4>📅 每日签到</h4>
+    <div style="font-size:12px; color:var(--text2)">已连续签到 <b style="color:var(--accent)">3</b> 天，再签 4 天可得 30 积分</div>
+    <div class="sign-dots"><i class="done"></i><i class="done"></i><i class="done"></i><i></i><i></i><i></i><i></i></div>
+    <button class="sign-btn" id="signBtn">签到 +5 积分</button>
+  </div>
+
+  <div class="ad-card">
+    <h4>🔥 学习热榜</h4>
+    <div class="rank-item"><span class="rank-num top1">1</span><span class="t">《深入理解 JVM 第3版》共读打卡</span><span class="n">2.3w</span></div>
+    <div class="rank-item"><span class="rank-num top2">2</span><span class="t">2026 前端面试真题解析（800 题合集）</span><span class="n">2.1w</span></div>
+    <div class="rank-item"><span class="rank-num top3">3</span><span class="t">Python 自动化办公 30 讲</span><span class="n">1.9w</span></div>
+    <div class="rank-item"><span class="rank-num">4</span><span class="t">算法图解：从 0 到 1 刷穿 LeetCode</span><span class="n">1.6w</span></div>
+    <div class="rank-item"><span class="rank-num">5</span><span class="t">Spring Cloud 微服务实战（2026 版）</span><span class="n">1.4w</span></div>
+    <div class="rank-item"><span class="rank-num">6</span><span class="t">MySQL 索引与 SQL 调优实战</span><span class="n">1.1w</span></div>
+    <div class="rank-item"><span class="rank-num">7</span><span class="t">TypeScript 从入门到上线</span><span class="n">9800</span></div>
+    <div class="rank-item"><span class="rank-num">8</span><span class="t">Docker & K8s 部署速成</span><span class="n">8600</span></div>
+    <div class="rank-item"><span class="rank-num">9</span><span class="t">计算机网络通关特训营</span><span class="n">7300</span></div>
+    <div class="rank-item"><span class="rank-num">10</span><span class="t">大模型应用开发：RAG 从零实现</span><span class="n">6100</span></div>
+  </div>
+
+  <div class="ad-card">
+    <h4>🎯 课程推荐</h4>
+    <div class="course">
+      <div class="cover" style="background:linear-gradient(135deg,#6a11cb,#2575fc)">☕</div>
+      <div class="info"><div class="name">【进阶】Spring Boot 源码剖析 36 讲</div><div class="price">¥99<s>¥199</s><span class="tag" style="margin-left:6px">限时</span></div></div>
+    </div>
+    <div class="course">
+      <div class="cover" style="background:linear-gradient(135deg,#0f9b8e,#38ef7d)">📊</div>
+      <div class="info"><div class="name">【体系课】数据分析全栈（Python + SQL + BI）</div><div class="price">¥899<span class="tag blue" style="margin-left:6px">分期免息</span></div></div>
+    </div>
+    <div class="course">
+      <div class="cover" style="background:linear-gradient(135deg,#ff5f6d,#ffc371)">⚛️</div>
+      <div class="info"><div class="name">【专项】React 18 + Next.js 全栈实战</div><div class="price">¥149<s>¥299</s></div></div>
+    </div>
+    <div class="course">
+      <div class="cover" style="background:linear-gradient(135deg,#2b5876,#4e4376)">🤖</div>
+      <div class="info"><div class="name">【新品】AI Agent 开发实战：从 Prompt 到生产</div><div class="price">¥199<s>¥399</s><span class="tag orange" style="margin-left:6px">新上架</span></div></div>
+    </div>
+  </div>
+
+  <div class="ad-card qr-box">
+    <h4 style="justify-content:center">📲 扫码关注公众号</h4>
+    <svg id="qrSvg" viewBox="0 0 29 29"></svg>
+    <div class="d">回复「资料」领面试大礼包<br>每周更新 · 已有 12.6 万人关注</div>
+  </div>
+
+  <div class="imgad" id="adImgRight" data-w="600" data-h="430"></div>
+
+  <div class="ad-card">
+    <h4>🔗 友情链接</h4>
+    <div class="fl-links">
+      <span>MDN 文档</span><span>LeetCode</span><span>菜鸟教程</span><span>掘金</span><span>Stack Overflow</span><span>V2EX</span><span>GitHub Trending</span><span>InfoQ</span>
+    </div>
+  </div>
+</aside>
+</div>
+</main>
+
+<!-- ============ 底部状态栏（VS Code 风格） ============ -->
+<div id="novelBar">
+  <div class="seg accent click" title="当前工作区">⚡ 学习模式</div>
+  <div class="seg" title="Python 解释器">🐍 Python 3.12.4</div>
+  <div class="seg" title="Git 分支">⑂ main*</div>
+  <div class="seg dim" title="问题面板">✓ 0 ⚠ 0</div>
+  <div id="segNovel">
+    <div class="zone" id="zonePrev" title="点击：上一页"></div>
+    <div class="zone" id="zoneNext" title="点击：下一页（滚轮也可翻页）"></div>
+    <div id="barTextWrap"><div id="barText"></div></div>
+  </div>
+  <div class="seg dim">UTF-8</div>
+  <div class="seg dim">CRLF</div>
+  <div class="seg" id="segPage" title="阅读进度">—</div>
+  <div id="barMeta">
+    <button class="mbtn" id="btnChapterPrev" title="上一章">«</button>
+    <button class="mbtn" id="btnChapterNext" title="下一章">»</button>
+    <button class="mbtn" id="btnToc" title="章节目录">📑</button>
+    <button class="mbtn" id="btnFloat" title="阅读浮窗（可拖动/调大小，随处放置）">🗗</button>
+    <button class="mbtn" id="btnNovelMenu" title="小说面板">☰</button>
+  </div>
+</div>
+
+<!-- ============ 阅读浮窗（只显示正文：可拖动 / 可调大小 / 随处放置） ============ -->
+<div id="floatBar">
+  <div id="fbText"></div>
+  <button id="fbClose" title="关闭浮窗">✕</button>
+  <div id="fbResize" title="拖动调整大小"></div>
+</div>
+
+<input type="file" id="fileInput" accept=".txt" hidden>
+
+<!-- ============ 设置弹窗 ============ -->
+<div class="modal-mask" id="settingsModal">
+  <div class="modal">
+    <header><h1>⚙️ 设置</h1><button class="close" data-close>✕</button></header>
+    <div class="body">
+      <div class="sect">
+        <h3>主题</h3>
+        <div class="theme-grid" id="themeGrid"></div>
+      </div>
+      <div class="sect">
+        <h3>老板键（多键位可同时启用，双保险）</h3>
+        <div class="set-row">
+          <span>Shift 单独按下 = 伪装</span>
+          <label class="switch"><input type="checkbox" id="bossShift"><em></em></label>
+        </div>
+        <div class="set-row">
+          <span>鼠标中键点击 = 伪装</span>
+          <label class="switch"><input type="checkbox" id="bossMiddle"><em></em></label>
+        </div>
+        <div style="font-size:11.5px; color:var(--text2); line-height:1.7">
+          伪装状态下：小说自动隐藏、点击和滚轮恢复正常行为，再按一次任意老板键恢复阅读。<br>
+          自定义组合键（如 Ctrl+H）在下方「快捷键」里录制。
+        </div>
+      </div>
+      <div class="sect">
+        <h3>内容配置（每次刷新随机换一批）</h3>
+        <div class="set-row">
+          <span>每次刷新随机挑选栏目与排版</span>
+          <label class="switch"><input type="checkbox" id="shuffleLoad"><em></em></label>
+        </div>
+        <div style="font-size:12px; color:var(--text2); margin-top:6px">点选下方标签，控制哪些栏目参与轮换（笔记固定显示）：</div>
+        <div id="packGrid"></div>
+        <button class="sign-btn" id="btnReshuffle" style="margin-top:12px">🎲 不等刷新，立即换一批内容</button>
+      </div>
+      <div class="sect">
+        <h3>快捷键（点击后按下新组合键）</h3>
+        <div id="hkList"></div>
+      </div>
+      <div class="sect">
+        <h3>小说</h3>
+        <button id="setImportBtn" style="width:100%; border:1px solid var(--line); background:var(--card2); color:var(--text); padding:9px 0; border-radius:10px; cursor:pointer; font-size:13px; font-family:inherit">📥 导入 / 更换小说（TXT）</button>
+        <div style="font-size:11.5px; color:var(--text2); margin-top:8px">导入后用底部状态栏的 ☰ 切换书籍/章节，数据仅保存在本机浏览器。</div>
+      </div>
+      <div class="sect">
+        <h3>小说栏</h3>
+        <div class="set-row">
+          <span>每页字数</span>
+          <span><input type="range" id="pageSize" min="30" max="200" step="5"><span class="val" id="pageSizeVal"></span></span>
+        </div>
+        <div class="set-row">
+          <span>小说字号</span>
+          <span><input type="range" id="barFs" min="10" max="18" step="1"><span class="val" id="barFsVal"></span></span>
+        </div>
+        <div class="set-row">
+          <span>失焦自动伪装隐藏小说</span>
+          <label class="switch"><input type="checkbox" id="blurHide"><em></em></label>
+        </div>
+        <div class="set-row">
+          <span>进入页面时默认伪装（按老板键才显示小说）</span>
+          <label class="switch"><input type="checkbox" id="startDisguised"><em></em></label>
+        </div>
+        <div class="set-row">
+          <span>点击页面空白处 = 下一页</span>
+          <label class="switch"><input type="checkbox" id="clickPage"><em></em></label>
+        </div>
+        <div class="set-row">
+          <span>全页滚轮翻页（下滚下页 / 上滚上页）</span>
+          <label class="switch"><input type="checkbox" id="wheelPage"><em></em></label>
+        </div>
+        <div class="set-row">
+          <span>伪装文案（失焦/老板键时显示）</span>
+          <input type="text" id="fakeText" style="width:220px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:6px 10px;font-family:inherit">
+        </div>
+        <div class="set-row">
+          <span>伪装标签页标题（失焦/老板键时切换）</span>
+          <input type="text" id="fakeTitle" style="width:220px;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:6px 10px;font-family:inherit">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 章节目录弹窗 ============ -->
+<div class="modal-mask" id="tocModal">
+  <div class="modal" style="width:min(520px,92vw)">
+    <header><h1>📑 章节目录</h1><button class="close" data-close>✕</button></header>
+    <div class="body" style="padding:14px 16px 16px">
+      <input id="tocSearch" placeholder="🔍 搜索章节标题…" autocomplete="off">
+      <div id="tocList" style="max-height:54vh; overflow-y:auto; margin-top:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 小说面板 ============ -->
+<div class="modal-mask" id="novelModal">
+  <div class="modal" style="width:min(460px,92vw)">
+    <header><h1>📖 小说</h1><button class="close" data-close>✕</button></header>
+    <div class="body">
+      <div class="np-book" id="npBookName">尚未导入小说</div>
+      <div id="npStat" style="font-size:11px; color:var(--text2); margin:-6px 0 8px"></div>
+      <div class="np-btns">
+        <button id="npPrevCh">⬅ 上一章</button>
+        <button id="npNextCh">下一章 ➡</button>
+      </div>
+      <select id="chapterSelect"></select>
+      <div class="np-import">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px">支持 .txt（自动识别 UTF-8 / GBK 编码与章节标题），全部数据仅保存在本机浏览器中。</div>
+        <button id="npImportBtn">📥 导入 / 更换小说</button>
+        <div id="bookList" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ================================================================
+   Study Hub — 学习主页 + 底栏小说阅读器（纯前端，数据存本机）
+   ================================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+
+/* ---------------- 设置存取 ---------------- */
+const DEFAULTS = {
+  theme: "dark",
+  hotkeys: {
+    nextPage:    "ArrowRight",
+    prevPage:    "ArrowLeft",
+    nextChapter: "Ctrl+ArrowRight",
+    prevChapter: "Ctrl+ArrowLeft",
+    chapterList: "C",
+    toggleBar:   "Ctrl+B",
+    bossKey:     "Ctrl+H",
+  },
+  pageSize: 70,
+  barFs: 13,
+  blurHide: true,
+  startDisguised: true,
+  bossShift: true,
+  bossMiddle: true,
+  clickPage: true,
+  wheelPage: true,
+  fakeText: "🟢 系统就绪 · 数据已同步 · 资源占用 12%",
+  fakeTitle: "季度报表_2026Q4_final.xlsx - Excel",
+  fbPos: null,    // 阅读浮窗位置 {x,y}
+  fbSize: null,   // 阅读浮窗大小 {w,h}
+  fbOpen: false,  // 浮窗是否打开
+  shuffleLoad: true,   // 每次刷新随机内容
+  packs: {},           // 栏目启用表，缺省全启用
+  note: "",
+  progress: {},   // {bookId: {ch, page}}
+  activeBook: null,
+};
+let settings = loadSettings();
+function loadSettings(){
+  try{
+    const s = JSON.parse(localStorage.getItem("studyhub.settings") || "{}");
+    const merged = { ...structuredClone(DEFAULTS), ...s, hotkeys: { ...DEFAULTS.hotkeys, ...(s.hotkeys||{}) } };
+    for(const [k,v] of Object.entries(merged.hotkeys)){
+      const nv = v.length === 1 ? v.toUpperCase() : v;   // 单键统一大写（修复 c/C 大小写不匹配）
+      merged.hotkeys[k] = /^F\d{1,2}$/.test(nv) ? DEFAULTS.hotkeys[k] : nv;
+    }
+    return merged;
+  }catch(e){ return structuredClone(DEFAULTS); }
+}
+let saveTimer = null;
+function saveSettings(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=> localStorage.setItem("studyhub.settings", JSON.stringify(settings)), 200);
+}
+
+/* ---------------- IndexedDB（存小说正文） ---------------- */
+const bookStore = {
+  db: null,
+  async init(){
+    try{
+      this.db = await new Promise((res, rej)=>{
+        const req = indexedDB.open("studyhub-db", 1);
+        req.onupgradeneeded = ()=> req.result.createObjectStore("books", { keyPath: "id" });
+        req.onsuccess = ()=> res(req.result);
+        req.onerror = ()=> rej(req.error);
+      });
+    }catch(e){ this.db = null; }
+  },
+  async put(book){
+    if(!this.db){ // 降级 localStorage（小书）
+      const m = JSON.parse(localStorage.getItem("studyhub.books") || "{}");
+      m[book.id] = book; localStorage.setItem("studyhub.books", JSON.stringify(m)); return;
+    }
+    const tx = this.db.transaction("books", "readwrite");
+    tx.objectStore("books").put(book);
+  },
+  async all(){
+    if(!this.db){
+      return Object.values(JSON.parse(localStorage.getItem("studyhub.books") || "{}"));
+    }
+    return new Promise(res=>{
+      const req = this.db.transaction("books").objectStore("books").getAll();
+      req.onsuccess = ()=> res(req.result || []);
+    });
+  },
+  async del(id){
+    if(!this.db){
+      const m = JSON.parse(localStorage.getItem("studyhub.books") || "{}");
+      delete m[id]; localStorage.setItem("studyhub.books", JSON.stringify(m)); return;
+    }
+    const tx = this.db.transaction("books", "readwrite");
+    tx.objectStore("books").delete(id);
+  }
+};
+
+/* ---------------- 小说解析 ---------------- */
+function decodeTxt(buf){
+  let s = new TextDecoder("utf-8").decode(buf);
+  const bad = (s.match(/\uFFFD/g) || []).length;
+  if(bad > s.length * 0.005){
+    try{ s = new TextDecoder("gbk").decode(buf); }catch(e){}
+  }
+  return s.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+}
+const CH_RE = /^\s*(?:第\s*[0-9零一二三四五六七八九十百千万两〇]+\s*[章节卷回集部篇][^\n]{0,40}|Chapter\s+\d+[^\n]{0,40}|\d{1,4}\s*[、.．]\s*\S[^\n]{0,30})\s*$/i;
+function parseChapters(text){
+  const lines = text.split("\n");
+  const marks = [];
+  for(let i=0;i<lines.length;i++){
+    const t = lines[i].trim();
+    if(t && t.length <= 50 && CH_RE.test(t)) marks.push(i);
+  }
+  if(marks.length < 2) return [{ title: "全文", start: 0, end: lines.length }];
+  const chapters = [];
+  if(marks[0] > 0){
+    const head = lines.slice(0, marks[0]).join("").trim();
+    if(head.length > 100) chapters.push({ title: "开篇", start: 0, end: marks[0] });
+  }
+  for(let i=0;i<marks.length;i++){
+    chapters.push({
+      title: lines[marks[i]].trim().slice(0, 42),
+      start: marks[i],
+      end: i+1 < marks.length ? marks[i+1] : lines.length,
+    });
+  }
+  return chapters;
+}
+const chapterText = (book, ci) =>
+  book.lines.slice(book.chapters[ci].start, book.chapters[ci].end).join(" ").replace(/\s+/g, " ").trim();
+
+/* ---------------- 阅读状态 ---------------- */
+let books = [];          // [{id,name,lines,chapters}]
+let cur = null;          // 当前书
+let curCh = 0, curPage = 0;
+let barHidden = false, disguised = false, entryGuard = false;
+
+function totalPages(ci){
+  if(!cur) return 1;
+  const t = chapterText(cur, ci);
+  return Math.max(1, Math.ceil(t.length / settings.pageSize));
+}
+function pageStr(ci, pi){
+  const t = chapterText(cur, ci);
+  return t.slice(pi * settings.pageSize, (pi+1) * settings.pageSize);
+}
+function totalProgress(){
+  if(!cur) return 0;
+  let before = 0;
+  for(let i=0;i<curCh;i++) before += chapterText(cur, i).length;
+  return Math.min(100, ((before + curPage * settings.pageSize) / cur.totalLen) * 100);
+}
+
+/* ---------------- 底栏渲染 ---------------- */
+const bar = $("#novelBar"), barText = $("#barText");
+function renderBar(anim){
+  const segPage = $("#segPage");
+  let txt, pageTxt;
+  if(!cur){
+    txt = "📖 在 设置 → 小说 中导入 TXT，即可开始阅读（仅存在本地）";
+    pageTxt = "—";
+    barText.textContent = txt;
+    if(segPage) segPage.textContent = pageTxt;
+    syncFb(txt, pageTxt, anim);
+    return;
+  }
+  const p = pageStr(curCh, curPage);
+  txt = p || "（本章完）";
+  pageTxt = `${curCh+1}章 ${curPage+1}/${totalPages(curCh)}页`;
+  barText.textContent = txt;
+  if(segPage) segPage.textContent = pageTxt;
+  syncFb(txt, pageTxt, anim);
+  if(anim){
+    barText.classList.remove("flip");
+    void barText.offsetWidth;
+    barText.style.setProperty("--flip-x", anim === "next" ? "14px" : "-14px");
+    barText.classList.add("flip");
+  }
+}
+/* 阅读浮窗与底栏内容同步（浮窗只显示正文） */
+function syncFb(txt, pageTxt, anim){
+  if(!fb.classList.contains("open")) return;
+  fbText.textContent = txt;
+  if(anim){
+    fbText.classList.remove("flip");
+    void fbText.offsetWidth;
+    fbText.style.setProperty("--flip-x", anim === "next" ? "14px" : "-14px");
+    fbText.classList.add("flip");
+  }
+}
+function saveProgress(){
+  if(!cur) return;
+  settings.progress[cur.id] = { ch: curCh, page: curPage };
+  saveSettings();
+}
+function flip(dir){
+  if(!cur || disguised || barHidden) return;
+  const tp = totalPages(curCh);
+  if(dir === "next"){
+    if(curPage < tp - 1) curPage++;
+    else if(curCh < cur.chapters.length - 1){ curCh++; curPage = 0; }
+  }else{
+    if(curPage > 0) curPage--;
+    else if(curCh > 0){ curCh--; curPage = totalPages(curCh) - 1; }
+  }
+  renderBar(dir); saveProgress();
+}
+function gotoChapter(ci){
+  if(!cur) return;
+  curCh = Math.max(0, Math.min(cur.chapters.length - 1, ci));
+  curPage = 0;
+  renderBar("next"); saveProgress(); fillChapterSelect();
+}
+/* 点击 / 滚轮 */
+$("#zoneNext").addEventListener("click", ()=> flip("next"));
+$("#zonePrev").addEventListener("click", ()=> flip("prev"));
+/* 滚轮翻页已升级为全局模式，见「全局鼠标翻页」 */
+$("#btnChapterPrev").addEventListener("click", ()=> gotoChapter(curCh - 1));
+$("#btnChapterNext").addEventListener("click", ()=> gotoChapter(curCh + 1));
+
+/* ---------------- 阅读浮窗（只显示正文：拖动 / 调大小 / 伪装时整体隐藏） ---------------- */
+let barDragMoved = false;   // 浮窗拖动结束后短暂抑制点击翻页，防止松手误翻
+const fb = $("#floatBar"), fbText = $("#fbText");
+function toggleFb(open){
+  settings.fbOpen = open === undefined ? !settings.fbOpen : !!open;
+  if(settings.fbOpen && disguised) settings.fbOpen = false;   // 伪装状态下不允许打开（防误露）
+  saveSettings();
+  fb.classList.toggle("open", settings.fbOpen);
+  bar.classList.toggle("fb-only", settings.fbOpen);   // 浮窗开着时，底栏不再显示小说
+  if(settings.fbOpen){ placeFb(); renderBar(); }
+}
+$("#btnFloat").addEventListener("click", ()=> toggleFb());
+$("#fbClose").addEventListener("click", ()=> toggleFb(false));
+
+/* 拖动（按住浮窗任意位置拖；和"点击翻页"用 4px 位移阈值区分） */
+let fbDrag = null;
+fb.addEventListener("mousedown", e=>{
+  if(e.button !== 0 || e.target.closest("#fbResize,#fbClose")) return;
+  fbDrag = { sx: e.clientX, sy: e.clientY, ox: fb.offsetLeft, oy: fb.offsetTop, moved: false };
+});
+/* 调整大小（右下角手柄，宽高随意拉） */
+let fbRz = null;
+$("#fbResize").addEventListener("mousedown", e=>{
+  if(e.button !== 0) return;
+  fbRz = { sx: e.clientX, sy: e.clientY, ow: fb.offsetWidth, oh: fb.offsetHeight };
+  e.preventDefault(); e.stopPropagation();
+});
+document.addEventListener("mousemove", e=>{
+  if(fbDrag){
+    const dx = e.clientX - fbDrag.sx, dy = e.clientY - fbDrag.sy;
+    if(!fbDrag.moved){
+      if(Math.hypot(dx, dy) < 4) return;
+      fbDrag.moved = true;
+      fb.classList.add("fb-drag");
+    }
+    const w = fb.offsetWidth, h = fb.offsetHeight;
+    fb.style.left = Math.min(Math.max(2, fbDrag.ox + dx), Math.max(2, innerWidth  - w - 2)) + "px";
+    fb.style.top  = Math.min(Math.max(2, fbDrag.oy + dy), Math.max(2, innerHeight - h - 2)) + "px";
+  }else if(fbRz){
+    const w = Math.min(Math.max(260, fbRz.ow + e.clientX - fbRz.sx), innerWidth  - 16);
+    const h = Math.min(Math.max(90,  fbRz.oh + e.clientY - fbRz.sy), innerHeight - 16);
+    fb.style.width = w + "px"; fb.style.height = h + "px";
+    // 拉大后如果超出右/下边界，整体钳回
+    fb.style.left = Math.min(fb.offsetLeft, innerWidth  - w - 2) + "px";
+    fb.style.top  = Math.min(fb.offsetTop,  innerHeight - h - 2) + "px";
+  }
+});
+document.addEventListener("mouseup", ()=>{
+  if(fbDrag){
+    if(fbDrag.moved){
+      settings.fbPos = { x: fb.offsetLeft, y: fb.offsetTop };
+      saveSettings();
+      barDragMoved = true;              // 拖完松手不触发翻页
+      setTimeout(()=> barDragMoved = false, 0);
+    }
+    fb.classList.remove("fb-drag");
+    fbDrag = null;
+  }
+  if(fbRz){
+    settings.fbSize = { w: fb.offsetWidth, h: fb.offsetHeight };
+    saveSettings();
+    fbRz = null;
+  }
+});
+function placeFb(){
+  const w = fb.offsetWidth, h = fb.offsetHeight;
+  if(settings.fbSize){ fb.style.width = settings.fbSize.w + "px"; fb.style.height = settings.fbSize.h + "px"; }
+  if(settings.fbPos){
+    fb.style.left = Math.min(Math.max(2, settings.fbPos.x), Math.max(2, innerWidth  - w - 2)) + "px";
+    fb.style.top  = Math.min(Math.max(2, settings.fbPos.y), Math.max(2, innerHeight - h - 2)) + "px";
+  }else{
+    // 默认：右侧偏上，不挡底栏
+    fb.style.left = Math.max(8, innerWidth - w - 36) + "px";
+    fb.style.top  = "84px";
+  }
+}
+window.addEventListener("resize", ()=>{ if(settings.fbOpen) placeFb(); });
+/* 浮窗内点击翻页：左 20% 上一页，其余下一页 */
+$("#fbText").addEventListener("click", e=>{
+  if(disguised || barDragMoved) return;
+  const r = fb.getBoundingClientRect();
+  flip((e.clientX - r.left) / r.width < 0.2 ? "prev" : "next");
+});
+/* 浮窗内滚轮：内容可滚动时优先滚动（滚到边再翻页），不可滚动时交给全局翻页 */
+$("#fbText").addEventListener("wheel", e=>{
+  if(disguised) return;
+  const el = e.currentTarget;
+  if(el.scrollHeight > el.clientHeight + 2){
+    e.stopPropagation();   // 不让全局滚轮翻页，先正常滚动
+    if(el.scrollTop + el.clientHeight >= el.scrollHeight - 2 && e.deltaY > 0) flip("next");
+    else if(el.scrollTop <= 0 && e.deltaY < 0) flip("prev");
+  }
+}, { passive: true });
+
+/* ---------------- 失焦伪装 / 老板键 ---------------- */
+const REAL_TITLE = document.title;
+function setFavicon(emoji){
+  let link = document.querySelector("link[rel='icon']");
+  if(!link){ link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>${emoji}</text></svg>`;
+  link.href = "data:image/svg+xml," + encodeURIComponent(svg);
+}
+setFavicon("📚");
+function setDisguise(on){
+  disguised = on;
+  if(!on) entryGuard = false;   // 手动揭示后，恢复正常的失焦/聚焦自动切换
+  bar.classList.toggle("info", on);
+  document.title = on ? (settings.fakeTitle || REAL_TITLE) : REAL_TITLE;
+  setFavicon(on ? "📊" : "📚");
+  if(on){
+    /* 底栏：隐藏中间小说段和页码段（visibility 保留布局，看起来是干净的编辑器状态栏） */
+    bar.classList.add("info");
+    /* 浮窗：整体隐藏（保留 open 状态，揭示时自动恢复） */
+    fb.classList.add("hidden-bar");
+  }else{
+    bar.classList.remove("info");
+    fb.classList.remove("hidden-bar");
+    renderBar();   // 浮窗若开着会由 syncFb 恢复正文
+  }
+}
+window.addEventListener("blur", ()=>{ if(settings.blurHide && !barHidden) setDisguise(true); });
+/* 切回窗口/聚焦时不自动揭示小说——只有手动按老板键才显示（防止切回瞬间露馅） */
+
+/* ---------------- 快捷键 ---------------- */
+function comboFromEvent(e){
+  const k = e.key;
+  if(["Control","Alt","Shift","Meta"].includes(k)) return null;
+  const parts = [];
+  if(e.ctrlKey)  parts.push("Ctrl");
+  if(e.altKey)   parts.push("Alt");
+  if(e.shiftKey) parts.push("Shift");
+  if(e.metaKey)  parts.push("Meta");
+  parts.push(k.length === 1 ? k.toUpperCase() : k);
+  return parts.join("+");
+}
+const ACTIONS = {
+  nextPage:    "小说下一页",
+  prevPage:    "小说上一页",
+  nextChapter: "下一章",
+  prevChapter: "上一章",
+  chapterList: "章节目录（弹窗）",
+  toggleBar:   "显示/隐藏小说栏",
+  bossKey:     "伪装（老板键）",
+};
+let listeningAction = null;
+document.addEventListener("keydown", e=>{
+  /* 录制快捷键 */
+  if(listeningAction){
+    e.preventDefault(); e.stopPropagation();
+    if(e.key === "Escape"){            // Esc 取消录制
+      listeningAction = null; renderHotkeys(); return;
+    }
+    const combo = comboFromEvent(e);
+    if(combo && !/^F\d{1,2}$/.test(combo)){
+      settings.hotkeys[listeningAction] = combo; saveSettings();
+      listeningAction = null; renderHotkeys();
+    }
+    /* 单独按下修饰键(Ctrl/Alt/Shift/Meta)时：保持监听，等待组合键的剩余部分 */
+    return;
+  }
+  const tag = document.activeElement?.tagName;
+  if(tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  /* Shift 单独按下 = 老板键（可开关） */
+  if(settings.bossShift && e.key === "Shift" && !e.ctrlKey && !e.altKey && !e.metaKey){
+    e.preventDefault();
+    setDisguise(!disguised);
+    return;
+  }
+  const combo = comboFromEvent(e);
+  if(!combo || /^F\d{1,2}$/.test(combo)) return;   // F1~F12 保留给浏览器：F5 刷新、F11 全屏、F12 开发者工具
+  for(const [act, key] of Object.entries(settings.hotkeys)){
+    if(combo === key){
+      e.preventDefault();
+      if(act === "nextPage") flip("next");
+      else if(act === "prevPage") flip("prev");
+      else if(act === "nextChapter") gotoChapter(curCh + 1);
+      else if(act === "prevChapter") gotoChapter(curCh - 1);
+      else if(act === "chapterList") toggleToc();
+      else if(act === "toggleBar"){
+        barHidden = !barHidden;
+        bar.classList.toggle("hidden-bar", barHidden);
+        if(!barHidden) renderBar();
+      }
+      else if(act === "bossKey") setDisguise(!disguised);
+      return;
+    }
+  }
+});
+
+/* ---------------- Tab 切换 / 时钟 / 笔记 ---------------- */
+$$("nav button").forEach(b=> b.addEventListener("click", ()=>{
+  $$("nav button").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  $$(".pane").forEach(p=>p.classList.remove("active"));
+  $(`.pane[data-pane="${b.dataset.tab}"]`).classList.add("active");
+}));
+setInterval(()=>{
+  const d = new Date();
+  const w = "日一二三四五六"[d.getDay()];
+  $("#clock").textContent = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")} 星期${w} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;
+}, 1000);
+$("#noteArea").value = settings.note || "";
+let noteTimer;
+$("#noteArea").addEventListener("input", e=>{
+  settings.note = e.target.value;
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(()=>{
+    saveSettings();
+    const h = $("#saveHint"); h.classList.add("show");
+    setTimeout(()=>h.classList.remove("show"), 1200);
+  }, 600);
+});
+
+/* ---------------- 设置弹窗 ---------------- */
+const THEMES = [
+  { id:"dark",  name:"暗夜",   c:["#0f1115","#1c2130","#6c8cff"] },
+  { id:"light", name:"极简白", c:["#f5f6fa","#ffffff","#4c6fff"] },
+  { id:"green", name:"护眼绿", c:["#c7e6c9","#d6ecd8","#2f7d43"] },
+  { id:"sepia", name:"豆沙纸", c:["#f0e4d0","#f7edd9","#a86a2d"] },
+  { id:"purple",name:"深紫",   c:["#171226","#251d3e","#a78bfa"] },
+  { id:"blue",  name:"深海蓝", c:["#0c1a26","#152b3d","#38bdf8"] },
+];
+function renderThemes(){
+  $("#themeGrid").innerHTML = THEMES.map(t=>`
+    <div class="theme-item ${settings.theme===t.id?'active':''}" data-theme-id="${t.id}">
+      <div class="swatch">${t.c.map(c=>`<i style="background:${c}"></i>`).join("")}</div>${t.name}
+    </div>`).join("");
+  $$("#themeGrid .theme-item").forEach(el=> el.addEventListener("click", ()=>{
+    settings.theme = el.dataset.themeId;
+    document.documentElement.dataset.theme = settings.theme;
+    saveSettings(); renderThemes();
+  }));
+}
+function fmtCombo(c){ return c.split("+").map(p=>`<kbd>${p}</kbd>`).join("+"); }
+function renderHotkeys(){
+  $("#hkList").innerHTML = Object.entries(ACTIONS).map(([act, label])=>`
+    <div class="hk-row">
+      <label>${label}</label>
+      <div class="hk-key ${listeningAction===act?'listen':''}" data-act="${act}">
+        ${listeningAction===act ? "按下组合键…（Esc 取消）" : fmtCombo(settings.hotkeys[act])}
+      </div>
+    </div>`).join("");
+  $$("#hkList .hk-key").forEach(el=> el.addEventListener("click", ()=>{
+    listeningAction = el.dataset.act; renderHotkeys();
+  }));
+}
+function openModal(id){ $(id).classList.add("open"); }
+function closeModal(el){ el.closest(".modal-mask").classList.remove("open"); }
+$$(".modal-mask").forEach(m=>{
+  m.addEventListener("click", e=>{ if(e.target === m) m.classList.remove("open"); });
+});
+$$("[data-close]").forEach(b=> b.addEventListener("click", ()=> closeModal(b)));
+$("#btnSettings").addEventListener("click", ()=>{
+  renderThemes(); renderHotkeys();
+  $("#pageSize").value = settings.pageSize; $("#pageSizeVal").textContent = settings.pageSize;
+  $("#barFs").value = settings.barFs; $("#barFsVal").textContent = settings.barFs + "px";
+  $("#blurHide").checked = settings.blurHide;
+  $("#startDisguised").checked = settings.startDisguised;
+  $("#fakeText").value = settings.fakeText;
+  $("#fakeTitle").value = settings.fakeTitle;
+  $("#clickPage").checked = settings.clickPage;
+  $("#wheelPage").checked = settings.wheelPage;
+  $("#bossShift").checked = settings.bossShift;
+  $("#bossMiddle").checked = settings.bossMiddle;
+  $("#shuffleLoad").checked = settings.shuffleLoad;
+  renderPackChips();
+  openModal("#settingsModal");
+});
+$("#pageSize").addEventListener("input", e=>{
+  settings.pageSize = +e.target.value; $("#pageSizeVal").textContent = e.target.value;
+  saveSettings(); renderBar(); saveProgress();
+});
+$("#barFs").addEventListener("input", e=>{
+  settings.barFs = +e.target.value; $("#barFsVal").textContent = e.target.value + "px";
+  document.documentElement.style.setProperty("--bar-fs", e.target.value + "px");
+  saveSettings();
+});
+$("#blurHide").addEventListener("change", e=>{ settings.blurHide = e.target.checked; saveSettings(); });
+$("#startDisguised").addEventListener("change", e=>{ settings.startDisguised = e.target.checked; saveSettings(); });
+$("#fakeText").addEventListener("input", e=>{ settings.fakeText = e.target.value; saveSettings(); });
+$("#fakeTitle").addEventListener("input", e=>{ settings.fakeTitle = e.target.value; saveSettings(); });
+$("#clickPage").addEventListener("change", e=>{ settings.clickPage = e.target.checked; saveSettings(); });
+$("#wheelPage").addEventListener("change", e=>{ settings.wheelPage = e.target.checked; saveSettings(); });
+$("#bossShift").addEventListener("change", e=>{ settings.bossShift = e.target.checked; saveSettings(); });
+$("#bossMiddle").addEventListener("change", e=>{ settings.bossMiddle = e.target.checked; saveSettings(); });
+$("#shuffleLoad").addEventListener("change", e=>{
+  settings.shuffleLoad = e.target.checked; saveSettings(); shuffleContent();
+});
+$("#btnReshuffle").addEventListener("click", ()=> shuffleContent());
+
+/* ---------------- 小说导入 / 面板 ---------------- */
+$("#setImportBtn").addEventListener("click", ()=> $("#fileInput").click());
+$("#npImportBtn").addEventListener("click", ()=> $("#fileInput").click());
+$("#fileInput").addEventListener("change", async e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const buf = await file.arrayBuffer();
+  const text = decodeTxt(buf);
+  const book = {
+    id: "bk_" + Date.now(),
+    name: file.name.replace(/\.txt$/i, ""),
+    lines: text.split("\n"),
+    totalLen: text.replace(/\s/g, "").length,
+  };
+  book.chapters = parseChapters(text);
+  await bookStore.put(book);
+  await loadBooks();
+  await setActiveBook(book.id, true);
+  e.target.value = "";
+  $("#novelModal").classList.remove("open");
+  $("#settingsModal").classList.remove("open");
+});
+$("#btnNovelMenu").addEventListener("click", async ()=>{
+  await renderNovelPanel();
+  openModal("#novelModal");
+});
+async function loadBooks(){ books = await bookStore.all(); }
+async function setActiveBook(id, fresh){
+  cur = books.find(b=> b.id === id) || null;
+  settings.activeBook = cur ? cur.id : null;
+  const p = settings.progress[id];
+  if(p && !fresh){ curCh = p.ch; curPage = p.page; }
+  else { curCh = 0; curPage = 0; }
+  curCh = Math.min(curCh, (cur?.chapters.length||1) - 1);
+  curPage = Math.min(curPage, totalPages(curCh) - 1);
+  saveSettings(); renderBar(); fillChapterSelect(); await renderBookList();
+}
+function fillChapterSelect(){
+  const sel = $("#chapterSelect");
+  $("#npBookName").textContent = cur ? `📖 ${cur.name}` : "尚未导入小说";
+  if(!cur){ sel.innerHTML = "<option>—</option>"; sel.disabled = true; return; }
+  sel.disabled = false;
+  sel.innerHTML = cur.chapters.map((c,i)=>`<option value="${i}" ${i===curCh?"selected":""}>${esc(c.title)}</option>`).join("");
+}
+$("#chapterSelect").addEventListener("change", e=> gotoChapter(+e.target.value));
+$("#npPrevCh").addEventListener("click", ()=> gotoChapter(curCh - 1));
+$("#npNextCh").addEventListener("click", ()=> gotoChapter(curCh + 1));
+async function renderBookList(){
+  const box = $("#bookList");
+  if(!books.length){ box.innerHTML = ""; return; }
+  box.innerHTML = books.map(b=>`
+    <div class="hk-row" style="margin-bottom:6px">
+      <label style="cursor:pointer; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap"
+             data-open="${b.id}" title="切换到这本书">📘 ${esc(b.name)}${cur && b.id===cur.id ? " ✓" : ""}</label>
+      <div class="hk-key" style="min-width:auto; color:#f87171; border-color:#f8717155" data-del="${b.id}">删除</div>
+    </div>`).join("");
+  box.querySelectorAll("[data-open]").forEach(el=> el.addEventListener("click", ()=> setActiveBook(el.dataset.open)));
+  box.querySelectorAll("[data-del]").forEach(el=> el.addEventListener("click", async ()=>{
+    await bookStore.del(el.dataset.del);
+    if(settings.activeBook === el.dataset.del){ settings.activeBook = null; saveSettings(); }
+    await loadBooks();
+    if(cur && cur.id === el.dataset.del){ cur = null; renderBar(); }
+    await renderBookList(); fillChapterSelect();
+  }));
+}
+async function renderNovelPanel(){
+  fillChapterSelect(); await renderBookList();
+  const stat = $("#npStat");
+  if(stat){
+    const m = Math.round((settings.readSec || 0) / 60);
+    stat.textContent = m > 0 ? `⏱ 今日累计阅读 ${m} 分钟` : "";
+  }
+}
+
+/* ---------------- 侧栏装饰交互（纯氛围） ---------------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+(function drawQR(){
+  const svg = $("#qrSvg");
+  if(!svg) return;
+  const N = 29, rnd = mulberry32(2026);
+  const finderZone = (x,y)=> (x<7&&y<7)||(x>N-8&&y<7)||(x<7&&y>N-8);
+  let cells = "";
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    if(finderZone(x,y)) continue;
+    if(rnd() < 0.45) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  }
+  const finder = (ox,oy)=>`<path fill-rule="evenodd" d="M${ox} ${oy}h7v7h-7z M${ox+1} ${oy+1}h5v5h-5z M${ox+2} ${oy+2}h3v3h-3z"/>`;
+  svg.innerHTML = cells + finder(0,0) + finder(N-7,0) + finder(0,N-7);
+})();
+/* 假「领取」按钮：点了变已领取 */
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".fake-act");
+  if(b && !b.dataset.done){
+    b.dataset.done = "1";
+    b.textContent = "已领取 ✓";
+    b.style.opacity = ".65";
+  }
+});
+/* 签到按钮 */
+const signBtn = $("#signBtn");
+if(signBtn) signBtn.addEventListener("click", ()=>{
+  if(signBtn.disabled) return;
+  signBtn.disabled = true;
+  signBtn.textContent = "✓ 今日已签到，明日再来";
+  const dots = document.querySelectorAll(".sign-dots i");
+  if(dots[3]) dots[3].classList.add("done");
+});
+/* 秒杀倒计时（氛围用，每天重置） */
+setInterval(()=>{
+  const el = $("#seckillTimer");
+  if(!el) return;
+  const now = new Date();
+  const end = new Date(now); end.setHours(24,0,0,0);
+  let s = Math.max(0, Math.floor((end - now)/1000));
+  const p = n => String(n).padStart(2,"0");
+  el.textContent = `${p(Math.floor(s/3600))}:${p(Math.floor(s%3600/60))}:${p(s%60)}`;
+}, 1000);
+
+/* 左侧栏小交互 */
+const enBtn = $("#enBtn");
+if(enBtn) enBtn.addEventListener("click", ()=>{
+  if(enBtn.disabled) return;
+  enBtn.disabled = true;
+  enBtn.textContent = "✓ 已打卡 · 连续 12 天";
+});
+(function kaoyanCountdown(){
+  const el = $("#kaoyanDays");
+  if(!el) return;
+  const target = new Date("2026-12-19T00:00:00");
+  const days = Math.ceil((target - new Date()) / 86400000);
+  el.textContent = days > 0 ? days : "加油!";
+})();
+
+/* ---------------- 章节目录弹窗 ---------------- */
+let tocFilter = "";
+function toggleToc(){
+  if(!cur){ renderNovelPanel(); openModal("#novelModal"); return; }
+  tocFilter = ""; $("#tocSearch").value = "";
+  renderToc();
+  openModal("#tocModal");
+  setTimeout(()=> $("#tocSearch").focus(), 60);
+}
+function renderToc(){
+  if(!cur) return;
+  const box = $("#tocList");
+  const kw = tocFilter.trim().toLowerCase();
+  const items = cur.chapters
+    .map((c,i)=>({ i, t:c.title }))
+    .filter(x=> !kw || x.t.toLowerCase().includes(kw));
+  box.innerHTML = items.length
+    ? items.map(x=>`<div class="toc-item ${x.i===curCh?"cur":""}" data-ci="${x.i}">${x.i+1}. ${esc(x.t)}</div>`).join("")
+    : `<div class="empty-tip" style="padding:20px 0">没有匹配的章节</div>`;
+  box.querySelectorAll(".toc-item").forEach(el=> el.addEventListener("click", ()=>{
+    gotoChapter(+el.dataset.ci);
+    $("#tocModal").classList.remove("open");
+  }));
+  const curEl = box.querySelector(".toc-item.cur");
+  if(curEl && !kw) curEl.scrollIntoView({ block:"center" });   // 自动滚到当前章
+}
+$("#tocSearch").addEventListener("input", e=>{ tocFilter = e.target.value; renderToc(); });
+$("#btnToc").addEventListener("click", toggleToc);
+
+/* ---------------- 全局鼠标翻页（摸鱼核心） ---------------- */
+const CLICK_EXCLUDE = "button,a,input,textarea,select,label,option,nav,#novelBar,#floatBar,.modal-mask,.modal," +
+  ".theme-item,.hk-key,.rank-item,.course,.feed-item,.fl-links,.fake-act,.sign-btn,.ad-banner,pre,code";
+const canFish = ()=> cur && !disguised && !barHidden && !listeningAction;
+
+/* 左键点击页面空白处 = 下一页（按钮/弹窗/代码区/选中文本时不触发） */
+document.addEventListener("click", e=>{
+  if(!settings.clickPage || !canFish()) return;
+  if(e.button !== 0) return;
+  if(!(e.target instanceof Element) || e.target.closest(CLICK_EXCLUDE)) return;
+  const sel = window.getSelection && window.getSelection();
+  if(sel && !sel.isCollapsed) return;   // 正在复制/选择文字
+  flip("next");
+});
+
+/* 滚轮翻页：下滚下一页、上滚上一页（带触控板节流，避免一次翻十几页） */
+let wheelAcc = 0, wheelLock = 0;
+document.addEventListener("wheel", e=>{
+  if(!settings.wheelPage || !canFish()) return;
+  if(e.target instanceof Element && e.target.closest(".modal-mask")) return;  // 弹窗内正常滚动
+  e.preventDefault();
+  const now = Date.now();
+  if(now < wheelLock) return;
+  wheelAcc += e.deltaY;
+  if(Math.abs(wheelAcc) >= 60){
+    flip(wheelAcc > 0 ? "next" : "prev");
+    wheelAcc = 0;
+    wheelLock = now + 150;
+  }
+}, { passive: false });
+
+/* 鼠标中键点击 = 老板键（可开关，弹窗/输入框内不触发） */
+document.addEventListener("mousedown", e=>{
+  if(!settings.bossMiddle) return;
+  if(e.button !== 1) return;
+  if(e.target instanceof Element && e.target.closest(".modal-mask, input, textarea, select")) return;
+  e.preventDefault();   // 阻止浏览器默认的滚轮滚动模式
+  setDisguise(!disguised);
+});
+
+/* Esc 关闭弹窗 */
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape") $$(".modal-mask.open").forEach(m=> m.classList.remove("open"));
+});
+
+/* 今日阅读时长统计（仅在真正阅读时计时） */
+setInterval(()=>{
+  if(canFish() && document.hasFocus()){
+    const today = new Date().toISOString().slice(0,10);
+    if(settings.readDay !== today){ settings.readDay = today; settings.readSec = 0; }
+    settings.readSec = (settings.readSec || 0) + 1;
+    saveSettings();
+  }
+}, 1000);
+
+/* ---------------- 图片广告位（随机组合 + 定时轮换，纯图片展示、无跳转） ---------------- */
+const AD_IMGS = [
+  { t:"考研政治冲刺班", s:"肖四肖八 全套包邮",   b:"立即报名", c:["#2575fc","#6a11cb"] },
+  { t:"iPhone 17 首发",  s:"以旧换新最高补贴 ¥1200", b:"马上换新", c:["#ff5f6d","#ffc371"] },
+  { t:"云服务器 1 折",   s:"2核2G3M 新用户 ¥45/年",  b:"立即抢购", c:["#0f9b8e","#38ef7d"] },
+  { t:"外教 1v1 口语",   s:"首节体验课 0 元",        b:"免费试听", c:["#2b5876","#4e4376"] },
+  { t:"双 11 预售开启",  s:"定金膨胀 10 倍",         b:"先付定金", c:["#fc466b","#3f5efb"] },
+  { t:"大模型训练营",    s:"从 0 到 1 做出 AI Agent", b:"立即占座", c:["#6a11cb","#fc466b"] },
+  { t:"名企招聘直通车",  s:"内推免筛选 · 48h 反馈",   b:"投简历",   c:["#11998e","#38ef7d"] },
+  { t:"3A 大作首发",     s:"预购送限定皮肤礼包",      b:"立即预购", c:["#ff8008","#ffc837"] },
+  { t:"找房不踩坑",      s:"整租房源 · 押一付一",     b:"查看房源", c:["#4e54c8","#8f94fb"] },
+  { t:"体脂管理计划",    s:"私教课程 5 折体验",       b:"领取课程", c:["#f5515f","#9f041b"] },
+];
+function adSvgUrl(ad, w, h){
+  const [c1,c2] = ad.c;
+  const fs = Math.round(h*0.17), ss = Math.round(h*0.085);
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>`+
+    `<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>`+
+    `<stop offset='0' stop-color='${c1}'/><stop offset='1' stop-color='${c2}'/></linearGradient></defs>`+
+    `<rect width='${w}' height='${h}' fill='url(#g)'/>`+
+    `<circle cx='${w*0.85}' cy='${h*0.18}' r='${h*0.32}' fill='rgba(255,255,255,.12)'/>`+
+    `<circle cx='${w*0.12}' cy='${h*0.88}' r='${h*0.26}' fill='rgba(255,255,255,.10)'/>`+
+    `<text x='${w*0.06}' y='${h*0.40}' font-size='${fs}' font-weight='bold' fill='#fff' font-family='"Microsoft YaHei",sans-serif'>${ad.t}</text>`+
+    `<text x='${w*0.06}' y='${h*0.40+fs}' font-size='${ss}' fill='rgba(255,255,255,.92)' font-family='"Microsoft YaHei",sans-serif'>${ad.s}</text>`+
+    `<rect x='${w*0.06}' y='${h*0.74}' rx='${h*0.09}' width='${w*0.20}' height='${h*0.15}' fill='rgba(255,255,255,.26)'/>`+
+    `<text x='${w*0.16}' y='${h*0.74+h*0.105}' text-anchor='middle' font-size='${ss}' fill='#fff' font-family='"Microsoft YaHei",sans-serif'>${ad.b}</text>`+
+    `</svg>`;
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+}
+function fillAds(){
+  const slots = [["#adImgLeft",600,780],["#adImgRight",600,430],["#adImgTop",1200,170]];
+  const pool = [...AD_IMGS];
+  slots.forEach(([sel,w,h])=>{
+    const el = $(sel); if(!el) return;
+    const idx = Math.floor(Math.random()*pool.length);
+    const ad = pool.splice(idx,1)[0] || AD_IMGS[Math.floor(Math.random()*AD_IMGS.length)];
+    el.innerHTML = `<span class="adtag">广告</span><img src="${adSvgUrl(ad,w,h)}" alt="广告图片">`;
+  });
+}
+fillAds();
+setInterval(fillAds, 45000);
+
+/* ================= 内容多变引擎：每次刷新换一场布景 ================= */
+const rnd  = a => a[Math.floor(Math.random() * a.length)];
+const rndN = (min, max) => Math.floor(min + Math.random() * (max - min + 1));
+function pickN(arr, n){
+  const c = [...arr];
+  for(let i = c.length - 1; i > 0; i--){ const j = (Math.random() * (i + 1)) | 0; [c[i], c[j]] = [c[j], c[i]]; }
+  return c.slice(0, Math.min(n, c.length));
+}
+function shuffleAll(arr){ return pickN(arr, arr.length); }
+const fmtW = n => n >= 10000 ? (n / 10000).toFixed(1) + "w" : String(n);
+const TIME_STR = ["刚刚", "8 分钟前", "21 分钟前", "43 分钟前", "1 小时前", "2 小时前", "5 小时前", "昨天 23:11", "昨天 15:40", "前天"];
+
+/* ---------- 栏目注册表 ---------- */
+const PACKS = [
+  { id:"js",        name:"JavaScript" },
+  { id:"py",        name:"Python" },
+  { id:"java",      name:"Java" },
+  { id:"algo",      name:"算法" },
+  { id:"interview", name:"面经" },
+  { id:"news",      name:"技术资讯" },
+  { id:"db",        name:"数据库",   gen: ()=>genDb() },
+  { id:"net",       name:"计算机网络", gen: ()=>genNet() },
+  { id:"linux",     name:"Linux/运维", gen: ()=>genLinux() },
+  { id:"ai",        name:"AI/大模型", gen: ()=>genAi() },
+  { id:"fe",        name:"前端框架",  gen: ()=>genFe() },
+  { id:"career",    name:"考公考研",  gen: ()=>genCareer() },
+  { id:"note",      name:"笔记", fixed:true },
+];
+const packName = id => (PACKS.find(p=>p.id===id) || {}).name || id;
+
+/* ---------- 动态栏目素材池 ---------- */
+const DB_SECS = [
+  { h:"索引为什么用 B+ 树而不是 B 树 / 红黑树", items:["叶子节点成链表，范围查询直接顺序扫，B 树要中序回溯","非叶子节点不存数据，单页能放更多键，树更矮（3 层撑千万级）","红黑树是二叉的，千万数据树高 23 层 = 23 次磁盘 IO，不可接受","哈希索引等值快但不支持范围和排序，InnoDB 只作自适应哈希"] },
+  { h:"事务隔离级别与现象对照", items:["读未提交：脏读 / 读已提交：解决脏读，有不可重复读","可重复读（InnoDB 默认）：MVCC 快照读 + 间隙锁防部分幻读","串行化：读加共享写加排他，并发最差","隔离级别越低锁越少性能越高，按业务容忍度选"] },
+  { h:"MVCC 实现三件套", items:["隐藏列：trx_id（最近修改事务）+ roll_pointer（指向 undo log）","ReadView：m_ids 活跃事务列表 + min/max_trx_id + creator_trx_id","可见性判断：trx_id < min 可见；≥ max 不可见；中间查 m_ids","RC 每次读生成新 ReadView，RR 复用第一次的，这就是两者区别的本质"] },
+  { h:"慢 SQL 排查标准流程", items:["开慢查询日志 slow_query_log，long_query_time 先设 1s","EXPLAIN 看四列：type（至少 range）、key、rows、Extra","Extra 出现 Using filesort / Using temporary 优先优化","rows 远大于结果集 = 索引选择性差，考虑联合索引或改写 SQL"] },
+  { h:"联合索引与最左前缀", items:["索引 (a,b,c)：a 必须出现，b 遇范围断，c 部分失效","where a=1 and c=3 只用到 a；覆盖索引可回表免 IO","区分度低的列放前面没意义（性别列）","页分裂：自增主键顺序写最友好，UUID 主键是灾难"] },
+  { h:"锁机制速记", items:["全局锁：mysqldump 备份用，业务库慎用","表锁 / 元数据锁 MDL：改表结构时注意长事务阻塞","行锁三种：Record / Gap / Next-Key，RR 下防幻读靠后两者","死锁：show engine innodb status 看 LATEST DETECTED DEADLOCK"] },
+  { h:"Redis 高频三问", items:["缓存穿透：查不存在的 key → 布隆过滤器或缓存空值(短TTL)","缓存击穿：热 key 过期瞬间 → 互斥锁重建或逻辑过期","缓存雪崩：大批 key 同时过期 → TTL 加随机抖动 + 多级缓存","Redis 单线程为什么快：内存操作 + IO多路复用 + 无锁竞争"] },
+  { h:"日志系统与主从延迟", items:["redo log 保证崩溃恢复（物理日志，循环写）","binlog 用于主从复制和归档（逻辑日志，追加写）","两阶段提交：redo prepare → 写 binlog → redo commit","主从延迟大：看 Seconds_Behind_Master，并行复制或拆分大事务"] },
+];
+const DB_CODE = [
+`-- 窗口函数：每个部门工资 Top3（8.0+）
+SELECT * FROM (
+  SELECT name, dept, salary,
+         ROW_NUMBER() OVER (PARTITION BY dept ORDER BY salary DESC) rn
+  FROM emp) t
+WHERE rn <= 3;`,
+`-- 上线安全加字段（避免锁表）
+ALTER TABLE big_table
+  ADD COLUMN remark VARCHAR(200) DEFAULT '',
+  ALGORITHM=INPLACE, LOCK=NONE;`,
+`-- 强制走索引 / 分析执行计划
+EXPLAIN FORMAT=JSON
+SELECT * FROM orders WHERE user_id = 42 AND status = 'PAID'
+  ORDER BY created_at DESC LIMIT 20;`,
+`-- 深分页优化：游标方式代替 OFFSET
+SELECT * FROM orders WHERE id < :last_id
+  ORDER BY id DESC LIMIT 20;`,
+];
+const DB_QA = [
+  ["线上一条 SQL 突然变慢，昨天还好好的，怎么排查？","先看执行计划有没有换索引（统计信息过期会选错），再查锁等待和 IOPS。常见元凶：归档任务锁表、buffer pool 被冷数据刷掉、隐式类型转换走不了索引。"],
+  ["分库分表之后，全局唯一 ID 怎么生成？","雪花算法（时间戳+机器ID+序列）最常用；要单调递增可号段模式。注意时钟回拨问题，NTP 乐观策略 + 等待兜底。"],
+  ["为什么大表加索引要低峰期？加索引锁表吗？","MySQL 8.0 Online DDL 大部分 INPLACE 不锁写，但仍要拷数据、耗 IO。大表建议 gh-ost/pt-osc 限速在线改表。"],
+  ["count(*) 和 count(1) 和 count(id) 到底谁快？","InnoDB 官方：没区别，优化器会选最小的索引。别再纠结这个了，性能问题去查执行计划。"],
+  ["数据库连接池应该设多大？","公式：核心数 * 2 + 磁盘数。HikariCP 作者实测 4 核机器 pool=10 就够，几百连接只会增加上下文切换。"],
+];
+const DB_TIPS = ["生产库改数据前先开事务 + 备份，ROLLBACK 不存在于幻想中。", "ORM 生成的 N+1 查询是慢 SQL 重灾区，开 SQL 日志看一眼就露馅。", "字段类型能小则小：int 够用就别 bigint，状态用 tinyint 别 varchar。"];
+
+const NET_SECS = [
+  { h:"三次握手为什么不是两次", items:["两次无法阻止历史重复连接请求（旧 SYN 迟到建立无效连接）","也无法让服务端确认自己的 ACK 能到达对端","四次挥手因为 TCP 全双工，两个方向要分别关闭","TIME_WAIT 等 2MSL：保证最后 ACK 可重传 + 旧报文消亡"] },
+  { h:"从输入 URL 到页面显示（背熟但要说人话）", items:["DNS：浏览器缓存 → 系统缓存 → 递归解析 → 根/顶级/权威","TCP 连接 + TLS 握手（1.3 只要 1-RTT，会话复用 0-RTT）","HTTP 请求 → 服务端处理 → 响应 → 渲染：DOM/CSSOM → Layout → Paint","面试加分点：说清楚每一步可能出的问题（DNS 劫持、握手慢、渲染阻塞）"] },
+  { h:"HTTP/1.1 → /2 → /3 演进", items:["1.1 队头阻塞：一个连接同时只能一个请求在等响应","2 多路复用：二进制分帧，但 TCP 层丢包仍会阻塞所有流","3 换 QUIC(UDP)：流级别独立重传，彻底解决队头阻塞","HTTPS 下 HTTP/3 握手与加密合并，连接建立更快"] },
+  { h:"HTTPS / TLS 握手要点", items:["非对称交换密钥（ECDHE），对称加密传数据（AES-GCM）","证书链验证：站点证书 → 中间 CA → 根 CA（内置信任）","TLS1.3 删掉 RSA 密钥交换：不具备前向安全性","抓包工具能看 HTTPS 靠的是你手动装了它的根证书"] },
+  { h:"TCP 可靠传输三板斧", items:["确认应答 + 超时重传：基础保障","滑动窗口：流量控制，接收方告知剩余缓冲区大小","拥塞控制：慢启动 → 拥塞避免 → 快重传 → 快恢复","粘包：TCP 是字节流没有消息边界，应用层自定义分隔/长度头"] },
+  { h:"DNS / CDN 常考点", items:["递归查询（替你问到底）vs 迭代查询（让你自己问下一级）","CDN 本质：DNS 智能调度 + 边缘节点缓存 + 回源","缓存命中层级：浏览器 → OS → 本地 DNS → 权威","负向缓存：查不存在的域名 TTL 短，防 DNS 放大攻击"] },
+];
+const NET_QA = [
+  ["服务器出现大量 TIME_WAIT 怎么办？","本质是短连接太多（爬虫/压测常见）。复用长连接、开启 tcp_tw_reuse，或上七层负载均衡。不是朱砂痣，是要治的病。"],
+  ["WebSocket 和 HTTP 长连接是什么关系？","WebSocket 借 HTTP 101 Upgrade 握手，之后是独立的全双工 TCP 协议。HTTP keep-alive 只是复用连接，还是一问一答。"],
+  ["为什么抓包看到 TLS 握手后数据还是能被 Wireshark 解析？","解析的只是 TCP/IP 层结构，应用数据是密文。能看到明文是因为导入了会话密钥（SSLKEYLOGFILE）或中间人证书。"],
+  ["网关返回 502 和 504 有什么区别？","502 = 上游返回了非法响应/直接断开（进程崩了）；504 = 上游超时没响应（慢查询、卡死）。排障方向完全不同。"],
+];
+const NET_TIPS = ["面试说「TCP 面向字节流，UDP 面向报文」之后，一定要能接住「所以呢？」——接粘包处理。", "抓包三件套：tcpdump 服务器抓、Wireshark 分析、curl -v 快速复现。"];
+
+const LINUX_SECS = [
+  { h:"进程排查四连", items:["top / htop：看 CPU、内存、load（load > 核数说明排队）","ps aux --sort=-%mem | head：内存 Top 进程","pstree -p：看进程父子关系，找父进程比杀子进程有用","lsof -p PID：这进程打开了哪些文件/端口/Socket"] },
+  { h:"日志检索套路", items:["grep -C 5 'ERROR' app.log：带上下文看前后因从","less +F app.log：实时追踪，等价 tail -f 但可回翻","awk '{print $1}' access.log | sort | uniq -c | sort -rn | head：访问 Top IP","日志上千万行别用 cat，用 grep 管道，必要时先 tail 限定范围"] },
+  { h:"磁盘与 IO", items:["df -h 看挂载点，du -sh * | sort -rh 找大目录（注意已删除未释放：lsof | grep deleted）","iostat -x 1：看 %util 和 await，磁盘是否打满","dd / fio 测盘速；云盘的 IOPS 限制先看文档","文件名带空格：find -print0 | xargs -0 才安全"] },
+  { h:"网络排查三板斧", items:["ping 通不通（ICMP，可能被禁）→ curl -v 测应用层","ss -tlnp：端口监听；ss -s：连接状态统计","mtr / traceroute：定位丢包在哪一跳","端口占用：lsof -i:8080 或 ss -tlnp | grep 8080"] },
+];
+const LINUX_CODE = [
+`# 十分钟内定位 CPU 100% 的进程和线程
+top                      # 找到进程 PID
+top -H -p <PID>          # 看线程，记住最耗 CPU 的 TID
+printf '%x\\n' <TID>      # 转十六进制
+jstack <PID> | grep <hex> -A 20   # Java 直接定位代码行`,
+`# 找出最近 1 天内修改过的大文件
+find / -type f -mtime -1 -size +100M 2>/dev/null \\
+  | xargs -r du -h | sort -rh | head`,
+`# 一行命令批量重试（限速 + 失败重试）
+cat urls.txt | xargs -P 4 -I{} curl -s --retry 3 --limit-rate 2M -o {}.out {}`,
+`# systemd 服务速查
+systemctl status nginx        # 状态
+journalctl -u nginx -n 100    # 最近 100 行日志
+systemctl enable --now nginx  # 开机自启并立即启动`,
+];
+const LINUX_QA = [
+  ["服务器被入侵了第一步做什么？","断网（拔线/安全组）保现场 → last/wtmp 看登录 → history 和 crontab -l 查后门 → 对比 rpm -Va 文件完整性。别急着重启。"],
+  ["nohup 和 & 的区别？孤儿进程和僵尸进程？","& 后台跑但挂断退出，nohup 忽略 SIGHUP。僵尸是子进程死了父进程没 wait，孤儿会被 init 收养——僵尸堆积要杀父进程。"],
+  ["swap 用了很多，要不要关？","先看 vmstat si/so 是否频繁换页。频繁 = 内存不够，加内存或查泄漏；只是 swappiness 默认值偏高，调 10 以下即可。"],
+  ["cron 任务不执行，怎么查？","环境变量！cron 的 PATH 只有 /usr/bin。脚本用绝对路径、日志重定向、MAILTO 收报错，三件套排查。"],
+];
+const LINUX_TIPS = ["rm 之前先打一遍相同参数的 ls，确认列表没问题再换成 rm——保命习惯。", "生产操作用 tmux/screen，SSH 断线不背锅。"];
+
+const AI_SECS = [
+  { h:"大模型参数速查", items:["temperature：越低越确定，代码/抽取用 0~0.3，创意 0.7+","top_p：核采样，和 temperature 二选一调，别同时猛调","max_tokens：输出上限，不是「字数」，中文 1 token ≈ 1.5~2 字","上下文窗口：input+output 共享，超了要么截断要么摘要压缩"] },
+  { h:"RAG 最小可行架构", items:["切块 chunk：按语义切 300~800 token，重叠 10~15%","向量化 embedding → 向量库（PGVector/Milvus 均可起步）","检索 Top-K + 重排 rerank，拼 Prompt 时给来源","评估：建 50 条测试问答对，命中率 < 70% 先调切块别调模型"] },
+  { h:"Prompt 工程能落地的技巧", items:["角色 + 任务 + 约束 + 输出格式，四段式结构","Few-shot 给 2~3 个例子，比形容词管用十倍","要求「一步步思考」对推理类任务有真实增益","长输出先让它列大纲，确认后再展开，返工率骤降"] },
+  { h:"幻觉缓解", items:["RAG 挂来源，要求模型「只依据资料回答，无依据则说不知道」","temperature 调低 + 明确拒答边界","关键结论要引用原文片段，便于人工抽查","结构化输出用 JSON Schema 约束，程序可校验重试"] },
+];
+const AI_QA = [
+  ["微调还是 RAG？怎么选？","知识频繁更新/要溯源 → RAG；风格/格式/领域术语要内化 → 微调。多数业务问题 RAG 就够，别上来就炼丹。"],
+  ["Agent 的工具调用不稳定怎么办？","工具描述写清楚参数含义和何时使用，减少工具数量（<10 个），重要操作加确认环节。不稳定多数是描述写得烂。"],
+  ["Token 费用爆炸怎么优化？","系统提示词压缩、历史对话滑动窗口+摘要、缓存系统段（prefix caching）、小模型分流简单任务，通常能砍 60% 账单。"],
+  ["本地部署开源模型需要什么配置？","7B 量化后 8G 显存可跑；14B 要 16G+；别忽视显存带宽，它决定生成速度。CPU 也能跑但速度感人，仅适合尝鲜。"],
+];
+const AI_TIPS = ["把模型当「聪明但不了解你业务的新同事」：背景给足、要求说清、格式定死。", "Prompt 写进版本库做 code review，它是新时代的配置文件。"];
+
+const FE_SECS = [
+  { h:"Vue3 响应式 vs Vue2", items:["Vue2 Object.defineProperty：新增属性要 $set，数组下标监听不到","Vue3 Proxy：懒代理（访问才递归），支持 Map/Set/删除属性","ref vs reactive：ref 包装基本类型 + .value；reactive 解构会断响应式","性能优化点：v-memo、shallowRef 大列表、computed 缓存语义"] },
+  { h:"React Hooks 心法", items:["useEffect 依赖数组是「值比较」，引用类型每次都跑——用 useMemo/useCallback 稳定引用","状态放越近越好，全局状态才是最后手段","自定义 Hook = 逻辑复用，不是组件拆分","并发特性：useTransition 标记非紧急更新，输入不卡顿"] },
+  { h:"TypeScript 实用类型", items:["Pick/Omit/Partial/Required：从已有类型派生，别手写两遍","Record<string, T>：字典类型，keyof typeof 拿枚举键","unknown 代替 any：接收任意值但强制先收窄","类型体操有度：能跑、可读、同事看得懂的优先"] },
+  { h:"首屏性能优化清单", items:["路由懒加载 + 组件按需引入","图片：WebP/AVIF + 懒加载 + 尺寸自适应","关键 CSS 内联，JS defer/async","接口：合并请求、预请求、骨架屏兜底","Lighthouse 跑分看 LCP/CLS/INP，别凭感觉优化"] },
+];
+const FE_QA = [
+  ["v-if 和 v-show 到底什么场景选哪个？","v-if 真删真建（切换成本高、初始渲染快），v-show 只切 display（初始成本高）。高频切换用 v-show，权限块用 v-if。"],
+  ["useEffect 死循环怎么排查？","99% 是依赖里放了每次渲染都新建的对象/函数/数组。要么提到组件外，要么 useMemo 包住，要么用 ref 存。"],
+  ["前端错误监控怎么搭？","window.onerror + unhandledrejection 兜底，Sourcemap 还原堆栈，接入上报（采样！），用户行为面包屑辅助复现。"],
+  ["微前端到底解决什么问题？","多团队多技术栈共存 + 独立部署。如果不是这个痛点，上微前端是给自己找罪受，组件库共享就够了。"],
+];
+const FE_TIPS = ["框架 API 会过时，组件设计思维（状态归属、数据流向）才是护城河。", "控制台一红就截图问人之前，先读一遍报错信息第一行——80% 的答案在那。"];
+
+const CAREER_SECS = [
+  { h:"考研全程时间线（12 月下旬初试）", items:["3-6 月：数学英语打底，英语每天 1h 背单词+精读","7-9 月：强化期，专业课第一轮 + 数学 660/880 刷起","10 月：真题套卷 + 政治开始（肖秀荣精讲精练/技巧班）","11-12 月：政治大题背诵 + 英语作文模板 + 全真模拟按考试时间"] },
+  { h:"英语长难句拆解三步法", items:["找谓语动词定主句，从句连词（that/which/while）切分意群","插入语先拿掉（两个逗号/破折号之间），主干立现","翻译先直译意群再调语序，别逐词硬翻","每天精析 1 句胜过泛读 10 篇，坚持 2 个月见效果"] },
+  { h:"行测提速技巧", items:["资料分析性价比最高：练熟速算（截位直除、差分），20 题控制在 25 分钟","数量关系挑着做：先做工程/行程/经济利润套路题","言语理解别恋战，第一直觉正确率往往更高","涂卡策略：做完一个模块涂一个，最后 10 分钟留涂卡"] },
+  { h:"职场沟通与简历 STAR 法", items:["Situation 背景 → Task 任务 → Action 你做了什么 → Result 量化结果","简历每条经历都留数字：性能提升 40%、节省 3 人日、QPS 从 500 到 3000","向上沟通带方案：不说「这做不了」，说「A/B 两条路，倾向 B，因为…」","周报公式：本周结果（量化）→ 风险与求助 → 下周计划"] },
+];
+const CAREER_QA = [
+  ["在职考研时间怎么挤？","早晚各 1h 固定块 + 周末 6h 整块，通勤听课。先保数学和专业课，英语碎片化，政治 10 月再说。"],
+  ["面试被问「为什么离开上家」怎么答？","往「发展诉求」答：上家给到的成长已充分，目标岗位在 XX 方向有更大空间。绝不吐槽前司，一句都不要。"],
+  ["行测总是做不完怎么办？","策略性放弃：每模块限定时间到点就涂卡跳下个，正确率 70% 的完成卷 > 90% 的做不完。"],
+  ["英语单词总是背了就忘？","艾宾浩斯复习表 + APP 排队（墨墨/不背），核心是「多次低成本重逢」而不是一次死磕。真题里背单词效率翻倍。"],
+];
+const CAREER_TIPS = ["所有大考的本质是信息战 + 执行力，搜集信息别客气，上岸的人都是情报高手。", "番茄钟 25 分钟只是形式，重点是「时段内只做一件事」。"];
+
+/* ---------- 生成器 ---------- */
+function secUL(s, i){ return `<h3>${i + 1}. ${s.h}</h3><ul>${s.items.map(x=>`<li>${x}</li>`).join("")}</ul>`; }
+function secCode(code){ return `<pre><code>${esc(code)}</code></pre>`; }
+function qaItem(q){ return `<div class="feed-item"><div class="feed-title">${q[0]}</div><div class="feed-excerpt">${q[1]}</div></div>`; }
+function bannerHTML(){
+  const b = rnd(BANNER_POOL);
+  return `<div class="ad-banner ${rnd(["","teal"])}"><div><div class="big">${b.big}</div><div class="sub">${b.sub}</div></div><div class="cta">${b.cta} &gt;</div></div>`;
+}
+function genPack(name, icon, secs, tips, qa, codes){
+  const know = pickN(secs, 4).map(secUL);
+  const code = codes && Math.random() < 0.7 ? secCode(rnd(codes)) : "";
+  return `
+  <div class="card"><h2>${icon} ${name} · 今日聚焦</h2>
+    ${know.join("")}
+    ${code}
+    <p class="tip">💡 ${rnd(tips)}</p>
+  </div>
+  ${bannerHTML()}
+  <div class="card"><h2>💬 大家都在讨论</h2>
+    ${pickN(qa, 3).map(qaItem).join("")}
+  </div>`;
+}
+const genDb     = () => genPack("数据库 / MySQL", "🗄", DB_SECS, DB_TIPS, DB_QA, DB_CODE);
+const genNet    = () => genPack("计算机网络", "🌐", NET_SECS, NET_TIPS, NET_QA, null);
+const genLinux  = () => genPack("Linux / 运维", "🐧", LINUX_SECS, LINUX_TIPS, LINUX_QA, LINUX_CODE);
+const genAi     = () => genPack("AI / 大模型", "🤖", AI_SECS, AI_TIPS, AI_QA, null);
+const genFe     = () => genPack("前端框架", "⚛️", FE_SECS, FE_TIPS, FE_QA, null);
+const genCareer = () => genPack("考公 / 考研 / 职场", "📖", CAREER_SECS, CAREER_TIPS, CAREER_QA, null);
+
+/* ---------- 侧栏 / 资讯素材池 ---------- */
+const BANNER_POOL = [
+  { big:"⏰ 开学季 · 课程 5 折起", sub:"体系课 + 刷题营组合立减 ¥200，仅剩 2 天", cta:"立即抢购" },
+  { big:"🚀 大模型训练营 · 第 8 期开班", sub:"从 Prompt 工程到 Agent 落地，企业真实项目实战", cta:"查看课纲" },
+  { big:"📄 简历诊断 · 48h 出报告", sub:"前大厂面试官 1v1 改简历，投递回复率平均提升 3 倍", cta:"免费诊断" },
+  { big:"🎁 邀请返现 · 上不封顶", sub:"每邀请 1 位好友注册得 ¥18，满 3 人再送会员季卡", cta:"立即邀请" },
+  { big:"⚡ 新用户专享 · 0 元领 7 天 VIP", sub:"全站 3000+ 门课程畅学，含全部实战项目源码", cta:"0 元领取" },
+  { big:"📈 副业变现公开课", sub:"程序员接单避坑指南 + 报价策略，今晚 8 点开播", cta:"预约直播" },
+  { big:"🏅 认证考试补贴计划", sub:"通过软考/云厂商认证，报名费报销 50%，名额有限", cta:"了解详情" },
+  { big:"🧠 刷题会员 · 年卡 3 折", sub:"含大厂真题 12000+ 道，AI 模拟面试每日 3 次", cta:"开通年卡" },
+];
+const NOTICES = [
+  "🎉 恭喜用户 138****2217 抽中 AirPods Pro 一副",
+  "📣 系统将于本周日 02:00-04:00 例行维护",
+  "🔥 新版「学习周报」功能上线，快去生成你的专属报告",
+  "🎁 邀请好友注册，双方各得 500 积分",
+  "📢 今日全站累计学习 1,284,306 人次，超越昨日的你了吗？",
+  "🏆 「21 天打卡挑战」第 4 期报名开启，完赛瓜分 10 万积分",
+  "💡 创作者激励计划升级：精华帖奖励翻 3 倍",
+  "🎉 恭喜 @码上飞 的笔记入选本周精选，获得限量周边",
+  "📢 App 2.6 版本发布：支持离线缓存与倍速播放",
+  "🎁 每日 10:00 整点秒杀，会员年卡最低 ¥89",
+];
+const HOT_TITLES = [
+  "35 岁被裁之后，我在县城开了家文具店","浅谈：大模型会不会取代初级程序员？","用 Python 给领导写了个自动周报生成器",
+  "求救！线上 OOM 排查三天了毫无头绪","2026 年还要不要学 jQuery？（认真提问）","收入破百万的自由职业程序员，都做对了什么",
+  "公司要用低代码平台重写核心系统，我该怎么办","从体制内辞职转行程序员一年后的真实感受","面试官问我 MySQL 为什么用 B+ 树，我给他画了棵树",
+  "接受了 30% 降薪去小厂，两个月后我后悔了吗","一行代码引发的血案：记一次一次性的生产事故","30 岁转行学 Java 还来得及吗（附学习路线图）",
+  "我把公司项目写成了个人项目，然后被发现了","Nginx 日志里挖出的 10 万次攻击，分析给大家","如何优雅地拒绝同事的「帮我看看这个 bug」",
+  "坚持晨跑一年后的体检报告，和代码质量一样惊人",
+];
+const COURSES = [
+  { e:"☕", g:"135deg,#6a11cb,#2575fc", n:"【进阶】Spring Boot 源码剖析 36 讲", p:99,  o:199, t:"限时" },
+  { e:"📊", g:"135deg,#0f9b8e,#38ef7d", n:"【体系课】数据分析全栈（Python + SQL + BI）", p:899, o:1299, t:"分期免息" },
+  { e:"⚛️", g:"135deg,#ff5f6d,#ffc371", n:"【专项】React 18 + Next.js 全栈实战", p:149, o:299, t:null },
+  { e:"🤖", g:"135deg,#2b5876,#4e4376", n:"【新品】AI Agent 开发实战：从 Prompt 到生产", p:199, o:399, t:"新上架" },
+  { e:"🐧", g:"135deg,#1a2980,#26d0ce", n:"【速成】Linux 运维 + 上线部署一条龙", p:79,  o:158, t:"今日特价" },
+  { e:"🗄", g:"135deg,#42275a,#734b6d", n:"【面试向】MySQL 调优与高可用实战", p:129, o:259, t:"热门" },
+  { e:"📝", g:"135deg,#11998e,#38ef7d", n:"【上岸】考公行测 80 分冲刺营", p:299, o:599, t:"冲刺" },
+  { e:"🎓", g:"135deg,#373b44,#4286f4", n:"【2027 考研】数学全程班（基础+强化+冲刺）", p:699, o:1280, t:"报满即止" },
+  { e:"🌐", g:"135deg,#fc4a1a,#f7b733", n:"【图解】计算机网络通关特训营", p:99,  o:198, t:null },
+  { e:"🛡", g:"135deg,#232526,#414345", n:"【实战】Web 安全渗透测试入门到进阶", p:169, o:338, t:"限量" },
+  { e:"📱", g:"135deg,#00c6ff,#0072ff", n:"【全栈】Flutter 跨端开发：一套代码三端跑", p:139, o:279, t:null },
+  { e:"💼", g:"135deg,#654ea3,#eaafc8", n:"【职场】程序员谈薪与晋升私房课", p:59,  o:118, t:"口碑榜" },
+];
+const NEWS_POOL = [
+  { tag:"前端", cls:"blue",  src:"技术周刊",   t:"2026 前端趋势报告发布：响应式框架进入「信号时代」", x:"报告显示基于细粒度响应式的方案已进入主流框架核心，编译时优化成为新战场。附 12 家大厂技术栈统计。" },
+  { tag:"后端", cls:"green", src:"开源日报",   t:"Node.js 24 LTS 发布：内置 TypeScript 类型剥离", x:"无需 tsx/ts-node 直接运行 .ts 文件；权限模型默认启用；原生 fetch/ws 稳定性大幅增强。" },
+  { tag:"数据库", cls:"orange", src:"架构师社区", t:"深度解析：大模型时代的数据库为何都在拥抱向量检索", x:"从 HNSW 索引原理讲到 RAG 场景混合检索实践，附三方案压测对比数据。" },
+  { tag:"开源", cls:"gray",  src:"GitWeek",    t:"某大厂开源内部 DevOps 平台：CI/CD + 混沌工程一体化", x:"支持 K8s 多集群发布、自动化故障演练。上线首日破 8k Star，评论区吵翻了。" },
+  { tag:"职场", cls:"blue",  src:"码农周刊",   t:"程序员健康白皮书：我们采访了 2000 名开发者", x:"78% 的受访者日均坐姿超 9 小时；坚持每周 3 次运动的开发者 bug 率反而更低。" },
+  { tag:"AI", cls:"orange", src:"机器之心",   t:"开源模型追平闭源？三份横向评测报告的结论打架了", x:"不同榜单排名差异巨大，评测集污染问题浮出水面。附选型决策树。" },
+  { tag:"硬件", cls:"green", src:"芯片前线",   t:"端侧推理新突破：手机本地跑 7B 模型帧率翻倍", x:"新指令集 + 量化方案让中端机型也能实时对话，功耗降低 40%。" },
+  { tag:"安全", cls:"gray",  src:"威胁情报",   t:"供应链攻击新变种：恶意包潜伏 8 个月后触发", x:"本轮波及多国维护者，安装期行为完全正常，构建时才执行恶意代码。附自查清单。" },
+  { tag:"云计算", cls:"blue", src:"云头条",    t:"Serverless 十年之问：为什么大家又回去管服务器了？", x:"成本不可预测与冷启动是主因，但事件驱动场景仍是最优解。" },
+  { tag:"工具", cls:"green", src:"效率指南",   t:"2026 终端工具盘点：AI Shell 助手已经卷成什么样了", x:"自然语言转命令、危险操作拦截、历史语义搜索，三大标杆横向对比。" },
+  { tag:"政策", cls:"orange", src:"产经观察",  t:"多地下调宽带资费：千兆入户成本降四成", x:"运营商竞争白热化，附各省最新资费对比表与办理攻略。" },
+  { tag:"职场", cls:"gray",  src:"脉脉热帖",   t:"「带 AI 面试」成新战场：面试官也开始用 AI 出题了", x:"算法题实时求解被识别率大增，多家公司改用白板 + 追问式考察。" },
+];
+const IV_POOL = [
+  { c:"字节跳动", r:"后端开发 二面", s:"挂了但学到很多", cls:"orange", u:"努力摸鱼", x:"Redis 混合持久化、MySQL 索引下推、Kafka 不丢消息配置被追问 15 分钟。手撕：LRU + 无重复最长子串。" },
+  { c:"腾讯", r:"前端开发 一面", s:"未通过", cls:"gray", u:"码上飞", x:"事件循环输出题、Vue3 响应式差异、HTTP/2 多路复用。手写：Promise.allSettled + 函数柯里化。" },
+  { c:"美团", r:"测开 三面", s:"已OC", cls:"green", u:"奶茶三分糖", x:"SQL 窗口函数、接口自动化框架设计、弱网测试思路。三面主要聊职业规划，面试官全程微笑。" },
+  { c:"阿里", r:"客户端 一面", s:"已结束", cls:"blue", u:"安卓小菜鸡", x:"Activity 生命周期、Handler 机制、LeakCanary 原理、三次握手为什么不是两次。" },
+  { c:"拼多多", r:"服务端 二面+HR", s:"已完成", cls:"green", u:"不想加班", x:"分布式锁三种实现对比、秒杀系统设计（缓存预热+限流+削峰）。HR 面问稳定性和薪资结构。" },
+  { c:"网易", r:"游戏服务端 一面", s:"流程中", cls:"orange", u:"摸鱼锦鲤", x:"帧同步与状态同步取舍、ECS 架构、对象池设计。手撕：跳表插入。游戏面试果然不一样。" },
+  { c:"快手", r:"大数据开发 二面", s:"未通过", cls:"gray", u:"Flink 搬砖人", x:"水位线乱序问题、Checkpoint 机制、维表关联方案对比。手写：TopN 窗口。" },
+  { c:"微软", r:"SDE 校招 终面", s:"已OC", cls:"green", u:"凌波微步", x:"全程英文。系统设计：设计一个分布式任务调度器。AA 面试文化名不虚传，面试官一直在引导。" },
+  { c:"京东", r:"Java 后端 一面", s:"已结束", cls:"blue", u:"北京之首", x:"Spring 循环依赖三级缓存、Redis 分布式锁续期问题、消息队列顺序消费。" },
+  { c:"小红书", r:"推荐算法 一面", s:"流程中", cls:"orange", u:"炼丹小学生", x:"AUC 离线涨在线不涨的可能原因、特征穿越排查、双塔模型负采样策略。" },
+];
+const CHAT_POOL = [
+  ["debug一整天","兄弟们，秋招 0 offer，春招还有救吗？在线等，挺急的 😭","231"],
+  ["卷不动了","组长说「年轻人要多学习不要计较加班」，我该怎么优雅回应？","87"],
+  ["算法搬运工","背了 300 题模板，面试手撕还是写不出来，问题出在哪？","154"],
+  ["offer收割机","晒 offer：字节 35w / 美团 32w / 拼多多 45w，选哪个在线等","1024"],
+  ["咖啡因驱动","今天用 AI 写代码一天干完三天的活，突然有点恐慌","312"],
+  ["早八人","公司 10 点开会到 12 点，下午 2 点又开到 6 点，这班是非上不可吗","445"],
+  ["数据库清洁工","DBA 说我的 SQL 像行为艺术，大家帮忙看看哪里像了","68"],
+  ["理财产品受害者","基金绿了一个月，决定好好上班攒钱定投了","203"],
+  ["午睡大师","工位午睡被打呼投诉了，有没有 silently 治呼的办法","156"],
+  ["转行预备役","32 岁传统行业，自学编程 8 个月，求一份不打击的学习规划","587"],
+];
+const REF_POOL = [
+  { c:"字节", r:"前端开发", tag:"急招", cls:"" },
+  { c:"腾讯", r:"后端 Go 方向", tag:"内推", cls:"blue" },
+  { c:"美团", r:"数据分析", tag:"直通卡", cls:"green" },
+  { c:"阿里", r:"测试开发", tag:"热招", cls:"orange" },
+  { c:"小红书", r:"推荐算法", tag:"急招", cls:"" },
+  { c:"网易", r:"游戏策划", tag:"内推", cls:"blue" },
+  { c:"快手", r:"大数据开发", tag:"直通卡", cls:"green" },
+  { c:"百度", r:"自动驾驶感知", tag:"热招", cls:"orange" },
+  { c:"米哈游", r:"服务端引擎", tag:"急招", cls:"" },
+  { c:"华为", r:"嵌入式软件", tag:"内推", cls:"blue" },
+];
+const EN_QUOTES = [
+  ["The best way to predict the future is to invent it.","预测未来的最好方式，就是亲手创造它。"],
+  ["Talk is cheap. Show me the code.","废话少说，放码过来。"],
+  ["Simplicity is the ultimate sophistication.","大巧若拙，简至为繁。"],
+  ["The quieter you become, the more you can hear.","你越安静，听到的就越多。"],
+  ["Well begun is half done.","好的开始是成功的一半。"],
+  ["Quality is not an act, it is a habit.","优秀不是一种行为，而是一种习惯。"],
+  ["A journey of a thousand miles begins with a single step.","千里之行，始于足下。"],
+  ["You miss 100% of the shots you don't take.","不出手，命中率永远是零。"],
+];
+const SECKILLS = [
+  { t:"⏰ 限时秒杀 · 全场 5 折", s:"会员课程大促倒计时" },
+  { t:"💥 整点抢 · 年卡直降 ¥400", s:"AI 刷题会员年卡倒计时" },
+  { t:"🔥 今晚 8 点 · 1 元秒杀公开课", s:"大模型入门实战倒计时" },
+  { t:"⚡ 闪购 · 好书 49 元封顶", s:"技术经典书系倒计时" },
+  { t:"🎯 冲刺季 · 直播课 3 折", s:"考公考研冲刺营倒计时" },
+];
+
+/* ---------- 动态内容渲染 ---------- */
+function bannerInner(){
+  const b = rnd(BANNER_POOL);
+  return `<div><div class="big">${b.big}</div><div class="sub">${b.sub}</div></div><div class="cta">${b.cta} &gt;</div>`;
+}
+function buildDynamicPanes(){
+  PACKS.filter(p=>p.gen).forEach(p=>{
+    let sec = document.querySelector(`.pane[data-pane="${p.id}"]`);
+    if(!sec){
+      sec = document.createElement("section");
+      sec.className = "pane"; sec.dataset.pane = p.id;
+      document.querySelector('.pane[data-pane="note"]').before(sec);
+    }
+    sec.innerHTML = p.gen();
+  });
+}
+function renderNav(activeId){
+  const enabled = PACKS.filter(p=> p.id !== "note" && settings.packs[p.id] !== false);
+  const shown = settings.shuffleLoad ? pickN(enabled, Math.min(6, enabled.length)) : enabled;
+  const ids = [...shown.map(p=>p.id), "note"];
+  if(!activeId || !ids.includes(activeId)) activeId = ids[0];
+  $("nav").innerHTML = ids.map(id=>
+    `<button data-tab="${id}" class="${id===activeId?"active":""}">${packName(id)}</button>`).join("");
+  bindNav();
+  $$(".pane").forEach(p=>p.classList.toggle("active", p.dataset.pane === activeId));
+}
+function bindNav(){
+  $$("nav button").forEach(b=> b.addEventListener("click", ()=>{
+    $$("nav button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    $$(".pane").forEach(p=>p.classList.remove("active"));
+    $(`.pane[data-pane="${b.dataset.tab}"]`)?.classList.add("active");
+  }));
+}
+function shuffleStaticPanes(){
+  ["js","py","java","algo"].forEach(id=>{
+    const pane = document.querySelector(`.pane[data-pane="${id}"]`);
+    if(!pane) return;
+    shuffleAll([...pane.children]).forEach(el=>pane.appendChild(el));   // 卡片顺序随机 = 版式变化
+    pane.querySelectorAll("ul").forEach(ul=>{
+      if(ul.children.length > 2) shuffleAll([...ul.children]).forEach(li=>ul.appendChild(li));
+    });
+  });
+  // 资讯/面经的 feed 流打乱顺序并重写随机数据
+  const newsPane = document.querySelector('.pane[data-pane="news"]');
+  const ivPane   = document.querySelector('.pane[data-pane="interview"]');
+  const metaStr  = (tag,cls,src) =>
+    `<div class="feed-meta"><span class="tag ${cls}">${tag}</span><span>${src}</span><span>${rnd(TIME_STR)}</span><span>${fmtW(rnd(5000,26000))} 阅读</span><span>${rndN(24,520)} 评论</span></div>`;
+  const feedStr = items => items.map(n=>
+    `<div class="feed-item"><div class="feed-title">${n.t}</div>${n.u ? "" : metaStr(n.tag,n.cls,n.src)}<div class="feed-excerpt">${n.x}</div></div>`).join("");
+  if(newsPane){
+    const feedCard = newsPane.querySelector(".card");
+    feedCard.innerHTML = `<h2>📰 今日技术资讯</h2>` + feedStr(pickN(NEWS_POOL, 5));
+    const hotCard = newsPane.querySelectorAll(".card")[1];
+    const heat = pickN(HOT_TITLES, 8).map((t,i)=>({ t, v: (4.8 - i*0.55 - Math.random()*0.3).toFixed(1)+"w" }));
+    hotCard.innerHTML = `<h2>⏱ 24 小时热帖榜</h2>` + heat.map((h,i)=>
+      `<div class="rank-item"><span class="rank-num ${i<3?"top"+(i+1):""}">${i+1}</span><span class="t">${h.t}</span><span class="n">${h.v}</span></div>`).join("");
+  }
+  if(ivPane){
+    const cards = ivPane.querySelectorAll(".card");
+    cards[0].innerHTML = `<h2>🔥 最新面经</h2>` + pickN(IV_POOL, 4).map(v=>
+      `<div class="feed-item"><div class="feed-title">${v.c} · ${v.r}（${v.s}）</div><div class="feed-meta"><span class="tag ${v.cls}">${v.s}</span><span>牛友@${v.u}</span><span>${rnd(TIME_STR)}</span><span>${fmtW(rnd(4000,24000))} 浏览</span><span>${rndN(30,400)} 评论</span></div><div class="feed-excerpt">${v.x}</div></div>`).join("");
+    cards[1].innerHTML = `<h2>💬 今晚热聊</h2>` + pickN(CHAT_POOL, 3).map(c=>
+      `<div class="feed-item"><div class="feed-excerpt"><b style="color:var(--text)">@${c[0]}：</b>${c[1]}</div><div class="feed-meta"><span>${c[2]} 条回复</span><span>${rnd(TIME_STR)}</span></div></div>`).join("");
+  }
+  // 栏目内广告横幅换文案
+  $$(".ad-banner").forEach(b=> b.innerHTML = bannerInner());
+}
+function renderSidebarPools(){
+  // 跑马灯
+  $(".marquee").innerHTML = pickN(NOTICES, 4).join("&nbsp;&nbsp;|&nbsp;&nbsp;");
+  const byH4 = txt => [...document.querySelectorAll(".sidebar .ad-card")].find(c=>
+    c.querySelector("h4")?.textContent.includes(txt));
+  // 学习热榜
+  const hotCard = byH4("学习热榜");
+  if(hotCard){
+    const heat = pickN(HOT_TITLES, 10).map((t,i)=>({ t, v: fmtW(Math.max(2200, 26000 - i*rndN(1600,2600) - rndN(0,1800))) }));
+    hotCard.innerHTML = `<h4>🔥 学习热榜</h4>` + heat.map((h,i)=>
+      `<div class="rank-item"><span class="rank-num ${i<3?"top"+(i+1):""}">${i+1}</span><span class="t">${h.t}</span><span class="n">${h.v}</span></div>`).join("");
+  }
+  // 课程推荐
+  const courseCard = byH4("课程推荐");
+  if(courseCard){
+    courseCard.innerHTML = `<h4>🎯 课程推荐</h4>` + pickN(COURSES, 4).map(c=>
+      `<div class="course"><div class="cover" style="background:linear-gradient(${c.g})">${c.e}</div><div class="info"><div class="name">${c.n}</div><div class="price">¥${c.p}<s>¥${c.o}</s>${c.t?`<span class="tag ${rnd(["","blue","orange"])}" style="margin-left:6px">${c.t}</span>`:""}</div></div></div>`).join("");
+  }
+  // 内推快报
+  const refCard = byH4("今日内推快报");
+  if(refCard){
+    const code = Array.from({length:8}, ()=> rnd("ABCDEFGHJKMNPQRSTUVWXYZ23456789".split(""))).join("");
+    refCard.innerHTML = `<h4>📮 今日内推快报</h4>` + pickN(REF_POOL, 4).map(r=>
+      `<div class="rank-item"><span class="t">${r.c} · ${r.r}</span><span class="tag ${r.cls}">${r.tag}</span></div>`).join("") +
+      `<div style="font-size:11px; color:var(--text2); margin-top:8px">使用内推码 <b style="color:var(--accent)">${code}</b> 可免筛选直推</div>`;
+  }
+  // 每日英语
+  const enCard = byH4("每日英语");
+  if(enCard){
+    const q = rnd(EN_QUOTES);
+    enCard.innerHTML = `<h4>🌎 每日英语</h4><div style="font-size:12.5px; line-height:1.7">"${q[0]}"</div><div style="font-size:11.5px; color:var(--text2); margin:4px 0 8px">${q[1]}</div><button class="sign-btn" id="enBtn" style="background:linear-gradient(120deg,#38bdf8,#0f9b8e)">完成今日打卡 +1</button>`;
+    $("#enBtn").addEventListener("click", ()=>{
+      const b = $("#enBtn");
+      b.disabled = true; b.textContent = "✓ 已打卡 · 连续 " + rndN(3, 99) + " 天";
+    });
+  }
+  // 秒杀卡（右栏渐变卡，注意别命中左侧云服务器卡）
+  const sk = rnd(SECKILLS);
+  const seckillCard = document.querySelector('.sidebar:not(.left) .ad-card[style*="gradient"]');
+  if(seckillCard){
+    seckillCard.innerHTML = `<div style="font-weight:700; font-size:15px">${sk.t}</div><div style="font-size:12px; opacity:.93; margin:4px 0 10px">${sk.s} <b id="seckillTimer">23:59:47</b></div><div style="display:flex; gap:8px"><span class="fake-act" style="background:rgba(255,255,255,.26); padding:5px 14px; border-radius:18px; font-size:12px; cursor:pointer">立即抢购</span><span class="fake-act" style="background:rgba(255,255,255,.26); padding:5px 14px; border-radius:18px; font-size:12px; cursor:pointer">领券中心</span></div>`;
+  }
+  // 友链顺序
+  const fl = $(".fl-links");
+  if(fl) fl.innerHTML = shuffleAll([...fl.children]).map(s=>s.outerHTML).join("");
+}
+function shuffleAsides(){
+  $$("main aside").forEach(aside=>{
+    const movable = [...aside.children].filter(el=>el.classList.contains("ad-card"));
+    shuffleAll(movable).forEach(el=>aside.appendChild(el));
+  });
+}
+function shuffleContent(){
+  const activeId = $("nav button.active")?.dataset.tab;
+  buildDynamicPanes();
+  renderNav(activeId);
+  shuffleStaticPanes();
+  renderSidebarPools();
+  shuffleAsides();
+}
+function renderPackChips(){
+  $("#packGrid").innerHTML = PACKS.filter(p=>!p.fixed).map(p=>
+    `<span class="pack-chip ${settings.packs[p.id]===false?"":"on"}" data-pid="${p.id}">${p.name}</span>`).join("");
+  $$("#packGrid .pack-chip").forEach(el=> el.addEventListener("click", ()=>{
+    const id = el.dataset.pid;
+    settings.packs[id] = settings.packs[id] === false ? true : false;
+    saveSettings(); renderPackChips(); shuffleContent();
+  }));
+}
+/* ================= 引擎结束 ================= */
+
+/* ---------------- 启动 ---------------- */
+(async function init(){
+  document.documentElement.dataset.theme = settings.theme;
+  document.documentElement.style.setProperty("--bar-fs", settings.barFs + "px");
+  shuffleContent();   // 内容多变引擎：随机栏目 + 随机排版 + 随机素材
+  await bookStore.init();
+  await loadBooks();
+  if(settings.activeBook && books.some(b=> b.id === settings.activeBook)){
+    await setActiveBook(settings.activeBook);   // 恢复上次阅读进度
+  }else{
+    renderBar();
+  }
+  /* 恢复阅读浮窗（上次开着就继续开着） */
+  if(settings.fbOpen) toggleFb(true);
+  /* 进入页面默认伪装：不显示小说，按老板键才揭示 */
+  if(settings.startDisguised && cur){
+    entryGuard = true;
+    setDisguise(true);
+  }
+})();
+</script>
+</body>
+</html>
