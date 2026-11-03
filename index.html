@@ -1556,8 +1556,22 @@ function setFavicon(emoji){
 }
 setFavicon("📚");
 /* 手动老板键：顺带退出平台模拟页，露出完整学习站 */
+/* 手动老板键：
+   - 模拟平台页内（知乎/小红书/微博/微信）：Shift = 直接在页面上浮现/隐藏小说，不退出模拟层——正在刷热点本身就是最好的伪装
+   - 学习站界面：Shift = 经典伪装（Excel 标题 + 隐藏小说） */
 function bossToggle(){
-  if(simOpen()) closeSim();
+  if(simOpen()){
+    const show = bar.classList.contains("info") || fb.classList.contains("hidden-bar") || !fb.classList.contains("open");   // 伪装中 / 浮窗没开 = 小说不可见 → 这次要显示
+    if(show){
+      setDisguise(false);                                 // 解除伪装（恢复标题/状态栏），模拟层本身不动
+      if(!fb.classList.contains("open")) toggleFb(true);  // 浮窗没开就自动打开，确保小说真的显示出来
+      else renderBar();
+    }else{
+      bar.classList.add("info");                          // 老板来了：小说秒隐，页面仍是干净的知乎/小红书
+      fb.classList.add("hidden-bar");
+    }
+    return;
+  }
   setDisguise(!disguised);
 }
 function setDisguise(on){  disguised = on;
