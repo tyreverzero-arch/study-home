@@ -410,47 +410,53 @@ select option{background:var(--card); color:var(--text)}
 /* ---- 平台模拟器外壳与详情页 ---- */
 .pf{border-radius:12px; overflow:hidden; background:var(--card); border:1px solid var(--line)}
 .pf-bar{display:flex; align-items:center; gap:12px; padding:9px 14px; color:#fff; position:sticky; top:0; z-index:5}
-.pf-logo{font-size:16px; font-weight:800; letter-spacing:1px}
-.pf-search{flex:1; background:rgba(255,255,255,.22); border-radius:16px; padding:5px 12px; font-size:12px; opacity:.95; white-space:nowrap; overflow:hidden}
-.pf-tabs{display:flex; gap:14px; font-size:13px}
+.pf-logo{font-size:18px; font-weight:800; letter-spacing:1px}
+.pf-search{flex:1; background:rgba(255,255,255,.22); border-radius:16px; padding:6px 12px; font-size:13px; opacity:.95; white-space:nowrap; overflow:hidden}
+.pf-tabs{display:flex; gap:14px; font-size:14px}
 .pf-tabs span{opacity:.75; cursor:pointer; padding-bottom:2px}
 .pf-tabs span.on{opacity:1; font-weight:700; border-bottom:2px solid #fff}
 .pf-me{width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff; flex-shrink:0}
-.pf-body{padding:4px 16px 16px}
-.pf-back{padding:12px 2px 4px; font-size:13px; color:var(--accent); cursor:pointer; font-weight:600}
-.pf-article{max-width:660px; margin:0 auto}
-.pf-article h1{font-size:20px; line-height:1.5; color:var(--text); margin:10px 0 12px}
+.pf-body{padding:6px 20px 20px}
+.pf-back{padding:14px 2px 6px; font-size:14px; color:var(--accent); cursor:pointer; font-weight:600}
+.pf-article{max-width:800px; margin:0 auto}
+.pf-article h1{font-size:24px; line-height:1.55; color:var(--text); margin:12px 0 14px}
 .pf-ameta{display:flex; align-items:center; gap:10px; padding:10px 0}
 .pf-ava{width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; flex-shrink:0}
-.pf-aname{font-size:13.5px; font-weight:700; color:var(--text)}
-.pf-asub{font-size:11px; color:var(--text2)}
-.pf-follow{margin-left:auto; background:#07c160; color:#fff; border:none; border-radius:16px; padding:5px 14px; font-size:12px; cursor:pointer}
+.pf-aname{font-size:15px; font-weight:700; color:var(--text)}
+.pf-asub{font-size:12px; color:var(--text2)}
+.pf-follow{margin-left:auto; background:#07c160; color:#fff; border:none; border-radius:16px; padding:6px 16px; font-size:13px; cursor:pointer}
 .pf-follow.blue{background:#056de8}
 .pf-follow.red{background:#ff2442}
-.pf-abody{font-size:14.5px; line-height:1.9; color:var(--text); padding:6px 0 14px; border-bottom:1px solid var(--line)}
-.pf-abody p{margin:0 0 14px; text-indent:2em}
-.wx-foot{display:flex; justify-content:center; gap:34px; padding:14px 0; font-size:12.5px; color:var(--text2)}
-.pf-cmt-title{font-size:13px; font-weight:700; color:var(--text); padding:12px 0 6px; border-top:1px solid var(--line)}
-.pf-cmt{display:flex; gap:9px; padding:10px 0; border-bottom:1px dashed var(--line)}
+.pf-abody{font-size:16px; line-height:2; color:var(--text); padding:8px 0 16px; border-bottom:1px solid var(--line)}
+.pf-abody p{margin:0 0 16px; text-indent:2em}
+.wx-foot{display:flex; justify-content:center; gap:34px; padding:14px 0; font-size:13.5px; color:var(--text2)}
+.pf-cmt-title{font-size:15px; font-weight:700; color:var(--text); padding:14px 0 8px; border-top:1px solid var(--line)}
+.pf-cmt{display:flex; gap:10px; padding:12px 0; border-bottom:1px dashed var(--line)}
 .pf-cmt:last-child{border-bottom:none}
-.pf-cmt .pf-ava{width:28px; height:28px; font-size:12px}
+.pf-cmt .pf-ava{width:34px; height:34px; font-size:14px}
 .pf-cbody{flex:1}
-.pf-cname{font-size:12px; font-weight:600; color:var(--text)}
-.pf-ctext{font-size:12.5px; color:var(--text); line-height:1.6; margin-top:2px}
-.pf-cmeta{font-size:10.5px; color:var(--text2); margin-top:3px}
-.zh-upbtn{background:#e8f3ff; color:#056de8; border:none; border-radius:5px; padding:6px 16px; font-weight:700; font-size:13px; cursor:pointer; margin:8px 0}
-.zh-meta-row{font-size:12px; color:var(--text2); display:flex; gap:16px; align-items:center; margin-bottom:8px}
+.pf-cname{font-size:13.5px; font-weight:600; color:var(--text)}
+.pf-ctext{font-size:14px; color:var(--text); line-height:1.7; margin-top:3px}
+.pf-cmeta{font-size:11.5px; color:var(--text2); margin-top:4px}
+.zh-upbtn{background:#e8f3ff; color:#056de8; border:none; border-radius:5px; padding:7px 18px; font-weight:700; font-size:14px; cursor:pointer; margin:8px 0}
+.zh-meta-row{font-size:13px; color:var(--text2); display:flex; gap:16px; align-items:center; margin-bottom:8px}
 .zh-meta-row .pf-follow{margin-left:auto}
-.xhs-cover-big{height:230px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:64px; color:#fff; margin-top:10px}
-.xhs-acts{display:flex; gap:24px; font-size:12.5px; color:var(--text2); padding:12px 0; border-top:1px solid var(--line); margin-top:6px}
+.xhs-cover-big{height:300px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:80px; color:#fff; margin-top:10px}
+.xhs-acts{display:flex; gap:24px; font-size:13.5px; color:var(--text2); padding:12px 0; border-top:1px solid var(--line); margin-top:6px}
 .xhs-tags{margin-top:10px}
-.xhs-tags span{color:#056de8; font-size:12.5px; margin-right:10px}
-.wb-imgs{display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:10px}
-.wb-imgs div{height:86px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:26px; color:#fff}
+.xhs-tags span{color:#056de8; font-size:13.5px; margin-right:10px}
+.wb-imgs{display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-top:10px}
+.wb-imgs div{height:116px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff}
+/* 相关推荐 */
+.pf-rel-title{font-size:16px; font-weight:700; color:var(--text); padding:16px 0 4px}
+.pf-rel{padding:12px 2px; border-bottom:1px solid var(--line); cursor:pointer}
+.pf-rel:hover .pf-rel-t{color:var(--accent)}
+.pf-rel-t{font-size:14.5px; font-weight:600; color:var(--text); line-height:1.5}
+.pf-rel-m{font-size:11.5px; color:var(--text2); margin-top:4px}
 .pf-ad{margin:10px 0; padding:9px 12px; border:1px solid var(--line); border-radius:9px; font-size:12px; color:var(--text2); display:flex; gap:10px; align-items:center; cursor:pointer; background:var(--card2)}
 .pf-ad .adchip{background:var(--line); color:var(--text2); font-size:10px; padding:1px 6px; border-radius:4px; flex-shrink:0}
 .layout.pf-mode .sidebar{display:none}
-.layout.pf-mode .content{max-width:980px}
+.layout.pf-mode .content{max-width:1100px}
 </style>
 </head>
 <body>
@@ -1876,10 +1882,7 @@ const PACKS = [
   { id:"ai",        name:"AI/大模型", gen: ()=>genAi() },
   { id:"fe",        name:"前端框架",  gen: ()=>genFe() },
   { id:"career",    name:"考公考研",  gen: ()=>genCareer() },
-  { id:"wechat",    name:"微信",      gen: ()=>genWechat() },
-  { id:"zhihu",     name:"知乎",      gen: ()=>genZhihu() },
-  { id:"weibo",     name:"微博",      gen: ()=>genWeibo() },
-  { id:"xhs",       name:"小红书",    gen: ()=>genXhs() },
+  { id:"feed",      name:"热点",      gen: ()=>genFeed() },   // 每次刷新随机进一个平台（知乎/微博/小红书/公众号），直接显示文章正文
   { id:"note",      name:"笔记", fixed:true },
 ];
 const packName = id => (PACKS.find(p=>p.id===id) || {}).name || id;
@@ -2109,28 +2112,80 @@ function pfComments(pf, n){
   }).join("");
 }
 const PF_DATA  = () => ({ wechat:WX_POOL, zhihu:ZH_POOL, weibo:WB_POSTS_POOL, xhs:XHS_POOL });   // 惰性求值：素材池声明在本块之后，不能在顶层立即引用
-const PF_LIST  = { wechat:wxList, zhihu:zhList, weibo:wbList, xhs:xhsList };
 const PF_DETAIL = { wechat:wxDetail, zhihu:zhDetail, weibo:wbDetail, xhs:xhsDetail };
+const PF_HIST = {};   // 各平台文章浏览历史（返回键用）
+
+/* 一篇完整的文章页 = 详情 + 相关推荐（点相关推荐继续读，像真的在刷平台） */
+function pfPage(pf, i){
+  const pool = PF_DATA()[pf];
+  const item = pool[i];
+  const relIdx = pool.map((_,j)=>j).filter(j=>j!==i);
+  const rel = pickN(relIdx, Math.min(5, relIdx.length));
+  return `<div data-pf-cur="${i}">` + PF_DETAIL[pf](item) +
+    `<div class="pf-rel-title">📌 相关推荐</div>` +
+    rel.map(j=>{
+      const r = pool[j];
+      const t = pf === "xhs" ? r[2] : (pf === "weibo" ? (r[3]||"").slice(0,40) : (pf === "wechat" ? r.t : r[0]));
+      const who = pf === "xhs" ? ("@"+r[3]) : (pf === "wechat" ? r.g : (pf === "zhihu" ? r[2] : ""));
+      return `<div class="pf-rel" data-pf-open data-pf="${pf}" data-i="${j}">
+        <div class="pf-rel-t">${esc(t)}</div>
+        <div class="pf-rel-m">${who ? who+" · " : ""}${rnd(TIME_STR)} · ${fmtW(rnd(3000, 98000))} 阅读</div>
+      </div>`;
+    }).join("") +
+    `<div class="pf-ad"><span class="adchip">广告</span><span>${rnd(["🔊 某多多 · 天天领红包，提现秒到账","📊 AI 简历优化 · 3 秒生成大厂版简历","🎵 某音精选 · 你关注的更新了","☕ 瑞幸 · 9.9 元一杯每周都能喝"])}</span></div></div>`;
+}
+
+/* 热点栏目：每次刷新随机进一个平台，直接展示一篇文章正文 */
+const FEED_NAMES = ["热点", "推荐", "头条", "热门", "今日热榜"];
+function genFeed(){
+  const pf = rnd(["wechat","zhihu","weibo","xhs"]);
+  const pool = PF_DATA()[pf];
+  const i = rndN(0, pool.length-1);
+  PF_HIST[pf] = [];
+  return pfShell(pf, pfPage(pf, i));
+}
+
 document.addEventListener("click", e=>{
-  const op = e.target.closest("[data-pf-open]");
-  if(op){
-    const pf = op.dataset.pf, item = PF_DATA()[pf] && PF_DATA()[pf][+op.dataset.i];
-    const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
-    if(item && body && PF_DETAIL[pf]){ body.innerHTML = PF_DETAIL[pf](item); window.scrollTo({top:0, behavior:"smooth"}); }
+  const openEl = e.target.closest("[data-pf-open]");
+  if(openEl){
+    const pf = openEl.dataset.pf, i = +openEl.dataset.i;
+    const shell = openEl.closest(".pf");
+    const body = shell && shell.querySelector(".pf-body");
+    const pool = PF_DATA()[pf];
+    if(body && pool[i]){
+      const curEl = body.querySelector("[data-pf-cur]");
+      const cur = curEl ? +curEl.dataset.pfCur : NaN;
+      if(!isNaN(cur)) (PF_HIST[pf] = PF_HIST[pf] || []).push(cur);
+      body.innerHTML = pfPage(pf, i);
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
     return;
   }
   const bk = e.target.closest("[data-pf-back]");
   if(bk){
     const pf = bk.dataset.pfBack;   // data-pf-back → dataset.pfBack（dataset 会转驼峰）
-    const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
-    if(body && PF_STATE[pf]) body.innerHTML = PF_STATE[pf];
+    const shell = bk.closest(".pf");
+    const body = shell && shell.querySelector(".pf-body");
+    if(body){
+      const pool = PF_DATA()[pf];
+      const i = (PF_HIST[pf] && PF_HIST[pf].length) ? PF_HIST[pf].pop() : rndN(0, pool.length-1);
+      body.innerHTML = pfPage(pf, i);
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
     return;
   }
   const tb = e.target.closest("[data-pf-tab]");
   if(tb){
-    const pf = tb.closest(".pf").dataset.pf;
-    const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
-    if(body) body.innerHTML = PF_LIST[pf]();   // 子标签切换 = 换一批内容
+    const shell = tb.closest(".pf");
+    const pf = shell.dataset.pf;
+    const body = shell.querySelector(".pf-body");
+    if(body){
+      const pool = PF_DATA()[pf];
+      const i = rndN(0, pool.length-1);   // 子标签切换 = 随机换一篇文章
+      PF_HIST[pf] = [];
+      body.innerHTML = pfPage(pf, i);
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
   }
 });
 function wxItem(w, i){
@@ -2398,6 +2453,9 @@ function bannerInner(){
   return `<div><div class="big">${b.big}</div><div class="sub">${b.sub}</div></div><div class="cta">${b.cta} &gt;</div>`;
 }
 function buildDynamicPanes(){
+  // 「热点」导航名随机化，不暴露具体平台
+  const feedPack = PACKS.find(p=>p.id==="feed");
+  if(feedPack) feedPack.name = rnd(FEED_NAMES);
   PACKS.filter(p=>p.gen).forEach(p=>{
     let sec = document.querySelector(`.pane[data-pane="${p.id}"]`);
     if(!sec){
@@ -2410,15 +2468,15 @@ function buildDynamicPanes(){
 }
 function renderNav(activeId){
   const enabled = PACKS.filter(p=> p.id !== "note" && settings.packs[p.id] !== false);
-  // 平台栏目（微信/知乎/微博/小红书）固定常驻导航，其余名额从技术栏目里随机挑
-  const isPlat = p => !!PF_BAR[p.id];
-  const plat   = enabled.filter(isPlat);
-  const others = enabled.filter(p=>!isPlat(p));
+  // 「热点」栏目常驻导航（内部随机是知乎/微博/小红书/公众号），其余名额从技术栏目里随机挑
+  const isFeed = p => p.id === "feed";
+  const feedPack = enabled.find(isFeed);
+  const others = enabled.filter(p=>!isFeed(p));
   const shown  = settings.shuffleLoad
-    ? [...plat, ...pickN(others, Math.max(0, Math.min(4, 8 - plat.length)))]
+    ? [...(feedPack?[feedPack]:[]), ...pickN(others, Math.max(0, Math.min(5, 7 - (feedPack?1:0))))]
     : enabled;
   const ids = [...shown.map(p=>p.id), "note"];
-  if(!activeId || !ids.includes(activeId)) activeId = ids[0];
+  if(!activeId || !ids.includes(activeId)) activeId = feedPack ? "feed" : ids[0];   // 刷新默认进热点（随机平台文章页）
   $("nav").innerHTML = ids.map(id=>
     `<button data-tab="${id}" class="${id===activeId?"active":""}">${packName(id)}</button>`).join("");
   bindNav();
@@ -2436,7 +2494,7 @@ function bindNav(){
 }
 function applyPfMode(){
   const id = $("nav button.active")?.dataset.tab;
-  document.querySelector(".layout")?.classList.toggle("pf-mode", ["wechat","zhihu","weibo","xhs"].includes(id));
+  document.querySelector(".layout")?.classList.toggle("pf-mode", id === "feed");
 }
 function shuffleStaticPanes(){
   ["js","py","java","algo"].forEach(id=>{
@@ -2548,6 +2606,7 @@ function renderPackChips(){
   document.documentElement.dataset.theme = settings.theme;
   document.documentElement.style.setProperty("--bar-fs", settings.barFs + "px");
   shuffleContent();   // 内容多变引擎：随机栏目 + 随机排版 + 随机素材
+  renderNav("feed");  // 打开页面默认显示「热点」= 随机平台的一篇完整文章
   await bookStore.init();
   await loadBooks();
   if(settings.activeBook && books.some(b=> b.id === settings.activeBook)){
