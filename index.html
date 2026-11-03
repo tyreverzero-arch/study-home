@@ -483,7 +483,10 @@ select option{background:var(--card); color:var(--text)}
 .xhs-waterfall{column-count:3; column-gap:16px; max-width:1150px; margin:0 auto; padding:18px 24px}
 .xhs-note{break-inside:avoid; background:#fff; border-radius:12px; margin-bottom:16px; cursor:pointer; border:1px solid #f5f5f5; transition:box-shadow .15s}
 .xhs-note:hover{box-shadow:0 4px 18px rgba(0,0,0,.08)}
-.xhs-cover{display:flex; align-items:center; justify-content:center; font-size:44px; border-radius:12px 12px 0 0}
+.xhs-cover{display:flex; align-items:center; justify-content:center; font-size:44px; border-radius:12px 12px 0 0; position:relative; overflow:hidden}
+.xhs-cover img, .xhs-modal-cover img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2}
+.xhs-cover-emo{position:relative; z-index:1}
+.xhs-modal-cover{width:52%; display:flex; align-items:center; justify-content:center; font-size:110px; flex-shrink:0; position:relative; overflow:hidden}
 .xhs-note-t{font-size:14px; font-weight:600; color:#333; padding:10px 12px 6px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .xhs-note-m{display:flex; align-items:center; gap:6px; padding:0 12px 12px}
 .xhs-ava{width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff}
@@ -1555,7 +1558,7 @@ setFavicon("📚");
 /* 手动老板键：顺带退出平台模拟页，露出完整学习站 */
 function bossToggle(){
   if(simOpen()) closeSim();
-  bossToggle();
+  setDisguise(!disguised);
 }
 function setDisguise(on){  disguised = on;
   if(!on) entryGuard = false;   // 手动揭示后，恢复正常的失焦/聚焦自动切换
@@ -2753,18 +2756,82 @@ function renderPackChips(){
 }
 /* ================= 平台全页模拟器（1:1 复刻） ================= */
 const SIM_PFS  = ["xhs","zhihu","weibo","wechat"];
-const SIM_STATE = { pf:null, lists:{}, hist:[] };
+const SIM_STATE = { pf:null, lists:{}, hist:[], items:{}, hot:{} };
 const simRoot = document.createElement("div");
 simRoot.id = "simRoot";
 document.body.appendChild(simRoot);
 const simOpen = ()=> simRoot.classList.contains("open");
 function closeSim(){ simRoot.classList.remove("open"); simRoot.innerHTML = ""; }
 
-/* ---------- 列表构建 ---------- */
+/* ---------- 真实热榜抓取（nginx 同源反代 /hotapi/ → 60s.viki.moe） ---------- */
+/* 平台 → 数据源：知乎=知乎热榜、微博=微博热搜、小红书=抖音热点（生活方式类标题+真实封面）、微信=今日头条热榜 */
+const HOT_SRC = { zhihu:"zhihu", weibo:"weibo", xhs:"douyin", wechat:"toutiao" };
+const HOT_TTL = 10*60*1000;   // 10 分钟内用缓存，不重复抓
+function cachedHot(pf){
+  try{
+    const c = JSON.parse(localStorage.getItem("simhot_"+pf) || "null");
+    if(c && Array.isArray(c.d) && c.d.length) return c.d;
+  }catch(_){}
+  return null;
+}
+function loadHot(pf){
+  try{
+    const c = JSON.parse(localStorage.getItem("simhot_"+pf) || "null");
+    if(c && Array.isArray(c.d) && c.d.length && Date.now()-c.t < HOT_TTL) return Promise.resolve(c.d);
+  }catch(_){}
+  return new Promise(res=>{
+    let done = false;
+    const fin = v => { if(!done){ done = true; res(v); } };
+    const to = setTimeout(()=>fin(null), 6000);   // 抓不到就用内置素材兜底，页面不能空
+    fetch("/hotapi/"+HOT_SRC[pf]).then(r=>r.json()).then(j=>{
+      clearTimeout(to);
+      const arr = ((j && j.data) || []).map(x=>({
+        t: (x.title||"").trim(),
+        d: (x.detail||"").trim(),
+        cover: x.cover || "",
+        hot: x.hot_value_desc || (x.hot_value ? Number(x.hot_value) : ""),
+        link: x.link || ""
+      })).filter(x=>x.t);
+      if(arr.length){
+        SIM_STATE.hot[pf] = arr;
+        try{ localStorage.setItem("simhot_"+pf, JSON.stringify({ t:Date.now(), d:arr })); }catch(_){}
+      }
+      fin(arr.length ? arr : null);
+    }).catch(()=>{ clearTimeout(to); fin(null); });
+  });
+}
+/* 真实详情正文兜底：真实摘要/标题起头 + 通用段落（模拟层专用，不碰旧 pfParas） */
+function simParas(first, pf){
+  const S = PF_SENT[pf] || PF_SENT.zhihu;
+  const m = pickN(S.mids, 2);
+  return [first, m[0] + " " + rnd(S.ends2), m[1] + " " + rnd(S.ends2), rnd(S.close)];
+}
+
+/* ---------- 列表构建（真实热榜优先，内置素材兜底补位） ---------- */
 const XHS_CATS = ["推荐","穿搭","美食","彩妆","影视","综艺","家居","旅行","健身","职场","数码","学习"];
+const WB_MEDIA = ["央视新闻","人民日报","澎湃新闻","环球网","中国新闻网","界面新闻","科技日报","新京报","每日经济新闻","南方都市报"];
+const SIM_GRADS = ["135deg,#ff5f6d,#ffc371","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#43cea2,#185a9d","135deg,#f7971e,#ffd200","135deg,#ff512f,#dd2476","135deg,#2b5876,#4e4376","135deg,#4776e6,#8e54e9"];
+const XHS_EMOS = ["✨","🍰","👗","📸","🏔️","💄","🍜","🐱","🏖️","📚","🌷","☕"];
+function hotImg(url){
+  return url ? `<img src="${url}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()" alt="">` : "";
+}
 function simXhsList(){
-  return pickN(XHS_POOL.map((x,i)=>i), 9).map(i=>{
-    const x = XHS_POOL[i];
+  const hot = SIM_STATE.hot.xhs || [];
+  const items = [];
+  hot.slice(0, 6).forEach(h=> items.push({ real:1, h }));
+  pickN(XHS_POOL.map((x,i)=>i), Math.max(3, 9-items.length)).forEach(i=> items.push({ real:0, i }));
+  SIM_STATE.items.xhs = items;
+  return items.map((it,i)=>{
+    if(it.real){
+      const h = it.h, g = rnd(SIM_GRADS), e = rnd(XHS_EMOS);
+      const who = rnd(XHS_POOL)[3];
+      return `<div class="xhs-note" data-sim-open="xhs:${i}">
+        <div class="xhs-cover" style="background:linear-gradient(${g}); height:${rnd(150,230)}px">${hotImg(h.cover)}<span class="xhs-cover-emo">${e}</span></div>
+        <div class="xhs-note-t">${esc(h.t)}</div>
+        <div class="xhs-note-m"><span class="xhs-ava" style="background:linear-gradient(${g})">${e}</span><span class="xhs-name">${who}</span><span class="xhs-like">❤ ${typeof h.hot==="number" ? fmtW(h.hot) : (h.hot||rndN(300,52000))}</span></div>
+      </div>`;
+    }
+    const x = XHS_POOL[it.i];
     return `<div class="xhs-note" data-sim-open="xhs:${i}">
       <div class="xhs-cover" style="background:linear-gradient(${x[1]}); height:${rnd(150,230)}px">${x[0]}</div>
       <div class="xhs-note-t">${esc(x[2])}</div>
@@ -2773,8 +2840,21 @@ function simXhsList(){
   }).join("");
 }
 function simZhihuList(){
-  return pickN(ZH_POOL.map((z,i)=>i), 6).map(i=>{
-    const z = ZH_POOL[i];
+  const hot = SIM_STATE.hot.zhihu || [];
+  const items = [];
+  hot.slice(0, 5).forEach(h=> items.push({ real:1, h }));
+  pickN(ZH_POOL.map((z,i)=>i), Math.max(3, 7-items.length)).forEach(i=> items.push({ real:0, i }));
+  SIM_STATE.items.zhihu = items;
+  return items.map((it,i)=>{
+    if(it.real){
+      const h = it.h;
+      return `<div class="zh-qcard" data-sim-open="zhihu:${i}">
+        <div class="zh-qcard-t">${esc(h.t)}</div>
+        <div class="zh-qcard-x">${esc((h.d||"").slice(0,90))}</div>
+        <div class="zh-qcard-m"><span>${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(800000,9800000))+" 热度")}</span><span>${rndN(30,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${rndN(120,18000)}</span></div>
+      </div>`;
+    }
+    const z = ZH_POOL[it.i];
     return `<div class="zh-qcard" data-sim-open="zhihu:${i}">
       <div class="zh-qcard-t">${esc(z[0])}</div>
       <div class="zh-qcard-x">${esc(z[1])}</div>
@@ -2784,8 +2864,23 @@ function simZhihuList(){
 }
 const WB_IMGS = ["🌅","🍜","🐱","📸","🌊","🌇","🎧","🍫","🐕","☕","📚","🎤"];
 function simWeiboList(){
-  return pickN(WB_POSTS_POOL.map((p,i)=>i), 5).map(i=>{
-    const p = WB_POSTS_POOL[i];
+  const hot = SIM_STATE.hot.weibo || [];
+  const items = [];
+  hot.slice(0, 4).forEach(h=> items.push({ real:1, h }));
+  pickN(WB_POSTS_POOL.map((p,i)=>i), Math.max(3, 6-items.length)).forEach(i=> items.push({ real:0, i }));
+  SIM_STATE.items.weibo = items;
+  return items.map((it,i)=>{
+    if(it.real){
+      const h = it.h, name = rnd(WB_MEDIA), e = rnd(["📺","📰","🗞️","🌐"]);
+      const g = rnd(SIM_GRADS);
+      return `<div class="wb-card" data-sim-open="weibo:${i}">
+        <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${g})">${e}</span><div><div class="wb-cname">${name} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
+        <div class="wb-ctext">${esc(h.t)}</div>
+        <div class="wb-imgs">${pickN(WB_IMGS, 3).map(x=>`<div style="background:linear-gradient(${rnd(SIM_GRADS)})">${x}</div>`).join("")}</div>
+        <div class="wb-cacts"><span>🔁 转发 ${rndN(80,42000)}</span><span>💬 ${rndN(200,98000)}</span><span>👍 ${typeof h.hot==="number" ? fmtW(h.hot) : rndN(1000,300000)}</span></div>
+      </div>`;
+    }
+    const p = WB_POSTS_POOL[it.i];
     return `<div class="wb-card" data-sim-open="weibo:${i}">
       <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${p[2]})">${p[1]}</span><div><div class="wb-cname">${p[0]} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
       <div class="wb-ctext">${p[3]}</div>
@@ -2795,8 +2890,13 @@ function simWeiboList(){
   }).join("");
 }
 function simWechatList(){
-  return pickN(WX_POOL.map((w,i)=>i), 8).map(i=>{
-    const w = WX_POOL[i];
+  const hot = SIM_STATE.hot.wechat || [];
+  const items = [];
+  hot.slice(0, 5).forEach(h=> items.push({ real:1, h }));
+  pickN(WX_POOL.map((w,i)=>i), Math.max(3, 8-items.length)).forEach(i=> items.push({ real:0, i }));
+  SIM_STATE.items.wechat = items;
+  return items.map((it,i)=>{
+    const w = it.real ? { t:it.h.t, x:(it.h.d||"").slice(0,42) || "热点话题 · 点击查看全文", g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
     return `<div class="wx-li" data-sim-open="wechat:${i}">
       <span class="wx-li-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span>
       <div class="wx-li-body"><div class="wx-li-t"><span>${esc(w.t)}</span><span class="time">${rnd(["上午 9:02","下午 2:15","晚上 10:03","昨天","前天"])}</span></div><div class="wx-li-x">${esc(w.x)}</div></div>
@@ -2830,25 +2930,57 @@ function simWeiboHeader(){
   </div></div>`;
 }
 function simZhihuSide(){
+  const hot = SIM_STATE.hot.zhihu || [];
+  const rows = hot.length
+    ? hot.slice(0, 8).map((h,i)=>`<div class="zh-hotrow" data-sim-open="zhihu:${i}"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(h.t)}</span><span class="zh-hot-v">${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(80000,9800000))+" 热度")}</span></div>`).join("")
+    : pickN(ZH_POOL.map(z=>z[0]), 8).map((t,i)=>`<div class="zh-hotrow"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(t)}</span><span class="zh-hot-v">${fmtW(rndN(80000, 9800000))} 热度</span></div>`).join("");
   return `<div class="zh-card"><div class="zh-side-h">🔥 知乎热榜</div>
-    ${pickN(ZH_POOL.map(z=>z[0]), 8).map((t,i)=>`<div class="zh-hotrow"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(t)}</span><span class="zh-hot-v">${fmtW(rndN(80000, 9800000))} 热度</span></div>`).join("")}
+    ${rows}
   </div>
   <div class="zh-card" style="margin-top:14px; padding:16px 18px; font-size:13px; color:#8590a6">© 知乎 · 有问题就会有答案<br><span style="font-size:12px">OR 闽ICP备11023387号</span></div>`;
 }
 function simWeiboSide(){
   const tags = { "爆":"background:#fe2d46", "沸":"background:#ff6600", "热":"background:#ff6600", "新":"background:#0095ee" };
+  const hot = SIM_STATE.hot.weibo || [];
+  const tagFor = i => i===0 ? "爆" : i===1 ? "沸" : i===2 ? "热" : i===3 ? "新" : "";
+  const lines = hot.length
+    ? hot.slice(0, 10).map((h,i)=>{
+        const tg = tagFor(i);
+        return `<div class="wb-hotline" data-sim-open="weibo:${i % SIM_STATE.items.weibo.length}"><span class="wb-hot-n ${i<3?"r"+(i+1):""}">${i+1}</span><span class="wb-hot-t">${esc(h.t)}</span>${tg?`<span class="wb-tag" style="${tags[tg]}">${tg}</span>`:""}<span class="wb-hot-v">${typeof h.hot==="number" ? fmtW(h.hot) : rndN(10, 990)+"万"}</span></div>`;
+      }).join("")
+    : pickN(WB_HOT_POOL, 10).map((h,i)=>{
+        const t = h[0], tg = h[1];
+        return `<div class="wb-hotline" data-sim-open="weibo:${rndN(0, WB_POSTS_POOL.length-1)}"><span class="wb-hot-n ${i<3?"r"+(i+1):""}">${i+1}</span><span class="wb-hot-t">${esc(t)}</span>${tg?`<span class="wb-tag" style="${tags[tg]||""}">${tg}</span>`:""}<span class="wb-hot-v">${rndN(10, 990)}万</span></div>`;
+      }).join("");
   return `<div class="wb-hotcard"><div class="wb-hotcard-h"><span>微博热搜 · 每小时更新</span><span data-sim-cat>换一换</span></div>
-    ${pickN(WB_HOT_POOL, 10).map((h,i)=>{
-      const t = h[0], tg = h[1];
-      return `<div class="wb-hotline" data-sim-open="weibo:${rndN(0, WB_POSTS_POOL.length-1)}"><span class="wb-hot-n ${i<3?"r"+(i+1):""}">${i+1}</span><span class="wb-hot-t">${esc(t)}</span>${tg?`<span class="wb-tag" style="${tags[tg]||""}">${tg}</span>`:""}<span class="wb-hot-v">${rndN(10, 990)}万</span></div>`;
-    }).join("")}
+    ${lines}
   </div>
   <div class="wb-promo">📣 微博规则：友善评论，理性发言。构建清朗网络空间，人人有责。</div>`;
 }
 
 /* ---------- 详情页 ---------- */
 function simXhsNote(i){
-  const x = XHS_POOL[i];
+  const it = (SIM_STATE.items.xhs||[])[i];
+  if(it && it.real){
+    const h = it.h, g = rnd(SIM_GRADS), e = rnd(XHS_EMOS);
+    const who = rnd(XHS_POOL)[3];
+    return `<div class="xhs-mask" id="xhsModal" data-sim-closemodal>
+    <div class="xhs-modal">
+      <span class="xhs-x" data-sim-back>✕</span>
+      <div class="xhs-modal-cover" style="background:linear-gradient(${g})">${hotImg(h.cover)}<span class="xhs-cover-emo">${e}</span></div>
+      <div class="xhs-modal-body">
+        <div class="pf-ameta" style="padding:0 0 14px"><span class="pf-ava" style="background:linear-gradient(${g});width:44px;height:44px;font-size:20px">${e}</span><div><div class="pf-aname">${who}</div><div class="pf-asub">${rndN(12,96)} 篇笔记 · ${fmtW(rndN(2000,90000))} 粉丝</div></div><button class="xhs-follow">＋ 关注</button></div>
+        <div class="xhs-mtitle">${esc(h.t)}</div>
+        <div class="xhs-mbody">${simParas(esc(h.t) + "。" + (h.d ? esc(h.d) : "刷到的时候还愣了一下，点进来才发现评论区已经吵翻了。"), "xhs").map(p=>`<p>${p}</p>`).join("")}</div>
+        <div class="xhs-mdate">${rndN(1,28)} ${rnd(["10","12","14","16","18","20","21"])}:${rndN(10,59)} · IP 属地${rnd(["广东","浙江","江苏","上海","北京","四川","湖北","福建"])}</div>
+        <div class="xhs-mtags">${pickN(["打工人日常","生活碎片","记录美好生活","实用干货","治愈系","周末去哪儿","好物分享"],3).map(t=>`<span># ${t}</span>`).join("")}</div>
+        <div class="xhs-macts"><span>❤ ${typeof h.hot==="number" ? fmtW(h.hot) : rndN(300,52000)}</span><span>⭐ ${fmtW(rndN(800,30000))}</span><span>💬 ${rndN(60,2400)}</span></div>
+        <div class="xhs-mcmts"><div class="xhs-mcmt-t">共 ${rndN(40,2200)} 条评论</div>${pfComments("xhs", rndN(4,7))}</div>
+      </div>
+    </div>
+  </div>`;
+  }
+  const x = XHS_POOL[(it && it.i) || 0];
   const paras = pfParas("xhs", x);
   return `<div class="xhs-mask" id="xhsModal" data-sim-closemodal>
     <div class="xhs-modal">
@@ -2867,18 +2999,24 @@ function simXhsNote(i){
   </div>`;
 }
 function simZhihuQ(i){
-  const z = ZH_POOL[i];
+  const it = (SIM_STATE.items.zhihu||[])[i];
   const others = ZH_POOL.filter((_,j)=>j!==i);
   const z2 = rnd(others);
+  const real = it && it.real;
+  const zt  = real ? it.h.t      : ZH_POOL[it.i][0];
+  const paras = real ? simParas((it.h.d || "这个问题最近突然冲上了热榜，先说结论，再展开聊。"), "zhihu")
+                     : pfParas("zhihu", ZH_POOL[it.i]);
+  const votes  = real ? (typeof it.h.hot==="number" ? fmtW(it.h.hot) : (it.h.hot||fmtW(rndN(800000,9800000)))) : ZH_POOL[it.i][3];
+  const zname  = real ? rnd(["社会热点观察","一个拍客的自白","深夜书桌","新闻重读人","派大星的望远镜"]) : ZH_POOL[it.i][2];
   return `<div class="zh-root">${simZhihuHeader()}
     <div class="zh-main"><div class="zh-col sim-detail">
       <button class="zh-backlink" data-sim-back>‹ 返回首页</button>
-      <h1 class="zh-qtitle-big">${esc(z[0])}</h1>
+      <h1 class="zh-qtitle-big">${esc(zt)}</h1>
       <div class="zh-qmeta"><span>🔄 关注 ${fmtW(rndN(800,46000))}</span><span>👁 ${fmtW(rndN(200000,9800000))} 浏览</span><button class="zh-btn-blue">✏️ 写回答</button></div>
       <div class="zh-ans">
-        <div class="pf-ameta" style="padding-top:0"><span class="pf-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376)">${rnd(["🦉","🎓","🧑‍💻","☕","📊"])}</span><div><div class="pf-aname">${z[2]}</div><div class="pf-asub">${rndN(2,30)} 万人关注 · 优质答主</div></div></div>
-        <div class="zh-vote"><span>▲ 赞同 ${z[3]}</span><span>💬 ${rndN(120,2600)}</span></div>
-        <div class="zh-ansbody">${pfParas("zhihu", z).map(p=>`<p>${p}</p>`).join("")}</div>
+        <div class="pf-ameta" style="padding-top:0"><span class="pf-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376)">${rnd(["🦉","🎓","🧑‍💻","☕","📊"])}</span><div><div class="pf-aname">${zname}</div><div class="pf-asub">${rndN(2,30)} 万人关注 · 优质答主</div></div></div>
+        <div class="zh-vote"><span>▲ 赞同 ${votes}</span><span>💬 ${rndN(120,2600)}</span></div>
+        <div class="zh-ansbody">${paras.map(p=>`<p>${p}</p>`).join("")}</div>
         <div class="zh-ansfoot">发布于 ${rnd(TIME_STR)} · 著作权归作者所有 · ${rndN(400,9000)} 次收藏</div>
       </div>
       <div class="zh-more">更多回答（${rndN(20,900)}）</div>
@@ -2896,16 +3034,21 @@ function simZhihuQ(i){
   </div>`;
 }
 function simWeiboDetail(i){
-  const p = WB_POSTS_POOL[i];
+  const it = (SIM_STATE.items.weibo||[])[i];
+  const real = it && it.real;
+  const name = real ? rnd(WB_MEDIA) : WB_POSTS_POOL[it.i][0];
+  const ava  = real ? rnd(["📺","📰","🗞️","🌐"]) : WB_POSTS_POOL[it.i][1];
+  const grad = rnd(SIM_GRADS);
+  const text = real ? esc(it.h.t) : WB_POSTS_POOL[it.i][3];
   return `<div class="wb-root">${simWeiboHeader()}
     <div class="wb-main"><div class="wb-feed sim-detail">
       <button class="wb-backlink" data-sim-back>‹ 返回首页</button>
       <div class="wb-card" style="cursor:default">
-        <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${p[2]})">${p[1]}</span><div><div class="wb-cname">${p[0]} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版 · 已编辑</div></div></div>
-        <div class="wb-ctext" style="font-size:16px">${p[3]}</div>
+        <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${grad})">${ava}</span><div><div class="wb-cname">${name} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版 · 已编辑</div></div></div>
+        <div class="wb-ctext" style="font-size:16px">${text}${real ? " 详情戳链接👉 <span style='color:#eb7350'>网页链接</span>" : ""}</div>
         <div class="wb-imgs">${pickN(WB_IMGS, 6).map(e=>`<div style="height:120px; background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371","135deg,#43cea2,#185a9d","135deg,#ff512f,#dd2476"])})">${e}</div>`).join("")}</div>
         <div style="font-size:12px; color:#939393; padding:8px 0">${rndN(15,58)} 分钟前 · ${fmtW(rndN(30000,9000000))} 次阅读</div>
-        <div class="wb-cacts"><span>🔁 转发 ${p[4]}</span><span>💬 ${p[5]}</span><span>👍 ${p[6]}</span></div>
+        <div class="wb-cacts"><span>🔁 转发 ${real ? rndN(80,42000) : WB_POSTS_POOL[it.i][4]}</span><span>💬 ${real ? rndN(200,98000) : WB_POSTS_POOL[it.i][5]}</span><span>👍 ${real ? (typeof it.h.hot==="number" ? fmtW(it.h.hot) : rndN(1000,300000)) : WB_POSTS_POOL[it.i][6]}</span></div>
       </div>
       <div class="wb-card" style="cursor:default"><div style="font-size:14px; font-weight:700; color:#333; padding-bottom:6px">热评（${rndN(300,9000)}）</div>${pfComments("weibo", rndN(4,6))}</div>
     </div>
@@ -2914,7 +3057,11 @@ function simWeiboDetail(i){
   </div>`;
 }
 function simWechatArticle(i){
-  const w = WX_POOL[i];
+  const it = (SIM_STATE.items.wechat||[])[i];
+  const real = it && it.real;
+  const w = real ? { t:it.h.t, x:(it.h.d||"").slice(0,42) || "热点话题 · 点击查看全文", g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
+  const paras = real ? simParas(esc(w.t) + "。昨天起，这件事在各个群里都被刷屏了，不少人第一反应是不敢相信。", "wechat")
+                     : pfParas("wechat", w);
   const recs = pickN(WX_POOL.filter((_,j)=>j!==i).map((_,k)=>k), 3);
   return `<div class="wx-root">
     <div class="wxtop"><span>‹ 微信 ( ${rndN(1,9)} )</span><span class="wxtop-r"><span data-sim-back style="cursor:pointer">‹ 退出文章</span></span></div>
@@ -2968,9 +3115,18 @@ const SIM_OPENERS = { xhs:simXhsNote, zhihu:simZhihuQ, weibo:simWeiboDetail, wec
 function openSim(pf){
   SIM_STATE.pf = pf;
   SIM_STATE.hist = [];
+  SIM_STATE.hot[pf] = SIM_STATE.hot[pf] || cachedHot(pf);   // 有缓存先上真实数据，秒开
   simRoot.innerHTML = SIM_BUILD[pf]();
   simRoot.classList.add("open");
   simRoot.scrollTop = 0;
+  /* 后台抓真实热榜，到达且仍停留在列表页时，整页无缝换成真实数据版 */
+  loadHot(pf).then(items=>{
+    if(!items || !items.length) return;
+    if(SIM_STATE.pf !== pf || !simOpen()) return;
+    if(SIM_STATE.hist.length || document.getElementById("xhsModal")) return;   // 已进详情/弹窗就不打扰
+    simRoot.innerHTML = SIM_BUILD[pf]();
+    simRoot.scrollTop = 0;
+  });
 }
 function rndSimPf(){ return rnd(SIM_PFS); }
 
@@ -2982,7 +3138,7 @@ simRoot.addEventListener("click", e=>{
     if(pf === "xhs"){
       simRoot.insertAdjacentHTML("beforeend", SIM_OPENERS.xhs(+i));   // 小红书：弹窗覆盖瀑布流
     }else{
-      SIM_STATE.hist.push(simRoot.innerHTML);
+      SIM_STATE.hist.push({ html:simRoot.innerHTML, items:SIM_STATE.items[pf] });   // 连 items 一起快照，防真实数据刷新后索引错位
       simRoot.innerHTML = SIM_OPENERS[pf](+i);                        // 其它平台：整页切到详情
       simRoot.scrollTop = 0;
     }
@@ -2992,7 +3148,9 @@ simRoot.addEventListener("click", e=>{
   if(back){
     const mask = document.getElementById("xhsModal");
     if(mask){ mask.remove(); return; }                                // 小红书：关弹窗回瀑布流
-    simRoot.innerHTML = SIM_STATE.hist.pop() || SIM_BUILD[SIM_STATE.pf]();
+    const h = SIM_STATE.hist.pop();
+    if(h && typeof h === "object"){ SIM_STATE.items[SIM_STATE.pf] = h.items; simRoot.innerHTML = h.html; }
+    else { simRoot.innerHTML = (typeof h === "string" ? h : "") || SIM_BUILD[SIM_STATE.pf](); }
     simRoot.scrollTop = 0;
     return;
   }
