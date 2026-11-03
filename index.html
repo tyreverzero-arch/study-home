@@ -2409,7 +2409,13 @@ function buildDynamicPanes(){
 }
 function renderNav(activeId){
   const enabled = PACKS.filter(p=> p.id !== "note" && settings.packs[p.id] !== false);
-  const shown = settings.shuffleLoad ? pickN(enabled, Math.min(7, enabled.length)) : enabled;
+  // 平台栏目（微信/知乎/微博/小红书）固定常驻导航，其余名额从技术栏目里随机挑
+  const isPlat = p => !!PF_BAR[p.id];
+  const plat   = enabled.filter(isPlat);
+  const others = enabled.filter(p=>!isPlat(p));
+  const shown  = settings.shuffleLoad
+    ? [...plat, ...pickN(others, Math.max(0, Math.min(4, 8 - plat.length)))]
+    : enabled;
   const ids = [...shown.map(p=>p.id), "note"];
   if(!activeId || !ids.includes(activeId)) activeId = ids[0];
   $("nav").innerHTML = ids.map(id=>
