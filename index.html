@@ -369,6 +369,44 @@ select option{background:var(--card); color:var(--text)}
 ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
 ::-webkit-scrollbar-track{background:transparent}
 .empty-tip{color:var(--text2); font-size:13px; text-align:center; padding:30px 0}
+/* ---- 平台风模块：微信 / 知乎 / 微博 / 小红书 ---- */
+.wx-item{display:flex; gap:11px; padding:13px 0; border-bottom:1px solid var(--line); cursor:pointer}
+.wx-item:last-child{border-bottom:none}
+.wx-cover{flex:0 0 98px; height:66px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:27px; color:#fff}
+.wx-body{flex:1; min-width:0}
+.wx-title{font-size:14px; font-weight:600; color:var(--text); line-height:1.45}
+.wx-abs{font-size:12px; color:var(--text2); margin-top:4px; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.wx-meta{font-size:11px; color:var(--text2); margin-top:6px; display:flex; gap:10px; align-items:center}
+.wx-gzh{color:var(--text2)}
+.wx-meta .tag{margin-left:auto}
+.zh-q{padding:13px 0; border-bottom:1px solid var(--line); cursor:pointer}
+.zh-q:last-child{border-bottom:none}
+.zh-title{font-size:14.5px; font-weight:700; color:var(--text); line-height:1.5}
+.zh-ans{font-size:12.5px; color:var(--text2); margin-top:6px; line-height:1.68}
+.zh-ans .zh-auth{color:var(--accent)}
+.zh-up{font-size:12px; color:#0f82e2; margin-top:7px; display:flex; gap:14px}
+.zh-up b{font-weight:600}
+.wb-rank{display:flex; align-items:center; gap:9px; padding:7.5px 0; font-size:13px; cursor:pointer; border-bottom:1px dashed var(--line)}
+.wb-rank:last-child{border-bottom:none}
+.wb-rank .rank-num{width:17px; text-align:center}
+.wb-rank .t{flex:1; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.wb-rank .n{font-size:11px; color:var(--text2)}
+.wb-tag{font-size:10px; padding:1px 5px; border-radius:4px; color:#fff; font-weight:600; flex-shrink:0}
+.wb-hot{background:#ff6b35}.wb-new{background:#4a90d9}.wb-bao{background:#f4243c}.wb-fei{background:#ff9406}.wb-re{background:#b0b6bf}
+.wb-post{padding:12px 0; border-bottom:1px solid var(--line); cursor:pointer}
+.wb-post:last-child{border-bottom:none}
+.wb-head{display:flex; align-items:center; gap:9px}
+.wb-ava{width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px; flex-shrink:0}
+.wb-info{flex:1; min-width:0}
+.wb-name{font-size:13px; font-weight:600; color:var(--text)}
+.wb-time{font-size:11px; color:var(--text2); margin-top:1px}
+.wb-text{font-size:13px; line-height:1.72; margin-top:8px; color:var(--text)}
+.wb-acts{display:flex; gap:26px; font-size:11.5px; color:var(--text2); margin-top:9px}
+.xhs-grid{display:grid; grid-template-columns:1fr 1fr; gap:11px}
+.xhs-card{border:1px solid var(--line); border-radius:10px; overflow:hidden; cursor:pointer; background:var(--card2)}
+.xhs-cover{height:74px; display:flex; align-items:center; justify-content:center; font-size:30px; color:#fff}
+.xhs-t{font-size:12px; font-weight:600; color:var(--text); padding:8px 9px 4px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.xhs-meta{font-size:10.5px; color:var(--text2); padding:0 9px 9px; display:flex; justify-content:space-between}
 </style>
 </head>
 <body>
@@ -1794,6 +1832,10 @@ const PACKS = [
   { id:"ai",        name:"AI/大模型", gen: ()=>genAi() },
   { id:"fe",        name:"前端框架",  gen: ()=>genFe() },
   { id:"career",    name:"考公考研",  gen: ()=>genCareer() },
+  { id:"wechat",    name:"微信",      gen: ()=>genWechat() },
+  { id:"zhihu",     name:"知乎",      gen: ()=>genZhihu() },
+  { id:"weibo",     name:"微博",      gen: ()=>genWeibo() },
+  { id:"xhs",       name:"小红书",    gen: ()=>genXhs() },
   { id:"note",      name:"笔记", fixed:true },
 ];
 const packName = id => (PACKS.find(p=>p.id===id) || {}).name || id;
@@ -1954,6 +1996,107 @@ const genAi     = () => genPack("AI / 大模型", "🤖", AI_SECS, AI_TIPS, AI_Q
 const genFe     = () => genPack("前端框架", "⚛️", FE_SECS, FE_TIPS, FE_QA, null);
 const genCareer = () => genPack("考公 / 考研 / 职场", "📖", CAREER_SECS, CAREER_TIPS, CAREER_QA, null);
 
+/* ---------- 平台风模块：微信 / 知乎 / 微博 / 小红书 ---------- */
+const WX_POOL = [
+  { g:"人民日报", e:"📰", c:"135deg,#e53935,#c62828", t:"夜读：一个人最顶级的自律，是管好傍晚六点", x:"下班后的两小时，正在悄悄拉开人与人之间的差距。真正的成长，往往发生在没人看见的地方。", r:"10万+" },
+  { g:"丁香医生", e:"🩺", c:"135deg,#26a69a,#00897b", t:"长期熬夜的人，身体最后都怎么样了？", x:"我们翻完了近五年的流行病学调查，结论比你想的更具体：先垮的不是精神，是代谢。", r:"8.9万" },
+  { g:"央视新闻", e:"📺", c:"135deg,#1565c0,#0d47a1", t:"多地出台新政：周末不是「半双休」，是这样休", x:"概括起来三个字：错峰休。有人拍手叫好，也有人担心变成「被自愿」，你怎么看？", r:"10万+" },
+  { g:"粥左罗", e:"✍", c:"135deg,#7b4397,#dc2430", t:"真正的强者，都在过一种「低消耗」的人生", x:"删掉 90% 的社交，退出 30 个群之后，我的收入翻了一倍。不是玄学，是注意力经济学。", r:"6.2万" },
+  { g:"半佛仙人", e:"🍋", c:"135deg,#f7971e,#ffd200", t:"奶茶行业大逃杀：一年倒闭 12 万家店之后", x:"你喝的每一杯 9 块 9，都是供应链卷出来的血泪。行业洗牌比你的减肥计划执行得彻底多了。", r:"7.7万" },
+  { g:"小Lin说", e:"💹", c:"135deg,#3a1c71,#d76d77", t:"利率又降了，普通人到底该不该提前还房贷？", x:"一笔账算清楚：机会成本、投资收益率、心理账户。看完这篇，你会有自己的答案。", r:"5.4万" },
+  { g:"地球上最酷的旅行", e:"🏔", c:"135deg,#134e5e,#71b280", t:"人均 800 玩透川西：这条路线我愿称之为天花板", x:"避开了 90% 的人流，看雪山不用排队，住宿人均不到 150。附 3 天 2 夜完整攻略。", r:"4.3万" },
+  { g:"数字尾巴", e:"📱", c:"135deg,#232526,#414345", t:"用了三天新旗舰，我反而开始怀念我的旧手机", x:"参数赢麻了，体验却像开盲盒。这届厂商卷影像卷芯片，唯独忘了「好用」两个字。", r:"3.1万" },
+  { g:"GQ实验室", e:"🎩", c:"135deg,#0f2027,#2c5364", t:"当代青年社交图鉴：已读不回的一百种礼貌", x:"「在吗」是冒犯，「哈哈」是敷衍，「哈哈哈」是职业假笑，「哈哈哈哈哈哈」才是真快乐。", r:"9.8万" },
+  { g:"单向街书店", e:"📚", c:"135deg,#4b6cb7,#182848", t:"许知远：读没用书的时刻，才是生活本身", x:"我们太急于把一切都变得「有用」，却忘了无用之用，方为大用。", r:"2.8万" },
+  { g:"卢克文", e:"🌏", c:"135deg,#5f2c82,#49a09d", t:"一个大国的能源底牌：从煤到光的四十年", x:"把产业脉络捋清楚，你会发现新闻里每一条政策背后，都是几十年的布局。", r:"6.6万" },
+  { g:"下厨房", e:"🍳", c:"135deg,#f5515f,#9f041b", t:"10 分钟搞定的 5 款工作日早餐，第 3 款绝了", x:"打工人别再对付早餐了。食材前一天晚上备好，早上 10 分钟热腾腾出锅。", r:"3.9万" },
+  { g:"槽值", e:"🧠", c:"135deg,#ff512f,#dd2476", t:"为什么你一到下午 3 点就特别想辞职？", x:"不是你矫情，是血糖、皮质醇和昼夜节律联合起来骗你。科学解释「下午的溃败感」。", r:"5.1万" },
+  { g:"中国天气网", e:"🌤", c:"135deg,#1e9600,#fff95b", t:"今冬会是「冷冬」吗？权威预报来了", x:"拉尼娜事件已形成，但冷冬与否还要看环流。附各省今冬气温偏高/偏低预测图。", r:"4.7万" },
+];
+function wxItem(w, ad){
+  return `<div class="wx-item"><div class="wx-cover" style="background:linear-gradient(${w.c})">${w.e}</div><div class="wx-body"><div class="wx-title">${w.t}</div><div class="wx-abs">${w.x}</div><div class="wx-meta"><span class="wx-gzh">${w.g}</span><span>${fmtW(rnd(30000, 100000))} 阅读</span>${ad?"":`<span class="tag ${rnd(["blue","orange"])}">${rnd(["热文","爆文","荐读"])}</span>`}</div></div></div>`;
+}
+const genWechat = () => `
+  <div class="card"><h2>💬 微信 · 订阅号消息</h2>${pickN(WX_POOL, 6).map(w=>wxItem(w)).join("")}</div>
+  ${bannerHTML()}
+  <div class="card"><h2>👀 看一看 · 朋友都在读</h2>${pickN(WX_POOL, 3).map(w=>wxItem(w, true)).join("")}
+  <div style="font-size:11px; color:var(--text2); margin-top:10px">以上内容根据你的好友阅读偏好推荐</div></div>`;
+
+const ZH_POOL = [
+  ["有哪些看似聪明，实则很蠢的行为？","用战术上的勤奋掩盖战略上的懒惰。每天熬夜加班感动自己，但从不停下来想这件事十年后还重不重要。","「懂一点点」的答主", "2.8万"],
+  ["程序员 35 岁危机是真的吗？","危机不是 35 岁才有，是 25 岁就已经注定：用重复劳动置换年龄溢价。真正的护城河是稀缺性，不是工龄。","前大厂架构师", "4.1万"],
+  ["为什么现在的年轻人开始反向消费了？","不是消费降级，是信息差被打平了。大家发现 200 块的冲锋衣和 2000 块的用料一样，就再也回不去了。","零售行业十年从业者", "1.9万"],
+  ["有哪些低成本但很爽的爱好？","跑步、做饭、逛菜市场。尤其是最后一个：在人间的烟火气里走一圈，比刷两小时手机解压十倍。","生活观察员", "3.5万"],
+  ["租房有哪些让你相见恨晚的神器？","离公司近，就是最好的神器。通勤时间省下来的每一天，都是给自己的生活质量充值。","搬家八次的租客", "2.2万"],
+  ["长期坚持早起的人，后来都怎么样了？","没怎么样，就是把刷手机的两小时换成了吃饭慢一点、出门早一点。早起不神奇，神奇的是你以为早起能改变一切。","晨跑五年的普通上班族", "1.6万"],
+  ["存款到多少，你才敢裸辞？","公式：月支出 × 12 + 换工作空窗期预算。但更重要的变量是：你的技能在市场上的流动性。","财务自由失败者", "5.3万"],
+  ["有哪些一针见血的人间清醒文案？","「不要在饿的时候逛超市，不要在孤独的时候谈恋爱」——冲动决策都发生在需求最旺盛的时候。","句子迷本迷", "6.8万"],
+  ["为什么越来越多人喜欢独处？","独处不是孤僻，是把社交电量留给自己。内向者的充电方式，和外向者本来就不一样。","心理咨询师", "2.4万"],
+  ["有哪些值得长期坚持的好习惯？","定期整理收藏夹。你的收藏夹就是你的知识仓库，堆满「稍后阅读」的仓库，等于没有仓库。","知识管理爱好者", "1.8万"],
+  ["健身三个月，身材会有多大变化？","变化最大的是脸——拍自己的丑照时会开始挑光线了。身体数据变化反而不大，但精神状态肉眼可见变好。","健身房钉子户", "3.2万"],
+  ["上班摸鱼被领导发现了怎么办？","大方承认比慌张掩饰好。真正危险的不是摸鱼本身，是你摸鱼时那副「做贼心虚」的表情管理。","职场老油条", "4.7万"],
+  ["如何看待「年轻人开始整顿周末」？","睡到自然醒、拒绝无效局、逛菜市场、citywalk。不是躺平，是把周末还给自己。","社会学研究生", "2.1万"],
+  ["有什么道理是你工作了之后才懂的？","公司是个平台，不是家。你要带走的是能力、人脉和作品，而不是工牌和对工位的感情。","十年老兵", "7.5万"],
+];
+function zhItem(z){
+  const up = fmtW(rnd(8000, 70000));
+  return `<div class="zh-q"><div class="zh-title">${z[0]}</div><div class="zh-ans"><span class="zh-auth">${z[2]}：</span>${z[1]}</div><div class="zh-up"><span>👍 赞同 <b>${z[3]}</b></span><span>💬 ${rndN(120, 2600)} 评论</span><span>${rnd(TIME_STR)}</span></div></div>`;
+}
+const genZhihu = () => `
+  <div class="card"><h2>🦅 知乎 · 今日热榜</h2>${pickN(ZH_POOL, 5).map(zhItem).join("")}</div>
+  ${bannerHTML()}
+  <div class="card"><h2>✨ 精选回答</h2>${pickN(ZH_POOL, 2).map(zhItem).join("")}</div>`;
+
+const WB_HOT_POOL = [
+  ["年底了各大公司开始发年终奖", "爆"], ["年轻人流行周末逛菜市场", "热"], ["早起打卡挑战第 30 天", "新"],
+  ["冬季的第一顿火锅", "热"], ["人工智能又会做菜了", "沸"], ["地铁上新版故障自救指南", ""],
+  ["传统手艺人的百万粉丝之路", "热"], ["原来茶叶蛋是这个做法", "新"], ["城市 15 分钟生活圈来了", ""],
+  ["周末两天一夜去哪玩", "热"], ["健身房年卡使用报告出炉", ""], ["国货新品排队抢购", "沸"],
+  ["加班文化专项整治来了", "爆"], ["校园食堂偷偷涨价的菜被挂出来", "新"], ["高铁静音车厢扩大试点", ""],
+  ["今年冬天第一场雪比往年早", "热"], ["打工人午休 20 分钟最佳方案", "新"], ["老小区加装电梯新政策", ""],
+];
+const WB_POSTS_POOL = [
+  ["段子手本手", "😂", "135deg,#f7971e,#ffd200", "刚才电梯里遇到领导，情急之下说了句「您先出去」，现在整个人是懵的，求问还有救吗[允悲]", "312", "2840", "1.8万"],
+  ["深夜食堂常客", "🍜", "135deg,#fc4a1a,#f7b733", "楼下开了十年的面馆涨价了两块钱，老板娘不好意思地说「面加量了」。确实，碗都快端不动了，这钱涨得我服气。", "156", "1203", "9231"],
+  ["跑步打卡中", "🏃", "135deg,#11998e,#38ef7d", "坚持夜跑第 100 天打卡！最初 2 公里就喘，现在 8 公里配速 6 分内。最大的变化不是体重，是情绪稳定太多了。", "866", "4520", "3.4万"],
+  ["数码闲聊站", "📱", "135deg,#232526,#414345", "听说下个月有两台重磅新机一起发，配置都拉满了，就看定价。今年这市场，谁定价谁流泪。", "2044", "8730", "6.2万"],
+  ["打工人日历", "📅", "135deg,#654ea3,#eaafc8", "周三。本周进度条 60%，电量剩余 23%，靠一杯美式强行续命。同事说他是靠「下周就放假」的信念续的。", "489", "2311", "1.5万"],
+  ["美食街扫雷员", "🍰", "135deg,#ff5f6d,#ffc371", "探店第 47 家：网上吹爆的网红蛋糕店，实物和图片的差距，比我和体检报告的理想数值差距还大。避雷。", "723", "3408", "2.9万"],
+  ["篮球场钉子户", "🏀", "135deg,#1a2980,#26d0ce", "野球场现状：我运球的时候队友在指挥，我不运球的时候所有人都在要球。我还是回家投篮机吧。", "233", "1102", "8640"],
+  ["科学边角料", "🔬", "135deg,#0f9b8e,#38ef7d", "冷知识：冰箱不是保险箱。李斯特菌在冷藏温度下照样慢慢繁殖，剩菜超过三天该扔就扔，别省那几块钱。", "1567", "6204", "5.1万"],
+  ["养猫的程序员", "🐱", "135deg,#373b44,#4286f4", "改 bug 改到凌晨一点，一回头，猫把我的机械键盘当成了猫抓板。它抓得越起劲，我离脱发越近。", "921", "5120", "4.3万"],
+  ["旅行计划废柴", "🎒", "135deg,#134e5e,#71b280", "做了 20 页攻略的青海行，最后在酒店旁边的小面馆连吃三天。所以说旅行的意义就是：计划是用来推翻的。", "1102", "3988", "3.7万"],
+];
+function wbHotRow(h, i){
+  const cls = h[1]==="爆"?"wb-bao":h[1]==="沸"?"wb-fei":h[1]==="热"?"wb-hot":h[1]==="新"?"wb-new":"wb-re";
+  const num = (98.4 - i*rnd(2.1, 4.6) - Math.random()*1.4).toFixed(1);
+  return `<div class="wb-rank"><span class="rank-num ${i<3?"top"+(i+1):""}">${i+1}</span><span class="t">${h[0]}</span>${h[1]?`<span class="wb-tag ${cls}">${h[1]}</span>`:""}<span class="n">${num} 万</span></div>`;
+}
+function wbPost(p){
+  return `<div class="wb-post"><div class="wb-head"><div class="wb-ava" style="background:linear-gradient(${p[2]})">${p[1]}</div><div class="wb-info"><div class="wb-name">${p[0]} <span style="font-size:10px; color:#eab308">⚡</span></div><div class="wb-time">${rnd(TIME_STR)} · 来自网页版</div></div></div><div class="wb-text">${p[3]}</div><div class="wb-acts"><span>🔄 转发 ${p[4]}</span><span>💬 评论 ${p[5]}</span><span>👍 赞 ${p[6]}</span></div></div>`;
+}
+const genWeibo = () => `
+  <div class="card"><h2>🌡 微博热搜 · 每小时更新</h2>${pickN(WB_HOT_POOL, 9).map((h,i)=>wbHotRow(h,i)).join("")}</div>
+  ${bannerHTML()}
+  <div class="card"><h2>🔥 热门微博</h2>${pickN(WB_POSTS_POOL, 3).map(wbPost).join("")}</div>`;
+
+const XHS_POOL = [
+  ["🍱", "135deg,#ff6b6b,#feca57", "公司食堂这一天 15 块到底吃了啥？全网最良心!", "干饭阿伟", "4.2万"],
+  ["☕", "135deg,#d9a7c7,#fffcdc", "打工人 10 分钟快手早餐合集（第 3 款拿去交差）", "早八幸存者", "2.8万"],
+  ["🧹", "135deg,#84fab0,#8fd3f4", "下班后 15 分钟收纳法，租来的家也像样", "收纳小学妹", "1.9万"],
+  ["🐱", "135deg,#a18cd1,#fbc2eb", "开会的时候猫踩了我键盘，代码居然跑通了", "铲屎官日记", "6.7万"],
+  ["🚲", "135deg,#fbc2eb,#a6c1ee", "周末骑行路线｜这条滨江道人少景美还免费", "轮子上的风", "3.3万"],
+  ["🍲", "135deg,#fddb92,#d1fdff", "一人食电饭煲菜谱：把所有东西丢进去就对了", "懒人厨房", "5.1万"],
+  ["📚", "135deg,#cfd9df,#e2ebf0", "地铁通勤书单｜不用带脑子也能读进去的 6 本", "读闲书的人", "2.4万"],
+  ["💾", "135deg,#4b6cb7,#182848", "电脑桌面整理术，同事看了都问我是不是换工位了", "效率工具人", "1.7万"],
+  ["🌧", "135deg,#4ca1af,#c4e0e5", "下雨天的正确打开方式：窗边+热茶+老电影", "宅家研究员", "2.2万"],
+  ["💪", "135deg,#ff9a9e,#fecfef", "每天 10 分钟工位拉伸，富贵包真的会小!", "颈椎报警中", "3.8万"],
+];
+const genXhs = () => `
+  <div class="card"><h2>📕 小红书 · 猜你喜欢</h2><div class="xhs-grid">${pickN(XHS_POOL, 6).map(x=>
+    `<div class="xhs-card"><div class="xhs-cover" style="background:linear-gradient(${x[1]})">${x[0]}</div><div class="xhs-t">${x[2]}</div><div class="xhs-meta"><span>@${x[3]}</span><span>❤ ${x[4]}</span></div></div>`).join("")}</div></div>
+  ${bannerHTML()}`;
+
 /* ---------- 侧栏 / 资讯素材池 ---------- */
 const BANNER_POOL = [
   { big:"⏰ 开学季 · 课程 5 折起", sub:"体系课 + 刷题营组合立减 ¥200，仅剩 2 天", cta:"立即抢购" },
@@ -2085,7 +2228,7 @@ function buildDynamicPanes(){
 }
 function renderNav(activeId){
   const enabled = PACKS.filter(p=> p.id !== "note" && settings.packs[p.id] !== false);
-  const shown = settings.shuffleLoad ? pickN(enabled, Math.min(6, enabled.length)) : enabled;
+  const shown = settings.shuffleLoad ? pickN(enabled, Math.min(7, enabled.length)) : enabled;
   const ids = [...shown.map(p=>p.id), "note"];
   if(!activeId || !ids.includes(activeId)) activeId = ids[0];
   $("nav").innerHTML = ids.map(id=>
