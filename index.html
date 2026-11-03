@@ -446,6 +446,28 @@ select option{background:var(--card); color:var(--text)}
 .xhs-tags{margin-top:10px}
 .xhs-tags span{color:#056de8; font-size:13.5px; margin-right:10px}
 .wb-imgs{display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-top:10px}
+.wb-imgs .wb-img{aspect-ratio:1; overflow:hidden; border-radius:6px; background:#f5f5f5; position:relative}
+.wb-imgs .wb-img img{width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0}
+.wb-imgs.one{grid-template-columns:1fr}
+.wb-imgs.one .wb-img{aspect-ratio:16/9}
+/* 广告角标与广告卡 */
+.ad-badge{display:inline-block; background:#f2f2f2; color:#9a9a9a; font-size:10px; padding:1px 6px; border-radius:3px; margin-left:4px; font-weight:400}
+.zh-qcard-row{display:flex; gap:14px; align-items:flex-start}
+.zh-qcard-main{flex:1; min-width:0}
+.zh-qcard-thumb, .zh-ad-img{width:120px; height:84px; border-radius:8px; overflow:hidden; flex-shrink:0; position:relative; background:linear-gradient(135deg,#e8eefc,#dfe6f5)}
+.zh-qcard-thumb img, .zh-ad-img img{width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0}
+.zh-ad{display:flex; gap:14px; align-items:flex-start}
+.zh-ad-body{flex:1; min-width:0}
+.zh-ad-src{font-size:12px; color:#8590a6; margin-top:8px}
+.wb-ad-img{position:relative; aspect-ratio:16/8; overflow:hidden; border-radius:8px; margin:10px 0; background:linear-gradient(135deg,#f7971e,#ffd200)}
+.wb-ad-img img{width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0}
+.wb-ad-btn{width:100%; border:1px solid #eb7350; color:#eb7350; background:#fff; border-radius:4px; padding:8px 0; font-size:14px; cursor:pointer; margin-top:10px}
+.xhs-sponsor{position:absolute; top:10px; right:10px; z-index:3; background:rgba(0,0,0,.38); color:#fff; font-size:11px; padding:2px 9px; border-radius:11px}
+.wx-banner-ad{display:flex; gap:12px; align-items:center; margin:18px 0; padding:10px; border:1px solid #f0f0f0; border-radius:10px; background:#fafafa}
+.wx-banner-img{width:128px; height:68px; border-radius:6px; overflow:hidden; flex-shrink:0; position:relative; background:linear-gradient(135deg,#2b5876,#4e4376)}
+.wx-banner-img img{width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0}
+.wx-banner-t{font-size:14px; font-weight:600; color:#191919; line-height:1.5}
+.wx-banner-s{font-size:12px; color:#9a9a9a; margin-top:5px}
 .wb-imgs div{height:116px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff}
 /* 相关推荐 */
 .pf-rel-title{font-size:16px; font-weight:700; color:var(--text); padding:16px 0 4px}
@@ -481,7 +503,7 @@ select option{background:var(--card); color:var(--text)}
 .xhd-cats span{cursor:pointer; white-space:nowrap; padding-bottom:4px}
 .xhd-cats span.on{color:#ff2442; font-weight:700; border-bottom:2px solid #ff2442}
 .xhs-waterfall{column-count:3; column-gap:16px; max-width:1150px; margin:0 auto; padding:18px 24px}
-.xhs-note{break-inside:avoid; background:#fff; border-radius:12px; margin-bottom:16px; cursor:pointer; border:1px solid #f5f5f5; transition:box-shadow .15s}
+.xhs-note{break-inside:avoid; background:#fff; border-radius:12px; margin-bottom:16px; cursor:pointer; border:1px solid #f5f5f5; transition:box-shadow .15s; position:relative; overflow:hidden}
 .xhs-note:hover{box-shadow:0 4px 18px rgba(0,0,0,.08)}
 .xhs-cover{display:flex; align-items:center; justify-content:center; font-size:44px; border-radius:12px 12px 0 0; position:relative; overflow:hidden}
 .xhs-cover img, .xhs-modal-cover img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2}
@@ -513,13 +535,13 @@ select option{background:var(--card); color:var(--text)}
 .zhd-nav{font-size:15px; color:#8590a6; cursor:pointer}
 .zhd-nav.on{color:#121212; font-weight:600}
 .zhd-ask{margin-left:auto; background:#056de8; color:#fff; border:none; border-radius:4px; padding:7px 18px; font-size:14px; cursor:pointer}
-.zh-main{max-width:1050px; margin:0 auto; display:flex; gap:16px; padding:20px 18px; align-items:flex-start}
+.zh-main{max-width:1000px; margin:0 auto; display:flex; gap:16px; padding:20px 18px; align-items:flex-start}
 .zh-col{flex:1; min-width:0}
 .zh-side{width:300px; flex-shrink:0}
 .zh-card{background:#fff; border-radius:4px; box-shadow:0 1px 3px rgba(18,18,18,.08)}
 .zh-qcard{padding:16px 20px; border-bottom:1px solid #f2f2f2; cursor:pointer}
 .zh-qcard:hover .zh-qcard-t{color:#056de8}
-.zh-qcard-t{font-size:16.5px; font-weight:700; color:#1a1a1a; line-height:1.5}
+.zh-qcard-t{font-size:16.5px; font-weight:700; color:#1a1a1a; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .zh-qcard-x{font-size:14px; color:#646464; line-height:1.7; margin-top:7px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .zh-qcard-m{display:flex; gap:16px; font-size:13px; color:#8590a6; margin-top:10px; align-items:center}
 .zh-qcard-v{margin-left:auto; background:#ebf3ff; color:#056de8; font-weight:700; border-radius:4px; padding:3px 10px; font-size:12.5px}
@@ -550,7 +572,7 @@ select option{background:var(--card); color:var(--text)}
 .wbhd-nav{font-size:14.5px; color:#333; cursor:pointer; display:flex; align-items:center; gap:4px}
 .wbhd-nav.on{color:#e6162d; font-weight:700}
 .wbhd-me{margin-left:auto; width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#f7971e,#ffd200); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:14px}
-.wb-main{max-width:1150px; margin:0 auto; display:flex; gap:16px; padding:16px 18px; align-items:flex-start}
+.wb-main{max-width:1060px; margin:0 auto; display:flex; gap:16px; padding:16px 18px; align-items:flex-start}
 .wb-feed{flex:1; min-width:0}
 .wb-side{width:320px; flex-shrink:0}
 .wb-card{background:#fff; border-radius:8px; padding:16px 20px; margin-bottom:14px; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.04)}
@@ -561,6 +583,8 @@ select option{background:var(--card); color:var(--text)}
 .wb-v{color:#eab308; font-size:11px}
 .wb-ctime{font-size:12px; color:#939393; margin-top:2px}
 .wb-ctext{font-size:15px; color:#333; line-height:1.75; margin:11px 0}
+/* 信息流里的微博正文最多 3 行（详情页全文显示不受限） */
+.wb-card[data-sim-open] .wb-ctext{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
 .wb-cacts{display:flex; border-top:1px solid #f2f2f5; padding-top:10px; margin-top:11px}
 .wb-cacts span{flex:1; text-align:center; font-size:13px; color:#808080}
 .wb-hotcard{background:#fff; border-radius:8px; padding:4px 0 8px; box-shadow:0 1px 2px rgba(0,0,0,.04)}
@@ -591,7 +615,9 @@ select option{background:var(--card); color:var(--text)}
 .wx-tab{flex:1; text-align:center; font-size:11px; color:#7a7a7a; cursor:pointer}
 .wx-tab .ic{font-size:21px; display:block}
 .wx-tab.on{color:#07c160}
-.wx-art{background:#fff; min-height:100%; padding:26px 22px}
+.wx-art{background:#fff; min-height:100%; padding:26px 22px; max-width:760px; margin:0 auto; box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.wx-art-body{max-width:680px; margin:0 auto; line-height:1.9; font-size:16px; color:#333}
+.wx-art-body p{margin:0 0 18px}
 .wx-art-t{font-size:21px; font-weight:700; color:#191919; line-height:1.5}
 .wx-art-meta{display:flex; align-items:center; gap:9px; padding:14px 0; border-bottom:1px solid #f2f2f2; margin-bottom:6px}
 .wx-art-ava{width:34px; height:34px; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:15px}
@@ -2797,12 +2823,13 @@ function loadHot(pf){
     let done = false;
     const fin = v => { if(!done){ done = true; res(v); } };
     const to = setTimeout(()=>fin(null), 6000);   // 抓不到就用内置素材兜底，页面不能空
-    fetch("/hotapi/"+HOT_SRC[pf]).then(r=>r.json()).then(j=>{
+    fetch("/api/hot/"+pf).then(r=>r.json()).then(j=>{
       clearTimeout(to);
       const arr = ((j && j.data) || []).map(x=>({
         t: (x.title||"").trim(),
         d: (x.detail||"").trim(),
         cover: x.cover || "",
+        imgs: Array.isArray(x.images) ? x.images : [],
         hot: x.hot_value_desc || (x.hot_value ? Number(x.hot_value) : ""),
         link: x.link || ""
       })).filter(x=>x.t);
@@ -2820,6 +2847,84 @@ function simParas(first, pf){
   const m = pickN(S.mids, 2);
   return [first, m[0] + " " + rnd(S.ends2), m[1] + " " + rnd(S.ends2), rnd(S.close)];
 }
+/* ---------- 信息流广告（真实平台都有广告，没有反而穿帮） ---------- */
+const AD_COVER_POOL = () => [
+  ...(SIM_STATE.hot.xhs||[]).map(h=>h.cover),
+  ...(SIM_STATE.hot.wechat||[]).map(h=>h.cover),
+  ...(SIM_STATE.hot.zhihu||[]).map(h=>h.cover)
+].filter(Boolean);
+const AD_ZHIHU = [
+  { t:"京东 11.11 硬核好物 5 折起，爆款直降不用等", src:"京东", tag:"广告" },
+  { t:"0 基础 3 个月拿下软考中级，上岸经验分享", src:"希赛网", tag:"广告" },
+  { t:"30 岁转行数据分析，我踩过的坑都在这了", src:"拉勾教育", tag:"广告" },
+];
+const AD_WEIBO = [
+  { t:"聚划算 11.11 主会场：预售付定金立减，尾款再享跨店满减", src:"聚划算", btn:"查看详情", tag:"广告" },
+  { t:"官方验机 iPhone 17 至尊版，比官网直降 800，送一年碎屏险", src:"京东手机", btn:"立即抢购", tag:"广告" },
+  { t:"双十一购车节：热门新能源限时补贴 1 万元起", src:"懂车帝", btn:"领补贴", tag:"广告" },
+];
+const AD_XHS = [
+  { t:"油皮亲妈！烂脸自救三个月，就靠这瓶精华", brand:"@护肤研究所", tag:"赞助" },
+  { t:"打工人通勤穿搭合集，30 天不重样又显瘦", brand:"@穿搭日记", tag:"广告" },
+  { t:"出租房改造 500 元搞定，房东看了都想留我", brand:"@家居改造记", tag:"赞助" },
+];
+const AD_WECHAT = [
+  { t:"腾讯云服务器新用户 3 折起，首年低至 99 元", src:"腾讯云", tag:"广告" },
+  { t:"QQ音乐豪华绿钻 12 个月，畅听千万曲库", src:"QQ音乐", tag:"广告" },
+];
+function adCover(){
+  const pool = AD_COVER_POOL();
+  return pool.length ? rnd(pool) : "";
+}
+/* 知乎：左文右图信息流广告卡 */
+function adZhihuCard(){
+  const a = rnd(AD_ZHIHU);
+  return `<div class="zh-qcard zh-ad">
+    <div class="zh-ad-body">
+      <div class="zh-qcard-t">${a.t}</div>
+      <div class="zh-ad-src">${a.src} <span class="ad-badge">广告</span></div>
+    </div>
+    <div class="zh-ad-img">${hotImg(adCover())}<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px">🛍️</span></div>
+  </div>`;
+}
+/* 微博：粉丝通大图广告卡 */
+function adWeiboCard(){
+  const a = rnd(AD_WEIBO);
+  return `<div class="wb-card wb-ad" style="cursor:default">
+    <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(135deg,#ff512f,#dd2476)">🔥</span><div><div class="wb-cname">${a.src} <span class="wb-v">⚡</span></div><div class="wb-ctime">推广 · <span class="ad-badge">广告</span></div></div></div>
+    <div class="wb-ctext">${a.t}</div>
+    <div class="wb-ad-img">${hotImg(adCover())}<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px">🛒</span></div>
+    <button class="wb-ad-btn">${a.btn} ›</button>
+  </div>`;
+}
+/* 小红书：品牌合作笔记（带"赞助"角标） */
+function adXhsNote(){
+  const a = rnd(AD_XHS);
+  const g = rnd(SIM_GRADS);
+  return `<div class="xhs-note xhs-ad">
+    <span class="xhs-sponsor">${a.tag}</span>
+    <div class="xhs-cover" style="background:linear-gradient(${g}); height:${rnd(150,210)}px">${hotImg(adCover())}<span class="xhs-cover-emo">💄</span></div>
+    <div class="xhs-note-t">${a.t}</div>
+    <div class="xhs-note-m"><span class="xhs-ava" style="background:linear-gradient(${g})">💄</span><span class="xhs-name">${a.brand}</span><span class="xhs-like">❤ ${rndN(800,42000)}</span></div>
+  </div>`;
+}
+/* 微信：订阅号列表广告卡 */
+function adWechatLi(){
+  const a = rnd(AD_WECHAT);
+  return `<div class="wx-li wx-ad" style="cursor:default">
+    <span class="wx-li-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376)">${a.src[0]}</span>
+    <div class="wx-li-body"><div class="wx-li-t"><span>${a.t}</span><span class="time">广告</span></div><div class="wx-li-x">${a.src} · 推广 · <span class="ad-badge">广告</span></div></div>
+  </div>`;
+}
+/* 微信文章底部 banner 广告 */
+function adWechatBanner(){
+  const a = rnd(AD_WECHAT);
+  const c = adCover();
+  return `<div class="wx-banner-ad" style="cursor:default">
+    <div class="wx-banner-img">${hotImg(c)}<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px">🎁</span></div>
+    <div class="wx-banner-body"><div class="wx-banner-t">${a.t}</div><div class="wx-banner-s">${a.src} · <span class="ad-badge">广告</span></div></div>
+  </div>`;
+}
 
 /* ---------- 列表构建（真实热榜优先，内置素材兜底补位） ---------- */
 const XHS_CATS = ["推荐","穿搭","美食","彩妆","影视","综艺","家居","旅行","健身","职场","数码","学习"];
@@ -2827,7 +2932,8 @@ const WB_MEDIA = ["央视新闻","人民日报","澎湃新闻","环球网","中�
 const SIM_GRADS = ["135deg,#ff5f6d,#ffc371","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#43cea2,#185a9d","135deg,#f7971e,#ffd200","135deg,#ff512f,#dd2476","135deg,#2b5876,#4e4376","135deg,#4776e6,#8e54e9"];
 const XHS_EMOS = ["✨","🍰","👗","📸","🏔️","💄","🍜","🐱","🏖️","📚","🌷","☕"];
 function hotImg(url){
-  return url ? `<img src="${url}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()" alt="">` : "";
+  /* 全部走本地 Python 服务的图片代理：服务端带 Referer 拉图，绕过防盗链，带磁盘缓存 */
+  return url ? `<img loading="lazy" src="/img?url=${encodeURIComponent(url)}" onerror="this.remove()" alt="">` : "";
 }
 function simXhsList(){
   const hot = SIM_STATE.hot.xhs || [];
@@ -2835,7 +2941,7 @@ function simXhsList(){
   hot.slice(0, 6).forEach(h=> items.push({ real:1, h }));
   pickN(XHS_POOL.map((x,i)=>i), Math.max(3, 9-items.length)).forEach(i=> items.push({ real:0, i }));
   SIM_STATE.items.xhs = items;
-  return items.map((it,i)=>{
+  const cards = items.map((it,i)=>{
     if(it.real){
       const h = it.h, g = rnd(SIM_GRADS), e = rnd(XHS_EMOS);
       const who = rnd(XHS_POOL)[3];
@@ -2851,7 +2957,9 @@ function simXhsList(){
       <div class="xhs-note-t">${esc(x[2])}</div>
       <div class="xhs-note-m"><span class="xhs-ava" style="background:linear-gradient(${x[1]})">${x[0]}</span><span class="xhs-name">${x[3]}</span><span class="xhs-like">❤ ${x[4]}</span></div>
     </div>`;
-  }).join("");
+  });
+  cards.splice(4, 0, adXhsNote());          // 瀑布流第 5 张插品牌赞助笔记
+  return cards.join("");
 }
 function simZhihuList(){
   const hot = SIM_STATE.hot.zhihu || [];
@@ -2859,13 +2967,18 @@ function simZhihuList(){
   hot.slice(0, 5).forEach(h=> items.push({ real:1, h }));
   pickN(ZH_POOL.map((z,i)=>i), Math.max(3, 7-items.length)).forEach(i=> items.push({ real:0, i }));
   SIM_STATE.items.zhihu = items;
-  return items.map((it,i)=>{
+  const cards = items.map((it,i)=>{
     if(it.real){
       const h = it.h;
       return `<div class="zh-qcard" data-sim-open="zhihu:${i}">
-        <div class="zh-qcard-t">${esc(h.t)}</div>
-        <div class="zh-qcard-x">${esc((h.d||"").slice(0,90))}</div>
-        <div class="zh-qcard-m"><span>${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(800000,9800000))+" 热度")}</span><span>${rndN(30,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${rndN(120,18000)}</span></div>
+        <div class="zh-qcard-row">
+          <div class="zh-qcard-main">
+            <div class="zh-qcard-t">${esc(h.t)}</div>
+            <div class="zh-qcard-x">${esc((h.d||"").slice(0,90))}</div>
+            <div class="zh-qcard-m"><span>${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(800000,9800000))+" 热度")}</span><span>${rndN(30,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${rndN(120,18000)}</span></div>
+          </div>
+          ${h.cover ? `<div class="zh-qcard-thumb">${hotImg(h.cover)}</div>` : ""}
+        </div>
       </div>`;
     }
     const z = ZH_POOL[it.i];
@@ -2874,7 +2987,9 @@ function simZhihuList(){
       <div class="zh-qcard-x">${esc(z[1])}</div>
       <div class="zh-qcard-m"><span>${z[2]}</span><span>${rndN(20,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${z[3]}</span></div>
     </div>`;
-  }).join("");
+  });
+  cards.splice(3, 0, adZhihuCard());        // 信息流第 4 条插广告卡
+  return cards.join("");
 }
 const WB_IMGS = ["🌅","🍜","🐱","📸","🌊","🌇","🎧","🍫","🐕","☕","📚","🎤"];
 function simWeiboList(){
@@ -2883,14 +2998,18 @@ function simWeiboList(){
   hot.slice(0, 4).forEach(h=> items.push({ real:1, h }));
   pickN(WB_POSTS_POOL.map((p,i)=>i), Math.max(3, 6-items.length)).forEach(i=> items.push({ real:0, i }));
   SIM_STATE.items.weibo = items;
-  return items.map((it,i)=>{
+  const cards = items.map((it,i)=>{
     if(it.real){
       const h = it.h, name = rnd(WB_MEDIA), e = rnd(["📺","📰","🗞️","🌐"]);
       const g = rnd(SIM_GRADS);
+      const imgs = (h.imgs||[]).slice(0,3);
+      const imgHtml = imgs.length
+        ? `<div class="wb-imgs ${imgs.length===1?"one":""}">${imgs.map(u=>`<div class="wb-img">${hotImg(u)}</div>`).join("")}</div>`
+        : `<div class="wb-imgs">${pickN(WB_IMGS, 3).map(x=>`<div style="background:linear-gradient(${rnd(SIM_GRADS)})">${x}</div>`).join("")}</div>`;
       return `<div class="wb-card" data-sim-open="weibo:${i}">
         <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${g})">${e}</span><div><div class="wb-cname">${name} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
         <div class="wb-ctext">${esc(h.t)}</div>
-        <div class="wb-imgs">${pickN(WB_IMGS, 3).map(x=>`<div style="background:linear-gradient(${rnd(SIM_GRADS)})">${x}</div>`).join("")}</div>
+        ${imgHtml}
         <div class="wb-cacts"><span>🔁 转发 ${rndN(80,42000)}</span><span>💬 ${rndN(200,98000)}</span><span>👍 ${typeof h.hot==="number" ? fmtW(h.hot) : rndN(1000,300000)}</span></div>
       </div>`;
     }
@@ -2901,7 +3020,9 @@ function simWeiboList(){
       <div class="wb-imgs">${pickN(WB_IMGS, 3).map(e=>`<div style="background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371"])})">${e}</div>`).join("")}</div>
       <div class="wb-cacts"><span>🔁 转发 ${p[4]}</span><span>💬 ${p[5]}</span><span>👍 ${p[6]}</span></div>
     </div>`;
-  }).join("");
+  });
+  cards.splice(2, 0, adWeiboCard());        // 信息流第 3 条插粉丝通广告
+  return cards.join("");
 }
 function simWechatList(){
   const hot = SIM_STATE.hot.wechat || [];
@@ -2909,13 +3030,15 @@ function simWechatList(){
   hot.slice(0, 5).forEach(h=> items.push({ real:1, h }));
   pickN(WX_POOL.map((w,i)=>i), Math.max(3, 8-items.length)).forEach(i=> items.push({ real:0, i }));
   SIM_STATE.items.wechat = items;
-  return items.map((it,i)=>{
+  const cards = items.map((it,i)=>{
     const w = it.real ? { t:it.h.t, x:(it.h.d||"").slice(0,42) || "热点话题 · 点击查看全文", g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
     return `<div class="wx-li" data-sim-open="wechat:${i}">
       <span class="wx-li-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span>
       <div class="wx-li-body"><div class="wx-li-t"><span>${esc(w.t)}</span><span class="time">${rnd(["上午 9:02","下午 2:15","晚上 10:03","昨天","前天"])}</span></div><div class="wx-li-x">${esc(w.x)}</div></div>
     </div>`;
-  }).join("");
+  });
+  cards.splice(4, 0, adWechatLi());         // 订阅号列表第 5 条插广告
+  return cards.join("");
 }
 
 /* ---------- 顶栏 / 外壳 ---------- */
@@ -3054,13 +3177,17 @@ function simWeiboDetail(i){
   const ava  = real ? rnd(["📺","📰","🗞️","🌐"]) : WB_POSTS_POOL[it.i][1];
   const grad = rnd(SIM_GRADS);
   const text = real ? esc(it.h.t) : WB_POSTS_POOL[it.i][3];
+  const dimgs = real ? [...(it.h.imgs||[]), ...(it.h.imgs||[])].slice(0,6) : [];
+  const dImgHtml = real && dimgs.length
+    ? `<div class="wb-imgs">${dimgs.map(u=>`<div class="wb-img">${hotImg(u)}</div>`).join("")}</div>`
+    : `<div class="wb-imgs">${pickN(WB_IMGS, 6).map(e=>`<div style="height:120px; background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371","135deg,#43cea2,#185a9d","135deg,#ff512f,#dd2476"])})">${e}</div>`).join("")}</div>`;
   return `<div class="wb-root">${simWeiboHeader()}
     <div class="wb-main"><div class="wb-feed sim-detail">
       <button class="wb-backlink" data-sim-back>‹ 返回首页</button>
       <div class="wb-card" style="cursor:default">
         <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${grad})">${ava}</span><div><div class="wb-cname">${name} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版 · 已编辑</div></div></div>
         <div class="wb-ctext" style="font-size:16px">${text}${real ? " 详情戳链接👉 <span style='color:#eb7350'>网页链接</span>" : ""}</div>
-        <div class="wb-imgs">${pickN(WB_IMGS, 6).map(e=>`<div style="height:120px; background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371","135deg,#43cea2,#185a9d","135deg,#ff512f,#dd2476"])})">${e}</div>`).join("")}</div>
+        ${dImgHtml}
         <div style="font-size:12px; color:#939393; padding:8px 0">${rndN(15,58)} 分钟前 · ${fmtW(rndN(30000,9000000))} 次阅读</div>
         <div class="wb-cacts"><span>🔁 转发 ${real ? rndN(80,42000) : WB_POSTS_POOL[it.i][4]}</span><span>💬 ${real ? rndN(200,98000) : WB_POSTS_POOL[it.i][5]}</span><span>👍 ${real ? (typeof it.h.hot==="number" ? fmtW(it.h.hot) : rndN(1000,300000)) : WB_POSTS_POOL[it.i][6]}</span></div>
       </div>
@@ -3085,6 +3212,7 @@ function simWechatArticle(i){
       <div class="wx-art-body">${pfParas("wechat", w).map(p=>`<p>${p}</p>`).join("")}</div>
       <div class="wx-art-acts"><span>👍 ${fmtW(rndN(500,60000))}</span><span>💛 在看 ${fmtW(rndN(300,20000))}</span><span>✈ 分享</span></div>
       <div class="wx-cmts"><div class="wx-cmts-t">精选留言（${rndN(30,600)}）</div>${pfComments("wechat", rndN(4,6))}</div>
+      ${adWechatBanner()}
       <div style="padding:16px 4px 8px; font-size:14px; font-weight:700; color:#191919">喜欢此内容的人还喜欢</div>
       ${recs.map(j=>`<div class="wx-li" data-sim-open="wechat:${j}"><span class="wx-li-ava" style="background:linear-gradient(${WX_POOL[j].c})">${WX_POOL[j].g[0]}</span><div class="wx-li-body"><div class="wx-li-t"><span>${esc(WX_POOL[j].t)}</span></div><div class="wx-li-x">${esc(WX_POOL[j].x)}</div></div></div>`).join("")}
     </div>
