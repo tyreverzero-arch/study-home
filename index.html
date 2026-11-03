@@ -459,6 +459,146 @@ select option{background:var(--card); color:var(--text)}
 .layout.pf-mode .sidebar{display:none}
 .layout.pf-mode .content{max-width:1100px; margin:0 auto; width:100%}
 .layout.pf-mode .imgad{display:none}   /* 平台页里不显示学习站图片广告 */
+/* ================= 平台全页模拟器（1:1 复刻真实网站） ================= */
+#simRoot{
+  position:fixed; top:0; left:0; right:0; bottom:30px; z-index:50; overflow-y:auto;
+  background:#fff; display:none;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+  /* 强制浅色：让继承主题变量的组件（评论等）在白底上正常显示 */
+  --text:#333; --text2:#999; --line:#eee; --card:#fff; --card2:#fafafa; --accent:#ff2442;
+}
+#simRoot.open{display:block}
+.sim-main{min-height:60vh}
+/* ---- 小红书 ---- */
+.xhs-root{background:#fff; min-height:100%; color:#333}
+.xhd{position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid #f2f2f2; display:flex; align-items:center; gap:26px; padding:0 28px; height:60px}
+.xhd-logo{background:#ff2442; color:#fff; font-weight:800; font-size:19px; padding:5px 12px; border-radius:10px; letter-spacing:2px}
+.xhd-nav{font-size:15px; color:#666; cursor:pointer}
+.xhd-nav.on{color:#ff2442; font-weight:700}
+.xhd-search{flex:1; max-width:460px; margin:0 auto; background:#f5f5f5; border-radius:32px; padding:9px 18px; font-size:13.5px; color:#b0b0b0}
+.xhd-login{background:#ff2442; color:#fff; border-radius:18px; padding:6px 20px; font-size:14px; cursor:pointer}
+.xhd-cats{position:sticky; top:60px; z-index:9; background:#fff; display:flex; gap:26px; padding:10px 30px; border-bottom:1px solid #f7f7f7; font-size:14.5px; color:#666; overflow-x:auto}
+.xhd-cats span{cursor:pointer; white-space:nowrap; padding-bottom:4px}
+.xhd-cats span.on{color:#ff2442; font-weight:700; border-bottom:2px solid #ff2442}
+.xhs-waterfall{column-count:3; column-gap:16px; max-width:1150px; margin:0 auto; padding:18px 24px}
+.xhs-note{break-inside:avoid; background:#fff; border-radius:12px; margin-bottom:16px; cursor:pointer; border:1px solid #f5f5f5; transition:box-shadow .15s}
+.xhs-note:hover{box-shadow:0 4px 18px rgba(0,0,0,.08)}
+.xhs-cover{display:flex; align-items:center; justify-content:center; font-size:44px; border-radius:12px 12px 0 0}
+.xhs-note-t{font-size:14px; font-weight:600; color:#333; padding:10px 12px 6px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.xhs-note-m{display:flex; align-items:center; gap:6px; padding:0 12px 12px}
+.xhs-ava{width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff}
+.xhs-name{font-size:12px; color:#8a8a8a; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.xhs-like{font-size:12px; color:#8a8a8a}
+.xhs-mask{position:fixed; top:0; left:0; right:0; bottom:30px; background:rgba(0,0,0,.6); z-index:60; display:flex; align-items:center; justify-content:center}
+.xhs-modal{position:relative; background:#fff; width:min(1080px, 94%); height:88%; border-radius:16px; overflow:hidden; display:flex}
+.xhs-x{position:absolute; top:14px; right:18px; font-size:22px; color:#999; cursor:pointer; z-index:2}
+.xhs-modal-cover{width:52%; display:flex; align-items:center; justify-content:center; font-size:110px; flex-shrink:0}
+.xhs-modal-body{flex:1; overflow-y:auto; padding:26px 30px}
+.xhs-follow{margin-left:auto; background:#ff2442; color:#fff; border:none; border-radius:16px; padding:6px 18px; font-size:13px; cursor:pointer}
+.xhs-mtitle{font-size:19px; font-weight:700; color:#333; margin:4px 0 12px; line-height:1.5}
+.xhs-mbody{font-size:14.5px; color:#333; line-height:1.85}
+.xhs-mbody p{margin:0 0 13px}
+.xhs-mdate{font-size:12px; color:#b0b0b0; margin:10px 0 6px}
+.xhs-mtags span{color:#1555b8; font-size:13px; margin-right:12px}
+.xhs-macts{display:flex; gap:26px; font-size:14px; color:#666; padding:14px 0; border-bottom:1px solid #f2f2f2; margin-bottom:6px}
+.xhs-mcmt-t{font-size:14px; font-weight:700; color:#333; padding:12px 0 4px}
+/* ---- 知乎 ---- */
+.zh-root{background:#f6f6f6; min-height:100%; color:#1a1a1a}
+.zhd{position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid #ebebeb; display:flex; align-items:center; gap:22px; padding:0 28px; height:58px; box-shadow:0 1px 3px rgba(18,18,18,.06)}
+.zhd-logo{color:#056de8; font-size:27px; font-weight:800; letter-spacing:1px}
+.zhd-search{flex:1; max-width:520px; background:#f6f6f6; border:1px solid #ebebeb; border-radius:6px; padding:8px 14px; font-size:13.5px; color:#999}
+.zhd-nav{font-size:15px; color:#8590a6; cursor:pointer}
+.zhd-nav.on{color:#121212; font-weight:600}
+.zhd-ask{margin-left:auto; background:#056de8; color:#fff; border:none; border-radius:4px; padding:7px 18px; font-size:14px; cursor:pointer}
+.zh-main{max-width:1050px; margin:0 auto; display:flex; gap:16px; padding:20px 18px; align-items:flex-start}
+.zh-col{flex:1; min-width:0}
+.zh-side{width:300px; flex-shrink:0}
+.zh-card{background:#fff; border-radius:4px; box-shadow:0 1px 3px rgba(18,18,18,.08)}
+.zh-qcard{padding:16px 20px; border-bottom:1px solid #f2f2f2; cursor:pointer}
+.zh-qcard:hover .zh-qcard-t{color:#056de8}
+.zh-qcard-t{font-size:16.5px; font-weight:700; color:#1a1a1a; line-height:1.5}
+.zh-qcard-x{font-size:14px; color:#646464; line-height:1.7; margin-top:7px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.zh-qcard-m{display:flex; gap:16px; font-size:13px; color:#8590a6; margin-top:10px; align-items:center}
+.zh-qcard-v{margin-left:auto; background:#ebf3ff; color:#056de8; font-weight:700; border-radius:4px; padding:3px 10px; font-size:12.5px}
+.zh-side-h{font-size:15px; font-weight:700; padding:14px 18px 8px; color:#1a1a1a}
+.zh-hotrow{display:flex; align-items:center; gap:10px; padding:9px 18px; cursor:pointer}
+.zh-hotrow:hover .zh-hot-t{color:#056de8}
+.zh-hot-n{width:20px; text-align:center; font-weight:800; font-style:italic; color:#c3c3c3; font-size:15px}
+.zh-hot-n.top{color:#ff9607}
+.zh-hot-t{font-size:13.5px; color:#1a1a1a; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.zh-hot-v{font-size:11.5px; color:#b0b0b0}
+.zh-backlink{background:none; border:none; color:#056de8; font-size:14px; cursor:pointer; padding:0 0 12px}
+.zh-qtitle-big{font-size:22px; font-weight:700; color:#1a1a1a; line-height:1.5; margin:0 0 12px}
+.zh-qmeta{display:flex; align-items:center; gap:18px; font-size:13.5px; color:#8590a6; padding-bottom:14px; border-bottom:1px solid #ebebeb}
+.zh-qmeta .zh-btn-blue{margin-left:auto; background:#056de8; color:#fff; border:none; border-radius:4px; padding:7px 16px; font-size:13.5px; cursor:pointer}
+.zh-ans{background:#fff; border-radius:4px; box-shadow:0 1px 3px rgba(18,18,18,.08); padding:18px 22px; margin-top:14px}
+.zh-vote{display:inline-flex; gap:14px; background:#ebf3ff; border-radius:4px; padding:6px 14px; color:#056de8; font-weight:700; font-size:13.5px; margin:6px 0 12px}
+.zh-ansbody{font-size:15px; color:#121212; line-height:1.85}
+.zh-ansbody p{margin:0 0 15px}
+.zh-ansfoot{font-size:12.5px; color:#b0b0b0; padding:12px 0; border-top:1px solid #f2f2f2}
+.zh-more{font-size:15px; font-weight:700; color:#8590a6; margin:22px 0 0; padding:12px 4px 0; border-top:1px solid #dedede}
+.zh-cmthead{font-size:14px; font-weight:700; color:#1a1a1a; background:#fff; border-radius:4px; padding:14px 20px 4px; margin-top:14px; box-shadow:0 1px 3px rgba(18,18,18,.08)}
+/* ---- 微博 ---- */
+.wb-root{background:#f2f2f5; min-height:100%; color:#333}
+.wbhd{position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid #e8e8e8; height:50px; display:flex; align-items:center}
+.wbhd-in{max-width:1150px; margin:0 auto; width:100%; display:flex; align-items:center; gap:22px; padding:0 18px}
+.wbhd-logo{color:#e6162d; font-size:24px; font-weight:800; letter-spacing:1px}
+.wbhd-search{flex:1; max-width:380px; background:#f2f2f5; border-radius:6px; padding:7px 14px; font-size:13px; color:#939393}
+.wbhd-nav{font-size:14.5px; color:#333; cursor:pointer; display:flex; align-items:center; gap:4px}
+.wbhd-nav.on{color:#e6162d; font-weight:700}
+.wbhd-me{margin-left:auto; width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#f7971e,#ffd200); display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; font-size:14px}
+.wb-main{max-width:1150px; margin:0 auto; display:flex; gap:16px; padding:16px 18px; align-items:flex-start}
+.wb-feed{flex:1; min-width:0}
+.wb-side{width:320px; flex-shrink:0}
+.wb-card{background:#fff; border-radius:8px; padding:16px 20px; margin-bottom:14px; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.wb-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.wb-chead{display:flex; align-items:center; gap:11px}
+.wb-cava{width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:21px; color:#fff}
+.wb-cname{font-size:15px; font-weight:700; color:#e6162d}
+.wb-v{color:#eab308; font-size:11px}
+.wb-ctime{font-size:12px; color:#939393; margin-top:2px}
+.wb-ctext{font-size:15px; color:#333; line-height:1.75; margin:11px 0}
+.wb-cacts{display:flex; border-top:1px solid #f2f2f5; padding-top:10px; margin-top:11px}
+.wb-cacts span{flex:1; text-align:center; font-size:13px; color:#808080}
+.wb-hotcard{background:#fff; border-radius:8px; padding:4px 0 8px; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.wb-hotcard-h{display:flex; justify-content:space-between; padding:12px 16px 6px; font-size:15px; font-weight:700; color:#333}
+.wb-hotcard-h span:last-child{font-size:12px; color:#939393; font-weight:400; cursor:pointer}
+.wb-hotline{display:flex; align-items:center; gap:9px; padding:7px 16px; cursor:pointer; font-size:13.5px; color:#333}
+.wb-hotline:hover{background:#fafafa}
+.wb-hot-n{width:18px; text-align:center; font-weight:700; font-style:italic; color:#c9c9c9}
+.wb-hot-n.r1{color:#fe2d46}.wb-hot-n.r2{color:#ff6600}.wb-hot-n.r3{color:#faa90e}
+.wb-hot-t{flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.wb-tag{font-size:10.5px; color:#fff; border-radius:3px; padding:0 4px; line-height:17px}
+.wb-hot-v{font-size:11.5px; color:#b8b8b8}
+.wb-promo{background:#fff; border-radius:8px; padding:16px; margin-top:14px; font-size:13px; color:#939393; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.wb-backlink{background:none; border:none; color:#5090cc; font-size:14px; cursor:pointer; padding:0 0 12px}
+/* ---- 微信公众号 ---- */
+.wx-root{background:#f7f7f7; min-height:100%; color:#191919; display:flex; flex-direction:column}
+.wxtop{position:sticky; top:0; background:#ededed; color:#191919; display:flex; align-items:center; justify-content:space-between; padding:12px 18px; font-size:16px; font-weight:700; border-bottom:1px solid #dcdcdc}
+.wxtop-r{font-size:15px; color:#191919; display:flex; gap:18px}
+.wx-list{flex:1; background:#fff}
+.wx-li{display:flex; gap:12px; padding:13px 16px; border-bottom:1px solid #f2f2f2; cursor:pointer}
+.wx-li:hover{background:#f7f7f7}
+.wx-li-ava{width:44px; height:44px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:19px; font-weight:700; flex-shrink:0}
+.wx-li-body{flex:1; min-width:0}
+.wx-li-t{display:flex; justify-content:space-between; font-size:15.5px; color:#191919}
+.wx-li-t .time{font-size:11px; color:#b2b2b2; font-weight:400}
+.wx-li-x{font-size:13px; color:#9c9c9c; margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.wx-tabbar{position:sticky; bottom:0; background:#f7f7f7; border-top:1px solid #dcdcdc; display:flex; padding:6px 0 8px}
+.wx-tab{flex:1; text-align:center; font-size:11px; color:#7a7a7a; cursor:pointer}
+.wx-tab .ic{font-size:21px; display:block}
+.wx-tab.on{color:#07c160}
+.wx-art{background:#fff; min-height:100%; padding:26px 22px}
+.wx-art-t{font-size:21px; font-weight:700; color:#191919; line-height:1.5}
+.wx-art-meta{display:flex; align-items:center; gap:9px; padding:14px 0; border-bottom:1px solid #f2f2f2; margin-bottom:6px}
+.wx-art-ava{width:34px; height:34px; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:15px}
+.wx-art-gz{font-size:13.5px; color:#576b95}
+.wx-art-body{font-size:15.5px; color:#333; line-height:2}
+.wx-art-body p{margin:0 0 16px}
+.wx-art-acts{display:flex; justify-content:center; gap:44px; padding:16px 0; border-top:1px solid #f2f2f2; border-bottom:8px solid #f7f7f7; color:#576b95; font-size:13.5px}
+.wx-cmts{background:#f7f7f7; padding:14px 16px}
+.wx-cmts-t{font-size:13px; color:#b2b2b2; margin-bottom:4px}
+.wx-backlink{background:none; border:none; color:#576b95; font-size:14px; cursor:pointer; padding:0 0 12px}
 </style>
 </head>
 <body>
@@ -1412,8 +1552,12 @@ function setFavicon(emoji){
   link.href = "data:image/svg+xml," + encodeURIComponent(svg);
 }
 setFavicon("📚");
-function setDisguise(on){
-  disguised = on;
+/* 手动老板键：顺带退出平台模拟页，露出完整学习站 */
+function bossToggle(){
+  if(simOpen()) closeSim();
+  bossToggle();
+}
+function setDisguise(on){  disguised = on;
   if(!on) entryGuard = false;   // 手动揭示后，恢复正常的失焦/聚焦自动切换
   bar.classList.toggle("info", on);
   document.title = on ? (settings.fakeTitle || REAL_TITLE) : REAL_TITLE;
@@ -1474,7 +1618,7 @@ document.addEventListener("keydown", e=>{
   /* Shift 单独按下 = 老板键（可开关） */
   if(settings.bossShift && e.key === "Shift" && !e.ctrlKey && !e.altKey && !e.metaKey){
     e.preventDefault();
-    setDisguise(!disguised);
+    bossToggle();
     return;
   }
   const combo = comboFromEvent(e);
@@ -1492,7 +1636,7 @@ document.addEventListener("keydown", e=>{
         bar.classList.toggle("hidden-bar", barHidden);
         if(!barHidden) renderBar();
       }
-      else if(act === "bossKey") setDisguise(!disguised);
+      else if(act === "bossKey") bossToggle();
       return;
     }
   }
@@ -1763,7 +1907,7 @@ $("#btnToc").addEventListener("click", toggleToc);
 
 /* ---------------- 全局鼠标翻页（摸鱼核心） ---------------- */
 const CLICK_EXCLUDE = "button,a,input,textarea,select,label,option,nav,#novelBar,#floatBar,.modal-mask,.modal," +
-  ".theme-item,.hk-key,.rank-item,.course,.feed-item,.fl-links,.fake-act,.sign-btn,.ad-banner,pre,code,.pf";
+  ".theme-item,.hk-key,.rank-item,.course,.feed-item,.fl-links,.fake-act,.sign-btn,.ad-banner,pre,code,.pf,#simRoot";
 const canFish = ()=> cur && !disguised && !barHidden && !listeningAction;
 
 /* 左键点击页面空白处 = 下一页（按钮/弹窗/代码区/选中文本时不触发） */
@@ -1780,6 +1924,7 @@ document.addEventListener("click", e=>{
 let wheelAcc = 0, wheelLock = 0;
 document.addEventListener("wheel", e=>{
   if(!settings.wheelPage || !canFish()) return;
+  if(simOpen()) return;   // 平台模拟页里滚轮正常滚动页面，不翻小说
   if(e.target instanceof Element && e.target.closest(".modal-mask")) return;  // 弹窗内正常滚动
   e.preventDefault();
   const now = Date.now();
@@ -1798,12 +1943,12 @@ document.addEventListener("mousedown", e=>{
   if(e.button !== 1) return;
   if(e.target instanceof Element && e.target.closest(".modal-mask, input, textarea, select")) return;
   e.preventDefault();   // 阻止浏览器默认的滚轮滚动模式
-  setDisguise(!disguised);
+  bossToggle();
 });
 
 /* Esc 关闭弹窗 */
 document.addEventListener("keydown", e=>{
-  if(e.key === "Escape") $$(".modal-mask.open").forEach(m=> m.classList.remove("open"));
+  if(e.key === "Escape"){ if(simOpen()){ closeSim(); return; } $$(".modal-mask.open").forEach(m=> m.classList.remove("open")); }
 });
 
 /* 今日阅读时长统计（仅在真正阅读时计时） */
@@ -2147,11 +2292,8 @@ function pfPage(pf, i){
 /* 热点栏目：每次刷新随机进一个平台，直接展示一篇文章正文 */
 const FEED_NAMES = ["热点", "推荐", "头条", "热门", "今日热榜"];
 function genFeed(){
-  const pf = rnd(["wechat","zhihu","weibo","xhs"]);
-  const pool = PF_DATA()[pf];
-  const i = rndN(0, pool.length-1);
-  PF_HIST[pf] = [];
-  return pfShell(pf, pfPage(pf, i));
+  /* 「热点」栏目已升级为全页平台模拟器（openSim），这个面板仅作占位，正常不会被看到 */
+  return `<div class="card"><h2>📌 热点</h2><p class="tip">点击顶部导航「${rnd(FEED_NAMES)}」查看今日热门内容</p></div>`;
 }
 
 document.addEventListener("click", e=>{
@@ -2485,7 +2627,7 @@ function renderNav(activeId){
     ? [...(feedPack?[feedPack]:[]), ...pickN(others, Math.max(0, Math.min(5, 7 - (feedPack?1:0))))]
     : enabled;
   const ids = [...shown.map(p=>p.id), "note"];
-  if(!activeId || !ids.includes(activeId)) activeId = feedPack ? "feed" : ids[0];   // 刷新默认进热点（随机平台文章页）
+  if(!activeId || !ids.includes(activeId) || activeId === "feed") activeId = ids.find(id=>id!=="feed") || ids[0];   // 默认激活技术栏目（feed 走全页模拟器，不占面板）
   $("nav").innerHTML = ids.map(id=>
     `<button data-tab="${id}" class="${id===activeId?"active":""}">${packName(id)}</button>`).join("");
   bindNav();
@@ -2494,6 +2636,7 @@ function renderNav(activeId){
 }
 function bindNav(){
   $$("nav button").forEach(b=> b.addEventListener("click", ()=>{
+    if(b.dataset.tab === "feed"){ openSim(rndSimPf()); return; }   // 「热点」= 打开随机平台全页模拟
     $$("nav button").forEach(x=>x.classList.remove("active"));
     b.classList.add("active");
     $$(".pane").forEach(p=>p.classList.remove("active"));
@@ -2608,6 +2751,259 @@ function renderPackChips(){
     saveSettings(); renderPackChips(); shuffleContent();
   }));
 }
+/* ================= 平台全页模拟器（1:1 复刻） ================= */
+const SIM_PFS  = ["xhs","zhihu","weibo","wechat"];
+const SIM_STATE = { pf:null, lists:{}, hist:[] };
+const simRoot = document.createElement("div");
+simRoot.id = "simRoot";
+document.body.appendChild(simRoot);
+const simOpen = ()=> simRoot.classList.contains("open");
+function closeSim(){ simRoot.classList.remove("open"); simRoot.innerHTML = ""; }
+
+/* ---------- 列表构建 ---------- */
+const XHS_CATS = ["推荐","穿搭","美食","彩妆","影视","综艺","家居","旅行","健身","职场","数码","学习"];
+function simXhsList(){
+  return pickN(XHS_POOL.map((x,i)=>i), 9).map(i=>{
+    const x = XHS_POOL[i];
+    return `<div class="xhs-note" data-sim-open="xhs:${i}">
+      <div class="xhs-cover" style="background:linear-gradient(${x[1]}); height:${rnd(150,230)}px">${x[0]}</div>
+      <div class="xhs-note-t">${esc(x[2])}</div>
+      <div class="xhs-note-m"><span class="xhs-ava" style="background:linear-gradient(${x[1]})">${x[0]}</span><span class="xhs-name">${x[3]}</span><span class="xhs-like">❤ ${x[4]}</span></div>
+    </div>`;
+  }).join("");
+}
+function simZhihuList(){
+  return pickN(ZH_POOL.map((z,i)=>i), 6).map(i=>{
+    const z = ZH_POOL[i];
+    return `<div class="zh-qcard" data-sim-open="zhihu:${i}">
+      <div class="zh-qcard-t">${esc(z[0])}</div>
+      <div class="zh-qcard-x">${esc(z[1])}</div>
+      <div class="zh-qcard-m"><span>${z[2]}</span><span>${rndN(20,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${z[3]}</span></div>
+    </div>`;
+  }).join("");
+}
+const WB_IMGS = ["🌅","🍜","🐱","📸","🌊","🌇","🎧","🍫","🐕","☕","📚","🎤"];
+function simWeiboList(){
+  return pickN(WB_POSTS_POOL.map((p,i)=>i), 5).map(i=>{
+    const p = WB_POSTS_POOL[i];
+    return `<div class="wb-card" data-sim-open="weibo:${i}">
+      <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${p[2]})">${p[1]}</span><div><div class="wb-cname">${p[0]} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
+      <div class="wb-ctext">${p[3]}</div>
+      <div class="wb-imgs">${pickN(WB_IMGS, 3).map(e=>`<div style="background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371"])})">${e}</div>`).join("")}</div>
+      <div class="wb-cacts"><span>🔁 转发 ${p[4]}</span><span>💬 ${p[5]}</span><span>👍 ${p[6]}</span></div>
+    </div>`;
+  }).join("");
+}
+function simWechatList(){
+  return pickN(WX_POOL.map((w,i)=>i), 8).map(i=>{
+    const w = WX_POOL[i];
+    return `<div class="wx-li" data-sim-open="wechat:${i}">
+      <span class="wx-li-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span>
+      <div class="wx-li-body"><div class="wx-li-t"><span>${esc(w.t)}</span><span class="time">${rnd(["上午 9:02","下午 2:15","晚上 10:03","昨天","前天"])}</span></div><div class="wx-li-x">${esc(w.x)}</div></div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- 顶栏 / 外壳 ---------- */
+function simXhsHeader(){
+  return `<div class="xhd">
+    <span class="xhd-logo">小红书</span>
+    <span class="xhd-nav on">首页</span><span class="xhd-nav">发现</span><span class="xhd-nav">发布</span><span class="xhd-nav">通知</span><span class="xhd-nav" data-sim-exit>我</span>
+    <span class="xhd-search">🔍 搜索小红书</span>
+    <span class="xhd-login" data-sim-exit>登录</span>
+  </div>`;
+}
+function simZhihuHeader(){
+  return `<div class="zhd">
+    <span class="zhd-logo">知乎</span>
+    <span class="zhd-search">🔍 搜索你感兴趣的内容</span>
+    <span class="zhd-nav on">首页</span><span class="zhd-nav">会员</span><span class="zhd-nav">等你来答</span><span class="zhd-nav">专栏</span><span class="zhd-nav" data-sim-exit>我的</span>
+    <button class="zhd-ask">✏️ 提问</button>
+  </div>`;
+}
+function simWeiboHeader(){
+  return `<div class="wbhd"><div class="wbhd-in">
+    <span class="wbhd-logo">微博</span>
+    <span class="wbhd-search">🔍 大家都在搜：${rnd(WB_HOT_POOL)[0]}</span>
+    <span class="wbhd-nav on">🏠 首页</span><span class="wbhd-nav">🎬 视频</span><span class="wbhd-nav">🔍 发现</span><span class="wbhd-nav">📊 热榜</span>
+    <span class="wbhd-me" data-sim-exit>我</span>
+  </div></div>`;
+}
+function simZhihuSide(){
+  return `<div class="zh-card"><div class="zh-side-h">🔥 知乎热榜</div>
+    ${pickN(ZH_POOL.map(z=>z[0]), 8).map((t,i)=>`<div class="zh-hotrow"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(t)}</span><span class="zh-hot-v">${fmtW(rndN(80000, 9800000))} 热度</span></div>`).join("")}
+  </div>
+  <div class="zh-card" style="margin-top:14px; padding:16px 18px; font-size:13px; color:#8590a6">© 知乎 · 有问题就会有答案<br><span style="font-size:12px">OR 闽ICP备11023387号</span></div>`;
+}
+function simWeiboSide(){
+  const tags = { "爆":"background:#fe2d46", "沸":"background:#ff6600", "热":"background:#ff6600", "新":"background:#0095ee" };
+  return `<div class="wb-hotcard"><div class="wb-hotcard-h"><span>微博热搜 · 每小时更新</span><span data-sim-cat>换一换</span></div>
+    ${pickN(WB_HOT_POOL, 10).map((h,i)=>{
+      const t = h[0], tg = h[1];
+      return `<div class="wb-hotline" data-sim-open="weibo:${rndN(0, WB_POSTS_POOL.length-1)}"><span class="wb-hot-n ${i<3?"r"+(i+1):""}">${i+1}</span><span class="wb-hot-t">${esc(t)}</span>${tg?`<span class="wb-tag" style="${tags[tg]||""}">${tg}</span>`:""}<span class="wb-hot-v">${rndN(10, 990)}万</span></div>`;
+    }).join("")}
+  </div>
+  <div class="wb-promo">📣 微博规则：友善评论，理性发言。构建清朗网络空间，人人有责。</div>`;
+}
+
+/* ---------- 详情页 ---------- */
+function simXhsNote(i){
+  const x = XHS_POOL[i];
+  const paras = pfParas("xhs", x);
+  return `<div class="xhs-mask" id="xhsModal" data-sim-closemodal>
+    <div class="xhs-modal">
+      <span class="xhs-x" data-sim-back>✕</span>
+      <div class="xhs-modal-cover" style="background:linear-gradient(${x[1]})">${x[0]}</div>
+      <div class="xhs-modal-body">
+        <div class="pf-ameta" style="padding:0 0 14px"><span class="pf-ava" style="background:linear-gradient(${x[1]});width:44px;height:44px;font-size:20px">${x[0]}</span><div><div class="pf-aname">${x[3]}</div><div class="pf-asub">${rndN(12,96)} 篇笔记 · ${fmtW(rndN(2000,90000))} 粉丝</div></div><button class="xhs-follow">＋ 关注</button></div>
+        <div class="xhs-mtitle">${esc(x[2])}</div>
+        <div class="xhs-mbody">${paras.map(p=>`<p>${p}</p>`).join("")}</div>
+        <div class="xhs-mdate">${rndN(1,28)} ${rnd(["10","12","14","16","18","20","21"])}:${rndN(10,59)} · IP 属地${rnd(["广东","浙江","江苏","上海","北京","四川","湖北","福建"])}</div>
+        <div class="xhs-mtags">${pickN(["打工人日常","生活碎片","记录美好生活","实用干货","治愈系","周末去哪儿","好物分享"],3).map(t=>`<span># ${t}</span>`).join("")}</div>
+        <div class="xhs-macts"><span>❤ ${x[4]}</span><span>⭐ ${fmtW(rndN(800,30000))}</span><span>💬 ${rndN(60,2400)}</span></div>
+        <div class="xhs-mcmts"><div class="xhs-mcmt-t">共 ${rndN(40,2200)} 条评论</div>${pfComments("xhs", rndN(4,7))}</div>
+      </div>
+    </div>
+  </div>`;
+}
+function simZhihuQ(i){
+  const z = ZH_POOL[i];
+  const others = ZH_POOL.filter((_,j)=>j!==i);
+  const z2 = rnd(others);
+  return `<div class="zh-root">${simZhihuHeader()}
+    <div class="zh-main"><div class="zh-col sim-detail">
+      <button class="zh-backlink" data-sim-back>‹ 返回首页</button>
+      <h1 class="zh-qtitle-big">${esc(z[0])}</h1>
+      <div class="zh-qmeta"><span>🔄 关注 ${fmtW(rndN(800,46000))}</span><span>👁 ${fmtW(rndN(200000,9800000))} 浏览</span><button class="zh-btn-blue">✏️ 写回答</button></div>
+      <div class="zh-ans">
+        <div class="pf-ameta" style="padding-top:0"><span class="pf-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376)">${rnd(["🦉","🎓","🧑‍💻","☕","📊"])}</span><div><div class="pf-aname">${z[2]}</div><div class="pf-asub">${rndN(2,30)} 万人关注 · 优质答主</div></div></div>
+        <div class="zh-vote"><span>▲ 赞同 ${z[3]}</span><span>💬 ${rndN(120,2600)}</span></div>
+        <div class="zh-ansbody">${pfParas("zhihu", z).map(p=>`<p>${p}</p>`).join("")}</div>
+        <div class="zh-ansfoot">发布于 ${rnd(TIME_STR)} · 著作权归作者所有 · ${rndN(400,9000)} 次收藏</div>
+      </div>
+      <div class="zh-more">更多回答（${rndN(20,900)}）</div>
+      <div class="zh-ans">
+        <div class="pf-ameta" style="padding-top:0"><span class="pf-ava" style="background:linear-gradient(135deg,#ff5f6d,#ffc371)">${rnd(["🦉","🎓","🧑‍💻","☕"])}</span><div><div class="pf-aname">${z2[2]}</div><div class="pf-asub">${rndN(1,12)} 万粉丝 · 知乎盐选专栏作者</div></div></div>
+        <div class="zh-vote"><span>▲ 赞同 ${z2[3]}</span></div>
+        <div class="zh-ansbody">${pfParas("zhihu", z2).map(p=>`<p>${p}</p>`).join("")}</div>
+        <div class="zh-ansfoot">编辑于 ${rnd(TIME_STR)} · 已同意 《知乎社区规范》</div>
+      </div>
+      <div class="zh-cmthead">${rndN(120,3400)} 条评论</div>
+      <div class="zh-card" style="padding:4px 20px 10px">${pfComments("zhihu", rndN(4,6))}</div>
+    </div>
+    <div class="zh-side">${simZhihuSide()}</div>
+    </div>
+  </div>`;
+}
+function simWeiboDetail(i){
+  const p = WB_POSTS_POOL[i];
+  return `<div class="wb-root">${simWeiboHeader()}
+    <div class="wb-main"><div class="wb-feed sim-detail">
+      <button class="wb-backlink" data-sim-back>‹ 返回首页</button>
+      <div class="wb-card" style="cursor:default">
+        <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${p[2]})">${p[1]}</span><div><div class="wb-cname">${p[0]} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版 · 已编辑</div></div></div>
+        <div class="wb-ctext" style="font-size:16px">${p[3]}</div>
+        <div class="wb-imgs">${pickN(WB_IMGS, 6).map(e=>`<div style="height:120px; background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371","135deg,#43cea2,#185a9d","135deg,#ff512f,#dd2476"])})">${e}</div>`).join("")}</div>
+        <div style="font-size:12px; color:#939393; padding:8px 0">${rndN(15,58)} 分钟前 · ${fmtW(rndN(30000,9000000))} 次阅读</div>
+        <div class="wb-cacts"><span>🔁 转发 ${p[4]}</span><span>💬 ${p[5]}</span><span>👍 ${p[6]}</span></div>
+      </div>
+      <div class="wb-card" style="cursor:default"><div style="font-size:14px; font-weight:700; color:#333; padding-bottom:6px">热评（${rndN(300,9000)}）</div>${pfComments("weibo", rndN(4,6))}</div>
+    </div>
+    <div class="wb-side">${simWeiboSide()}</div>
+    </div>
+  </div>`;
+}
+function simWechatArticle(i){
+  const w = WX_POOL[i];
+  const recs = pickN(WX_POOL.filter((_,j)=>j!==i).map((_,k)=>k), 3);
+  return `<div class="wx-root">
+    <div class="wxtop"><span>‹ 微信 ( ${rndN(1,9)} )</span><span class="wxtop-r"><span data-sim-back style="cursor:pointer">‹ 退出文章</span></span></div>
+    <div class="wx-art">
+      <div class="wx-art-t">${esc(w.t)}</div>
+      <div class="wx-art-meta"><span class="wx-art-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span><span class="wx-art-gz">${w.g}</span><span style="font-size:12px; color:#b2b2b2">${rnd(TIME_STR)}</span><span style="margin-left:auto; color:#576b95; font-size:13px; cursor:pointer">关注</span></div>
+      <div class="wx-art-body">${pfParas("wechat", w).map(p=>`<p>${p}</p>`).join("")}</div>
+      <div class="wx-art-acts"><span>👍 ${fmtW(rndN(500,60000))}</span><span>💛 在看 ${fmtW(rndN(300,20000))}</span><span>✈ 分享</span></div>
+      <div class="wx-cmts"><div class="wx-cmts-t">精选留言（${rndN(30,600)}）</div>${pfComments("wechat", rndN(4,6))}</div>
+      <div style="padding:16px 4px 8px; font-size:14px; font-weight:700; color:#191919">喜欢此内容的人还喜欢</div>
+      ${recs.map(j=>`<div class="wx-li" data-sim-open="wechat:${j}"><span class="wx-li-ava" style="background:linear-gradient(${WX_POOL[j].c})">${WX_POOL[j].g[0]}</span><div class="wx-li-body"><div class="wx-li-t"><span>${esc(WX_POOL[j].t)}</span></div><div class="wx-li-x">${esc(WX_POOL[j].x)}</div></div></div>`).join("")}
+    </div>
+  </div>`;
+}
+
+/* ---------- 页面组装 ---------- */
+function simXhs(){
+  const list = simXhsList();
+  SIM_STATE.lists.xhs = list;
+  return `<div class="xhs-root">${simXhsHeader()}
+    <div class="xhd-cats">${XHS_CATS.map((c,i)=>`<span class="${i===0?"on":""}" data-sim-cat>${c}</span>`).join("")}</div>
+    <div class="xhs-waterfall sim-main">${list}</div>
+  </div>`;
+}
+function simZhihu(){
+  const list = simZhihuList();
+  SIM_STATE.lists.zhihu = list;
+  return `<div class="zh-root">${simZhihuHeader()}
+    <div class="zh-main"><div class="zh-col sim-main">${list}</div><div class="zh-side">${simZhihuSide()}</div></div>
+  </div>`;
+}
+function simWeibo(){
+  const list = simWeiboList();
+  SIM_STATE.lists.weibo = list;
+  return `<div class="wb-root">${simWeiboHeader()}
+    <div class="wb-main"><div class="wb-feed sim-main">${list}</div><div class="wb-side">${simWeiboSide()}</div></div>
+  </div>`;
+}
+function simWechat(){
+  const list = simWechatList();
+  SIM_STATE.lists.wechat = list;
+  return `<div class="wx-root">
+    <div class="wxtop"><span>微信 ( ${rndN(1,9)} )</span><span class="wxtop-r"><span>🔍</span><span>＋</span></span></div>
+    <div class="wx-list sim-main">${list}</div>
+    <div class="wx-tabbar"><span class="wx-tab on" data-sim-cat><span class="ic">💬</span>微信</span><span class="wx-tab"><span class="ic">👥</span>通讯录</span><span class="wx-tab"><span class="ic">🧭</span>发现</span><span class="wx-tab" data-sim-exit><span class="ic">👤</span>我</span></div>
+  </div>`;
+}
+const SIM_BUILD = { xhs:simXhs, zhihu:simZhihu, weibo:simWeibo, wechat:simWechat };
+const SIM_OPENERS = { xhs:simXhsNote, zhihu:simZhihuQ, weibo:simWeiboDetail, wechat:simWechatArticle };
+
+function openSim(pf){
+  SIM_STATE.pf = pf;
+  SIM_STATE.hist = [];
+  simRoot.innerHTML = SIM_BUILD[pf]();
+  simRoot.classList.add("open");
+  simRoot.scrollTop = 0;
+}
+function rndSimPf(){ return rnd(SIM_PFS); }
+
+/* ---------- 交互（事件委托） ---------- */
+simRoot.addEventListener("click", e=>{
+  const openEl = e.target.closest("[data-sim-open]");
+  if(openEl){
+    const [pf, i] = openEl.dataset.simOpen.split(":");
+    if(pf === "xhs"){
+      simRoot.insertAdjacentHTML("beforeend", SIM_OPENERS.xhs(+i));   // 小红书：弹窗覆盖瀑布流
+    }else{
+      SIM_STATE.hist.push(simRoot.innerHTML);
+      simRoot.innerHTML = SIM_OPENERS[pf](+i);                        // 其它平台：整页切到详情
+      simRoot.scrollTop = 0;
+    }
+    return;
+  }
+  const back = e.target.closest("[data-sim-back]");
+  if(back){
+    const mask = document.getElementById("xhsModal");
+    if(mask){ mask.remove(); return; }                                // 小红书：关弹窗回瀑布流
+    simRoot.innerHTML = SIM_STATE.hist.pop() || SIM_BUILD[SIM_STATE.pf]();
+    simRoot.scrollTop = 0;
+    return;
+  }
+  const exit = e.target.closest("[data-sim-exit]");
+  if(exit){ closeSim(); return; }
+  const cat = e.target.closest("[data-sim-cat]");
+  if(cat){ openSim(SIM_STATE.pf); return; }                           // 分类/子标签/换一换 = 重新随机
+  const mask = e.target.closest("[data-sim-closemodal]");
+  if(mask && !e.target.closest(".xhs-modal")){ mask.remove(); }       // 点弹窗外的遮罩关闭
+});
+
 /* ================= 引擎结束 ================= */
 
 /* ---------------- 启动 ---------------- */
@@ -2615,7 +3011,8 @@ function renderPackChips(){
   document.documentElement.dataset.theme = settings.theme;
   document.documentElement.style.setProperty("--bar-fs", settings.barFs + "px");
   shuffleContent();   // 内容多变引擎：随机栏目 + 随机排版 + 随机素材
-  renderNav("feed");  // 打开页面默认显示「热点」= 随机平台的一篇完整文章
+  renderNav();  // 渲染导航（默认激活技术栏目）
+  openSim(rndSimPf());  // 打开页面即随机进入一个平台的全页模拟（小红书/知乎/微博/微信）
   await bookStore.init();
   await loadBooks();
   if(settings.activeBook && books.some(b=> b.id === settings.activeBook)){
