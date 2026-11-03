@@ -1755,7 +1755,7 @@ $("#btnToc").addEventListener("click", toggleToc);
 
 /* ---------------- 全局鼠标翻页（摸鱼核心） ---------------- */
 const CLICK_EXCLUDE = "button,a,input,textarea,select,label,option,nav,#novelBar,#floatBar,.modal-mask,.modal," +
-  ".theme-item,.hk-key,.rank-item,.course,.feed-item,.fl-links,.fake-act,.sign-btn,.ad-banner,pre,code";
+  ".theme-item,.hk-key,.rank-item,.course,.feed-item,.fl-links,.fake-act,.sign-btn,.ad-banner,pre,code,.pf";
 const canFish = ()=> cur && !disguised && !barHidden && !listeningAction;
 
 /* 左键点击页面空白处 = 下一页（按钮/弹窗/代码区/选中文本时不触发） */
@@ -2108,21 +2108,22 @@ function pfComments(pf, n){
     return `<div class="pf-cmt"><div class="pf-ava" style="background:linear-gradient(${a.c})">${a.e}</div><div class="pf-cbody"><div class="pf-cname">${a.n}</div><div class="pf-ctext">${c}</div><div class="pf-cmeta">${rnd(TIME_STR)} · 赞 ${rndN(3, 890)}</div></div></div>`;
   }).join("");
 }
-const PF_DATA  = { wechat:WX_POOL, zhihu:ZH_POOL, weibo:WB_POSTS_POOL, xhs:XHS_POOL };
+const PF_DATA  = () => ({ wechat:WX_POOL, zhihu:ZH_POOL, weibo:WB_POSTS_POOL, xhs:XHS_POOL });   // 惰性求值：素材池声明在本块之后，不能在顶层立即引用
 const PF_LIST  = { wechat:wxList, zhihu:zhList, weibo:wbList, xhs:xhsList };
 const PF_DETAIL = { wechat:wxDetail, zhihu:zhDetail, weibo:wbDetail, xhs:xhsDetail };
 document.addEventListener("click", e=>{
   const op = e.target.closest("[data-pf-open]");
   if(op){
-    const pf = op.dataset.pf, item = PF_DATA[pf] && PF_DATA[pf][+op.dataset.i];
+    const pf = op.dataset.pf, item = PF_DATA()[pf] && PF_DATA()[pf][+op.dataset.i];
     const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
     if(item && body && PF_DETAIL[pf]){ body.innerHTML = PF_DETAIL[pf](item); window.scrollTo({top:0, behavior:"smooth"}); }
     return;
   }
   const bk = e.target.closest("[data-pf-back]");
   if(bk){
-    const body = document.querySelector(`.pane[data-pane="${bk.dataset.pf}"] .pf-body`);
-    if(body && PF_STATE[bk.dataset.pf]) body.innerHTML = PF_STATE[bk.dataset.pf];
+    const pf = bk.dataset.pfBack;   // data-pf-back → dataset.pfBack（dataset 会转驼峰）
+    const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
+    if(body && PF_STATE[pf]) body.innerHTML = PF_STATE[pf];
     return;
   }
   const tb = e.target.closest("[data-pf-tab]");
