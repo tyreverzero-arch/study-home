@@ -407,6 +407,50 @@ select option{background:var(--card); color:var(--text)}
 .xhs-cover{height:74px; display:flex; align-items:center; justify-content:center; font-size:30px; color:#fff}
 .xhs-t{font-size:12px; font-weight:600; color:var(--text); padding:8px 9px 4px; line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .xhs-meta{font-size:10.5px; color:var(--text2); padding:0 9px 9px; display:flex; justify-content:space-between}
+/* ---- 平台模拟器外壳与详情页 ---- */
+.pf{border-radius:12px; overflow:hidden; background:var(--card); border:1px solid var(--line)}
+.pf-bar{display:flex; align-items:center; gap:12px; padding:9px 14px; color:#fff; position:sticky; top:0; z-index:5}
+.pf-logo{font-size:16px; font-weight:800; letter-spacing:1px}
+.pf-search{flex:1; background:rgba(255,255,255,.22); border-radius:16px; padding:5px 12px; font-size:12px; opacity:.95; white-space:nowrap; overflow:hidden}
+.pf-tabs{display:flex; gap:14px; font-size:13px}
+.pf-tabs span{opacity:.75; cursor:pointer; padding-bottom:2px}
+.pf-tabs span.on{opacity:1; font-weight:700; border-bottom:2px solid #fff}
+.pf-me{width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; font-size:11px; color:#fff; flex-shrink:0}
+.pf-body{padding:4px 16px 16px}
+.pf-back{padding:12px 2px 4px; font-size:13px; color:var(--accent); cursor:pointer; font-weight:600}
+.pf-article{max-width:660px; margin:0 auto}
+.pf-article h1{font-size:20px; line-height:1.5; color:var(--text); margin:10px 0 12px}
+.pf-ameta{display:flex; align-items:center; gap:10px; padding:10px 0}
+.pf-ava{width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px; flex-shrink:0}
+.pf-aname{font-size:13.5px; font-weight:700; color:var(--text)}
+.pf-asub{font-size:11px; color:var(--text2)}
+.pf-follow{margin-left:auto; background:#07c160; color:#fff; border:none; border-radius:16px; padding:5px 14px; font-size:12px; cursor:pointer}
+.pf-follow.blue{background:#056de8}
+.pf-follow.red{background:#ff2442}
+.pf-abody{font-size:14.5px; line-height:1.9; color:var(--text); padding:6px 0 14px; border-bottom:1px solid var(--line)}
+.pf-abody p{margin:0 0 14px; text-indent:2em}
+.wx-foot{display:flex; justify-content:center; gap:34px; padding:14px 0; font-size:12.5px; color:var(--text2)}
+.pf-cmt-title{font-size:13px; font-weight:700; color:var(--text); padding:12px 0 6px; border-top:1px solid var(--line)}
+.pf-cmt{display:flex; gap:9px; padding:10px 0; border-bottom:1px dashed var(--line)}
+.pf-cmt:last-child{border-bottom:none}
+.pf-cmt .pf-ava{width:28px; height:28px; font-size:12px}
+.pf-cbody{flex:1}
+.pf-cname{font-size:12px; font-weight:600; color:var(--text)}
+.pf-ctext{font-size:12.5px; color:var(--text); line-height:1.6; margin-top:2px}
+.pf-cmeta{font-size:10.5px; color:var(--text2); margin-top:3px}
+.zh-upbtn{background:#e8f3ff; color:#056de8; border:none; border-radius:5px; padding:6px 16px; font-weight:700; font-size:13px; cursor:pointer; margin:8px 0}
+.zh-meta-row{font-size:12px; color:var(--text2); display:flex; gap:16px; align-items:center; margin-bottom:8px}
+.zh-meta-row .pf-follow{margin-left:auto}
+.xhs-cover-big{height:230px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:64px; color:#fff; margin-top:10px}
+.xhs-acts{display:flex; gap:24px; font-size:12.5px; color:var(--text2); padding:12px 0; border-top:1px solid var(--line); margin-top:6px}
+.xhs-tags{margin-top:10px}
+.xhs-tags span{color:#056de8; font-size:12.5px; margin-right:10px}
+.wb-imgs{display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-top:10px}
+.wb-imgs div{height:86px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:26px; color:#fff}
+.pf-ad{margin:10px 0; padding:9px 12px; border:1px solid var(--line); border-radius:9px; font-size:12px; color:var(--text2); display:flex; gap:10px; align-items:center; cursor:pointer; background:var(--card2)}
+.pf-ad .adchip{background:var(--line); color:var(--text2); font-size:10px; padding:1px 6px; border-radius:4px; flex-shrink:0}
+.layout.pf-mode .sidebar{display:none}
+.layout.pf-mode .content{max-width:980px}
 </style>
 </head>
 <body>
@@ -2013,14 +2057,102 @@ const WX_POOL = [
   { g:"槽值", e:"🧠", c:"135deg,#ff512f,#dd2476", t:"为什么你一到下午 3 点就特别想辞职？", x:"不是你矫情，是血糖、皮质醇和昼夜节律联合起来骗你。科学解释「下午的溃败感」。", r:"5.1万" },
   { g:"中国天气网", e:"🌤", c:"135deg,#1e9600,#fff95b", t:"今冬会是「冷冬」吗？权威预报来了", x:"拉尼娜事件已形成，但冷冬与否还要看环流。附各省今冬气温偏高/偏低预测图。", r:"4.7万" },
 ];
-function wxItem(w, ad){
-  return `<div class="wx-item"><div class="wx-cover" style="background:linear-gradient(${w.c})">${w.e}</div><div class="wx-body"><div class="wx-title">${w.t}</div><div class="wx-abs">${w.x}</div><div class="wx-meta"><span class="wx-gzh">${w.g}</span><span>${fmtW(rnd(30000, 100000))} 阅读</span>${ad?"":`<span class="tag ${rnd(["blue","orange"])}">${rnd(["热文","爆文","荐读"])}</span>`}</div></div></div>`;
+/* ---- 平台模拟器：外壳 / 正文 / 评论 / 列表详情切换 ---- */
+const PF_BAR = {
+  wechat:{ bg:"#07c160", logo:"微信",     tabs:["微信","通讯录","发现"],   ph:"搜索公众号文章" },
+  zhihu: { bg:"#056de8", logo:"知乎",     tabs:["推荐","热榜","关注"],     ph:"搜索你感兴趣的内容" },
+  weibo: { bg:"#e6162d", logo:"微博",     tabs:["首页","热榜","视频"],     ph:"大家都在搜什么" },
+  xhs:   { bg:"#ff2442", logo:"小红书",   tabs:["关注","发现","附近"],     ph:"搜索你感兴趣的笔记" },
+};
+const PF_STATE = {};          // 各平台当前列表 HTML（返回时恢复）
+const PF_USERS = {
+  wechat: [{n:"清风明月",e:"🌙",c:"135deg,#1a2980,#26d0ce"},{n:"早睡冠军",e:"😴",c:"135deg,#f7971e,#ffd200"},{n:"路过人间",e:"🍂",c:"135deg,#11998e,#38ef7d"},{n:"一杯拿铁",e:"☕",c:"135deg,#654ea3,#eaafc8"},{n:"南方姑娘",e:"🌸",c:"135deg,#ff5f6d,#ffc371"}],
+  zhihu:  [{n:"匿名用户",e:"🕵",c:"135deg,#232526,#414345"},{n:"理性讨论区",e:"📊",c:"135deg,#2b5876,#4e4376"},{n:" double 小",e:"🎓",c:"135deg,#056de8,#38bdf8"},{n:"斜杠青年",e:"💼",c:"135deg,#ff512f,#dd2476"},{n:"辩证大师",e:"⚖",c:"135deg,#134e5e,#71b280"}],
+  weibo:  [{n:"吃瓜第一线",e:"🍉",c:"135deg,#f7971e,#ffd200"},{n:"快乐星球常驻",e:"🪐",c:"135deg,#654ea3,#eaafc8"},{n:"冲浪选手",e:"🏄",c:"135deg,#1a2980,#26d0ce"},{n:"互联网嘴替",e:"💬",c:"135deg,#fc4a1a,#f7b733"},{n:"住在我心里",e:"🏠",c:"135deg,#11998e,#38ef7d"}],
+  xhs:    [{n:"小鹿乱撞",e:"🦌",c:"135deg,#ff5f6d,#ffc371"},{n:"momo",e:"🍥",c:"135deg,#fbc2eb,#a6c1ee"},{n:"半糖去冰",e:"🥤",c:"135deg,#84fab0,#8fd3f4"},{n:"山茶花开",e:"🌺",c:"135deg,#d9a7c7,#fffcdc"},{n:"梨涡浅浅",e:"🍐",c:"135deg,#fddb92,#d1fdff"}],
+};
+const PF_SENT = {
+  wechat:{ mids:["说到底，这件事的本质不在于技巧，而在于你愿不愿意开始。","我采访了身边十几位朋友，发现他们的答案出奇一致。","很多人败就败在：道理都懂，但从来不去做第一步。","把目光放长远一点，你会发现眼下的焦虑根本不值一提。"], ends2:["剩下的，交给时间就好。","与君共勉。","今天就聊到这里，我们留言区见。","点个「在看」，提醒自己别忘了。"], close:["最后，愿你把日子过成自己喜欢的样子。","愿你历尽千帆，归来仍是少年。","点亮「在看」，把这份清醒分享给更多人。"] },
+  zhihu: { mids:["先问是不是，再问为什么——这是回答这个问题前必须达成的共识。","利益相关，匿名答。这行待了十年，说点大实话。","数据不会骗人：把近五年的统计拉出来看，结论一目了然。","楼上很多答案都说到了点子上，但都漏了一个关键变量。"], ends2:["以上。","手机打字，写得仓促，将就看。","想到再补充，先说这么多。","不同意欢迎来杠，但请带数据。"], close:["总结一下：认清现实，然后依然热爱生活。","最后送一句话给刷到这个回答的人：种一棵树最好的时间是十年前，其次是现在。"] },
+  weibo: { mids:["真的会谢，这事儿太有共鸣了。","家人们谁懂啊，我上周刚经历过一模一样的。","评论区才是本体，笑不活了。","转发给身边的朋友，希望大家都别遇到这种事。"], ends2:["就这样，散会！","优雅，实在是太优雅了。","懂的都懂。","不允许还有人没看过这个。"], close:["以上就是全部内容，评论区蹲一个你们的经历。","更新：楼主已经在评论区笑晕了，大家轻点哈哈。"] },
+  xhs:   { mids:["姐妹们听我的，这么做真的会感谢自己！","亲测有效！已经安利给全办公室的人了。","手残党也不用怕，照着做零失败。","预算不多也能安排，学生党友好。"], ends2:["码住慢慢看~","不许还有人不知道！","有空一定要试试！","评论区蹲姐妹反馈！"], close:["今天的分享就到这里，喜欢的话点赞收藏哦❤","关注我，下期分享更绝的！","有问题评论区问我，看到都会回~"] },
+};
+const PF_CMT = {
+  wechat: ["写得太真实了，句句说到心坎里。","收藏了，明天就开始执行。","每天晚上十点的推送，是我一天中最安静的时刻。","作者一定是懂生活的人。","转发给了我妈，她比我还爱看这个号。","看完沉默了，反思了很久。","三年老粉，质量一直在线。"],
+  zhihu:  ["先问是不是，再问为什么。","利益相关：利益相关。","答主说得对，但请允许我补充一个视角。","数据来源挂一下？想引用。","读完之后我沉默了，是我不配。","这个回答值得一个专业徽章。","说实话，比我导师讲得清楚。","收藏=学会系列。"],
+  weibo:  ["哈哈哈哈哈哈笑不活了","这就是生活啊","转发了！让更多人看到","蹲一个后续","评论区比正文精彩系列","天呐真实到破防","楼主是我互联网嘴替","前排吃瓜瓜子已备好"],
+  xhs:    ["求链接！","码住码住","真的有用!! 已照做一周","姐妹怎么做到的，教教我","这也太治愈了吧","收藏夹吃灰第一步","拍得好好看，什么手机拍的呀","已安排，明天就试"],
+};
+function pfShell(pf, listHTML){
+  const b = PF_BAR[pf];
+  PF_STATE[pf] = listHTML;
+  return `<div class="pf" data-pf="${pf}">
+    <div class="pf-bar" style="background:${b.bg}">
+      <span class="pf-logo">${b.logo}</span>
+      <span class="pf-search">🔍 ${b.ph}</span>
+      <span class="pf-tabs">${b.tabs.map((t,i)=>`<span data-pf-tab class="${i===1?"on":""}">${t}</span>`).join("")}</span>
+      <span class="pf-me">我</span>
+    </div>
+    <div class="pf-body">${listHTML}</div>
+  </div>`;
 }
-const genWechat = () => `
-  <div class="card"><h2>💬 微信 · 订阅号消息</h2>${pickN(WX_POOL, 6).map(w=>wxItem(w)).join("")}</div>
-  ${bannerHTML()}
-  <div class="card"><h2>👀 看一看 · 朋友都在读</h2>${pickN(WX_POOL, 3).map(w=>wxItem(w, true)).join("")}
-  <div style="font-size:11px; color:var(--text2); margin-top:10px">以上内容根据你的好友阅读偏好推荐</div></div>`;
+function pfBack(pf){ return `<div class="pf-back" data-pf-back="${pf}">‹ 返回</div>`; }
+function pfParas(pf, item){
+  const S = PF_SENT[pf];
+  const m = pickN(S.mids, 2);
+  return [item.x, m[0] + " " + rnd(S.ends2), m[1] + " " + rnd(S.ends2), rnd(S.close)];
+}
+function pfComments(pf, n){
+  return pickN(PF_CMT[pf], n).map(c=>{
+    const a = rnd(PF_USERS[pf]);
+    return `<div class="pf-cmt"><div class="pf-ava" style="background:linear-gradient(${a.c})">${a.e}</div><div class="pf-cbody"><div class="pf-cname">${a.n}</div><div class="pf-ctext">${c}</div><div class="pf-cmeta">${rnd(TIME_STR)} · 赞 ${rndN(3, 890)}</div></div></div>`;
+  }).join("");
+}
+const PF_DATA  = { wechat:WX_POOL, zhihu:ZH_POOL, weibo:WB_POSTS_POOL, xhs:XHS_POOL };
+const PF_LIST  = { wechat:wxList, zhihu:zhList, weibo:wbList, xhs:xhsList };
+const PF_DETAIL = { wechat:wxDetail, zhihu:zhDetail, weibo:wbDetail, xhs:xhsDetail };
+document.addEventListener("click", e=>{
+  const op = e.target.closest("[data-pf-open]");
+  if(op){
+    const pf = op.dataset.pf, item = PF_DATA[pf] && PF_DATA[pf][+op.dataset.i];
+    const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
+    if(item && body && PF_DETAIL[pf]){ body.innerHTML = PF_DETAIL[pf](item); window.scrollTo({top:0, behavior:"smooth"}); }
+    return;
+  }
+  const bk = e.target.closest("[data-pf-back]");
+  if(bk){
+    const body = document.querySelector(`.pane[data-pane="${bk.dataset.pf}"] .pf-body`);
+    if(body && PF_STATE[bk.dataset.pf]) body.innerHTML = PF_STATE[bk.dataset.pf];
+    return;
+  }
+  const tb = e.target.closest("[data-pf-tab]");
+  if(tb){
+    const pf = tb.closest(".pf").dataset.pf;
+    const body = document.querySelector(`.pane[data-pane="${pf}"] .pf-body`);
+    if(body) body.innerHTML = PF_LIST[pf]();   // 子标签切换 = 换一批内容
+  }
+});
+function wxItem(w, i){
+  return `<div class="wx-item pf-open" data-pf-open data-pf="wechat" data-i="${i}"><div class="wx-cover" style="background:linear-gradient(${w.c})">${w.e}</div><div class="wx-body"><div class="wx-title">${w.t}</div><div class="wx-abs">${w.x}</div><div class="wx-meta"><span class="wx-gzh">${w.g}</span><span>${fmtW(rnd(30000, 100000))} 阅读</span><span class="tag ${rnd(["blue","orange"])}">${rnd(["热文","爆文","荐读"])}</span></div></div></div>`;
+}
+function wxList(){
+  const items = pickN(WX_POOL.map((w,i)=>i), 8);
+  let html = items.map(i=>wxItem(WX_POOL[i], i)).join("");
+  html += `<div class="pf-ad"><span class="adchip">广告</span><span>📖 微信读书会员限时 5 折，海量出版好书畅读</span></div>`;
+  return html;
+}
+function wxDetail(w){
+  return `${pfBack("wechat")}
+  <div class="pf-article">
+    <h1>${w.t}</h1>
+    <div class="pf-ameta"><div class="pf-ava" style="background:linear-gradient(${w.c})">${w.e}</div><div><div class="pf-aname">${w.g}</div><div class="pf-asub">${rnd(TIME_STR)} · 来自微信</div></div><button class="pf-follow">＋ 关注</button></div>
+    <div class="pf-abody">${pfParas("wechat", w).map(p=>`<p>${p}</p>`).join("")}</div>
+    <div class="wx-foot"><span>💛 在看 <b>${fmtW(rnd(2000, 46000))}</b></span><span>👍 点赞 <b>${fmtW(rnd(3000, 80000))}</b></span><span>✈ 分享</span></div>
+    <div class="pf-cmt-title">精选留言（${rndN(36, 860)}）</div>
+    ${pfComments("wechat", rndN(3, 6))}
+  </div>`;
+}
+const genWechat = () => pfShell("wechat", wxList(), "搜索公众号文章");
 
 const ZH_POOL = [
   ["有哪些看似聪明，实则很蠢的行为？","用战术上的勤奋掩盖战略上的懒惰。每天熬夜加班感动自己，但从不停下来想这件事十年后还重不重要。","「懂一点点」的答主", "2.8万"],
@@ -2038,14 +2170,29 @@ const ZH_POOL = [
   ["如何看待「年轻人开始整顿周末」？","睡到自然醒、拒绝无效局、逛菜市场、citywalk。不是躺平，是把周末还给自己。","社会学研究生", "2.1万"],
   ["有什么道理是你工作了之后才懂的？","公司是个平台，不是家。你要带走的是能力、人脉和作品，而不是工牌和对工位的感情。","十年老兵", "7.5万"],
 ];
-function zhItem(z){
-  const up = fmtW(rnd(8000, 70000));
-  return `<div class="zh-q"><div class="zh-title">${z[0]}</div><div class="zh-ans"><span class="zh-auth">${z[2]}：</span>${z[1]}</div><div class="zh-up"><span>👍 赞同 <b>${z[3]}</b></span><span>💬 ${rndN(120, 2600)} 评论</span><span>${rnd(TIME_STR)}</span></div></div>`;
+function zhItem(z, i){
+  return `<div class="zh-q pf-open" data-pf-open data-pf="zhihu" data-i="${i}"><div class="zh-title">${z[0]}</div><div class="zh-ans"><span class="zh-auth">${z[2]}：</span>${z[1]}</div><div class="zh-up"><span>👍 赞同 <b>${z[3]}</b></span><span>💬 ${rndN(120, 2600)} 评论</span><span>${rnd(TIME_STR)}</span></div></div>`;
 }
-const genZhihu = () => `
-  <div class="card"><h2>🦅 知乎 · 今日热榜</h2>${pickN(ZH_POOL, 5).map(zhItem).join("")}</div>
-  ${bannerHTML()}
-  <div class="card"><h2>✨ 精选回答</h2>${pickN(ZH_POOL, 2).map(zhItem).join("")}</div>`;
+function zhList(){
+  let html = pickN(ZH_POOL.map((z,i)=>i), 8).map(i=>zhItem(ZH_POOL[i], i)).join("");
+  html += `<div class="pf-ad"><span class="adchip">广告</span><span>📊 知乎盐选会员年卡 5 折，3000+ 盐选专栏免费读</span></div>`;
+  return html;
+}
+function zhDetail(z){
+  return `${pfBack("zhihu")}
+  <div class="pf-article">
+    <h1 class="pf-qtitle">${z[0]}</h1>
+    <div class="zh-meta-row"><span>🔄 关注 ${fmtW(rnd(800, 46000))}</span><span>👁 ${fmtW(rnd(200000, 9800000))} 浏览</span><button class="pf-follow blue">＋ 关注问题</button></div>
+    <hr style="border:none; border-top:1px solid var(--line)">
+    <div class="pf-ameta"><div class="pf-ava" style="background:linear-gradient(${rnd(["135deg,#2b5876,#4e4376","135deg,#ff5f6d,#ffc371","135deg,#11998e,#38ef7d"])})">${rnd(["🦉","🎓","🧑‍💻","☕","📊"])}</div><div><div class="pf-aname">${z[2]}</div><div class="pf-asub">${rndN(2, 30)} 万人关注 · 优质答主</div></div></div>
+    <button class="zh-upbtn">▲ 赞同 ${z[3]}</button>
+    <div class="pf-abody">${pfParas("zhihu", z).map(p=>`<p>${p}</p>`).join("")}</div>
+    <div style="font-size:11px; color:var(--text2); padding:8px 0 12px">发布于 ${rnd(TIME_STR)} · 著作权归作者所有</div>
+    <div class="pf-cmt-title">${rndN(120, 3400)} 条评论</div>
+    ${pfComments("zhihu", rndN(3, 6))}
+  </div>`;
+}
+const genZhihu = () => pfShell("zhihu", zhList(), "搜索你感兴趣的内容");
 
 const WB_HOT_POOL = [
   ["年底了各大公司开始发年终奖", "爆"], ["年轻人流行周末逛菜市场", "热"], ["早起打卡挑战第 30 天", "新"],
@@ -2072,13 +2219,28 @@ function wbHotRow(h, i){
   const num = (98.4 - i*rnd(2.1, 4.6) - Math.random()*1.4).toFixed(1);
   return `<div class="wb-rank"><span class="rank-num ${i<3?"top"+(i+1):""}">${i+1}</span><span class="t">${h[0]}</span>${h[1]?`<span class="wb-tag ${cls}">${h[1]}</span>`:""}<span class="n">${num} 万</span></div>`;
 }
-function wbPost(p){
-  return `<div class="wb-post"><div class="wb-head"><div class="wb-ava" style="background:linear-gradient(${p[2]})">${p[1]}</div><div class="wb-info"><div class="wb-name">${p[0]} <span style="font-size:10px; color:#eab308">⚡</span></div><div class="wb-time">${rnd(TIME_STR)} · 来自网页版</div></div></div><div class="wb-text">${p[3]}</div><div class="wb-acts"><span>🔄 转发 ${p[4]}</span><span>💬 评论 ${p[5]}</span><span>👍 赞 ${p[6]}</span></div></div>`;
+function wbPost(p, i){
+  return `<div class="wb-post pf-open" data-pf-open data-pf="weibo" data-i="${i}"><div class="wb-head"><div class="wb-ava" style="background:linear-gradient(${p[2]})">${p[1]}</div><div class="wb-info"><div class="wb-name">${p[0]} <span style="font-size:10px; color:#eab308">⚡</span></div><div class="wb-time">${rnd(TIME_STR)} · 来自网页版</div></div></div><div class="wb-text">${p[3]}</div><div class="wb-acts"><span>🔄 转发 ${p[4]}</span><span>💬 评论 ${p[5]}</span><span>👍 赞 ${p[6]}</span></div></div>`;
 }
-const genWeibo = () => `
-  <div class="card"><h2>🌡 微博热搜 · 每小时更新</h2>${pickN(WB_HOT_POOL, 9).map((h,i)=>wbHotRow(h,i)).join("")}</div>
-  ${bannerHTML()}
-  <div class="card"><h2>🔥 热门微博</h2>${pickN(WB_POSTS_POOL, 3).map(wbPost).join("")}</div>`;
+function wbList(){
+  let html = `<div class="card" style="margin:10px 0"><h2 style="font-size:14px; padding:0 0 4px">🌡 微博热搜 · 每小时更新</h2>${pickN(WB_HOT_POOL, 5).map((h,i)=>wbHotRow(h,i)).join("")}</div>`;
+  html += pickN(WB_POSTS_POOL.map((p,i)=>i), 6).map(i=>wbPost(WB_POSTS_POOL[i], i)).join("");
+  html += `<div class="pf-ad"><span class="adchip">粉丝头条</span><span>🔥 新剧今晚开播，主演在线回复评论中</span></div>`;
+  return html;
+}
+function wbDetail(p){
+  return `${pfBack("weibo")}
+  <div class="pf-article">
+    <div class="pf-ameta"><div class="pf-ava" style="background:linear-gradient(${p[2]})">${p[1]}</div><div><div class="pf-aname">${p[0]} <span style="font-size:10px; color:#eab308">⚡</span></div><div class="pf-asub">${rnd(TIME_STR)} · 来自微博网页版</div></div><button class="pf-follow" style="background:#e6162d">＋ 关注</button></div>
+    <div class="pf-abody" style="border-bottom:none"><p style="text-indent:0; margin-bottom:6px">${p[3]}</p></div>
+    <div class="wb-imgs">${pickN(["🌅","🍜","🐱","📸","🌊","🌇","🎧","🍫","🐕"], 3).map(e=>`<div style="background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371"])})">${e}</div>`).join("")}</div>
+    <div style="font-size:11px; color:var(--text2); padding:10px 0">${rndN(15, 58)} 分钟前 · ${fmtW(rnd(30000, 9000000))} 次阅读</div>
+    <div class="wb-acts" style="border-top:1px solid var(--line); padding-top:12px"><span>🔄 转发 ${p[4]}</span><span>💬 评论 ${p[5]}</span><span>👍 赞 ${p[6]}</span></div>
+    <div class="pf-cmt-title">热评（${p[5]}）</div>
+    ${pfComments("weibo", rndN(3, 6))}
+  </div>`;
+}
+const genWeibo = () => pfShell("weibo", wbList(), "大家都在搜什么");
 
 const XHS_POOL = [
   ["🍱", "135deg,#ff6b6b,#feca57", "公司食堂这一天 15 块到底吃了啥？全网最良心!", "干饭阿伟", "4.2万"],
@@ -2092,10 +2254,29 @@ const XHS_POOL = [
   ["🌧", "135deg,#4ca1af,#c4e0e5", "下雨天的正确打开方式：窗边+热茶+老电影", "宅家研究员", "2.2万"],
   ["💪", "135deg,#ff9a9e,#fecfef", "每天 10 分钟工位拉伸，富贵包真的会小!", "颈椎报警中", "3.8万"],
 ];
-const genXhs = () => `
-  <div class="card"><h2>📕 小红书 · 猜你喜欢</h2><div class="xhs-grid">${pickN(XHS_POOL, 6).map(x=>
-    `<div class="xhs-card"><div class="xhs-cover" style="background:linear-gradient(${x[1]})">${x[0]}</div><div class="xhs-t">${x[2]}</div><div class="xhs-meta"><span>@${x[3]}</span><span>❤ ${x[4]}</span></div></div>`).join("")}</div></div>
-  ${bannerHTML()}`;
+function xhsList(){
+  let html = `<div class="xhs-grid" style="margin-top:10px">${pickN(XHS_POOL.map((x,i)=>i), 6).map(i=>xhsCard(XHS_POOL[i], i)).join("")}</div>`;
+  html += `<div class="pf-ad"><span class="adchip">广告</span><span>✨ 手残党也能做的三明治早餐机，9.9 包邮</span></div>`;
+  return html;
+}
+function xhsCard(x, i){
+  return `<div class="xhs-card pf-open" data-pf-open data-pf="xhs" data-i="${i}"><div class="xhs-cover" style="background:linear-gradient(${x[1]})">${x[0]}</div><div class="xhs-t">${x[2]}</div><div class="xhs-meta"><span>@${x[3]}</span><span>❤ ${x[4]}</span></div></div>`;
+}
+function xhsDetail(x){
+  const tags = pickN(["打工人日常","生活碎片","记录美好生活","今天也要加油","好物分享","周末去哪儿","治愈系","实用干货"], 3).map(t=>`<span>#${t}</span>`).join("");
+  return `${pfBack("xhs")}
+  <div class="pf-article">
+    <div class="xhs-cover-big" style="background:linear-gradient(${x[1]})">${x[0]}</div>
+    <h1 style="font-size:18px; line-height:1.5; color:var(--text); margin:14px 0 10px">${x[2]}</h1>
+    <div class="pf-ameta" style="padding-top:0"><div class="pf-ava" style="background:linear-gradient(${x[1]})">${x[0]}</div><div><div class="pf-aname">${x[3]}</div><div class="pf-asub">${rndN(3, 98)} 篇笔记 · ${fmtW(rnd(2000, 90000))} 粉丝</div></div><button class="pf-follow red">＋ 关注</button></div>
+    <div class="pf-abody" style="border-bottom:none">${pfParas("xhs", x).map(p=>`<p style="text-indent:0">${p}</p>`).join("")}</div>
+    <div class="xhs-tags">${tags}</div>
+    <div class="xhs-acts"><span>❤ ${x[4]}</span><span>⭐ 收藏 ${fmtW(rnd(500, 30000))}</span><span>💬 ${rndN(60, 2400)}</span></div>
+    <div class="pf-cmt-title">共 ${rndN(40, 2200)} 条评论</div>
+    ${pfComments("xhs", rndN(3, 6))}
+  </div>`;
+}
+const genXhs = () => pfShell("xhs", xhsList(), "搜索你感兴趣的笔记");
 
 /* ---------- 侧栏 / 资讯素材池 ---------- */
 const BANNER_POOL = [
@@ -2234,6 +2415,7 @@ function renderNav(activeId){
   $("nav").innerHTML = ids.map(id=>
     `<button data-tab="${id}" class="${id===activeId?"active":""}">${packName(id)}</button>`).join("");
   bindNav();
+  applyPfMode();
   $$(".pane").forEach(p=>p.classList.toggle("active", p.dataset.pane === activeId));
 }
 function bindNav(){
@@ -2242,7 +2424,12 @@ function bindNav(){
     b.classList.add("active");
     $$(".pane").forEach(p=>p.classList.remove("active"));
     $(`.pane[data-pane="${b.dataset.tab}"]`)?.classList.add("active");
+    applyPfMode();
   }));
+}
+function applyPfMode(){
+  const id = $("nav button.active")?.dataset.tab;
+  document.querySelector(".layout")?.classList.toggle("pf-mode", ["wechat","zhihu","weibo","xhs"].includes(id));
 }
 function shuffleStaticPanes(){
   ["js","py","java","algo"].forEach(id=>{
