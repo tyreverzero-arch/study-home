@@ -542,7 +542,7 @@ select option{background:var(--card); color:var(--text)}
 .zh-qcard{padding:16px 20px; border-bottom:1px solid #f2f2f2; cursor:pointer}
 .zh-qcard:hover .zh-qcard-t{color:#056de8}
 .zh-qcard-t{font-size:16.5px; font-weight:700; color:#1a1a1a; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
-.zh-qcard-x{font-size:14px; color:#646464; line-height:1.7; margin-top:7px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.zh-qcard-x{font-size:14px; color:#646464; line-height:1.7; margin-top:7px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
 .zh-qcard-m{display:flex; gap:16px; font-size:13px; color:#8590a6; margin-top:10px; align-items:center}
 .zh-qcard-v{margin-left:auto; background:#ebf3ff; color:#056de8; font-weight:700; border-radius:4px; padding:3px 10px; font-size:12.5px}
 .zh-side-h{font-size:15px; font-weight:700; padding:14px 18px 8px; color:#1a1a1a}
@@ -584,7 +584,7 @@ select option{background:var(--card); color:var(--text)}
 .wb-ctime{font-size:12px; color:#939393; margin-top:2px}
 .wb-ctext{font-size:15px; color:#333; line-height:1.75; margin:11px 0}
 /* 信息流里的微博正文最多 3 行（详情页全文显示不受限） */
-.wb-card[data-sim-open] .wb-ctext{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+.wb-card[data-sim-open] .wb-ctext{display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
 .wb-cacts{display:flex; border-top:1px solid #f2f2f5; padding-top:10px; margin-top:11px}
 .wb-cacts span{flex:1; text-align:center; font-size:13px; color:#808080}
 .wb-hotcard{background:#fff; border-radius:8px; padding:4px 0 8px; box-shadow:0 1px 2px rgba(0,0,0,.04)}
@@ -2268,10 +2268,10 @@ const PF_USERS = {
   xhs:    [{n:"小鹿乱撞",e:"🦌",c:"135deg,#ff5f6d,#ffc371"},{n:"momo",e:"🍥",c:"135deg,#fbc2eb,#a6c1ee"},{n:"半糖去冰",e:"🥤",c:"135deg,#84fab0,#8fd3f4"},{n:"山茶花开",e:"🌺",c:"135deg,#d9a7c7,#fffcdc"},{n:"梨涡浅浅",e:"🍐",c:"135deg,#fddb92,#d1fdff"}],
 };
 const PF_SENT = {
-  wechat:{ mids:["说到底，这件事的本质不在于技巧，而在于你愿不愿意开始。","我采访了身边十几位朋友，发现他们的答案出奇一致。","很多人败就败在：道理都懂，但从来不去做第一步。","把目光放长远一点，你会发现眼下的焦虑根本不值一提。"], ends2:["剩下的，交给时间就好。","与君共勉。","今天就聊到这里，我们留言区见。","点个「在看」，提醒自己别忘了。"], close:["最后，愿你把日子过成自己喜欢的样子。","愿你历尽千帆，归来仍是少年。","点亮「在看」，把这份清醒分享给更多人。"] },
-  zhihu: { mids:["先问是不是，再问为什么——这是回答这个问题前必须达成的共识。","利益相关，匿名答。这行待了十年，说点大实话。","数据不会骗人：把近五年的统计拉出来看，结论一目了然。","楼上很多答案都说到了点子上，但都漏了一个关键变量。"], ends2:["以上。","手机打字，写得仓促，将就看。","想到再补充，先说这么多。","不同意欢迎来杠，但请带数据。"], close:["总结一下：认清现实，然后依然热爱生活。","最后送一句话给刷到这个回答的人：种一棵树最好的时间是十年前，其次是现在。"] },
-  weibo: { mids:["真的会谢，这事儿太有共鸣了。","家人们谁懂啊，我上周刚经历过一模一样的。","评论区才是本体，笑不活了。","转发给身边的朋友，希望大家都别遇到这种事。"], ends2:["就这样，散会！","优雅，实在是太优雅了。","懂的都懂。","不允许还有人没看过这个。"], close:["以上就是全部内容，评论区蹲一个你们的经历。","更新：楼主已经在评论区笑晕了，大家轻点哈哈。"] },
-  xhs:   { mids:["姐妹们听我的，这么做真的会感谢自己！","亲测有效！已经安利给全办公室的人了。","手残党也不用怕，照着做零失败。","预算不多也能安排，学生党友好。"], ends2:["码住慢慢看~","不许还有人不知道！","有空一定要试试！","评论区蹲姐妹反馈！"], close:["今天的分享就到这里，喜欢的话点赞收藏哦❤","关注我，下期分享更绝的！","有问题评论区问我，看到都会回~"] },
+  wechat:{ mids:["说到底，这件事的本质不在于技巧，而在于你愿不愿意开始。","我采访了身边十几位朋友，发现他们的答案出奇一致。","很多人败就败在：道理都懂，但从来不去做第一步。","把目光放长远一点，你会发现眼下的焦虑根本不值一提。","生活不会亏待每一个认真对待它的人，哪怕回报来得慢一点。","我们总以为改变需要多大的决心，其实只需要今天比昨天多做一点点。"], ends2:["剩下的，交给时间就好。","与君共勉。","今天就聊到这里，我们留言区见。","点个「在看」，提醒自己别忘了。"], close:["最后，愿你把日子过成自己喜欢的样子。","愿你历尽千帆，归来仍是少年。","点亮「在看」，把这份清醒分享给更多人。"] },
+  zhihu: { mids:["先问是不是，再问为什么——这是回答这个问题前必须达成的共识。","利益相关，匿名答。这行待了十年，说点大实话。","数据不会骗人：把近五年的统计拉出来看，结论一目了然。","楼上很多答案都说到了点子上，但都漏了一个关键变量。","我身边真实的例子比理论有说服力得多，就说三个我亲眼见过的人。","这个问题下大部分回答都在输出情绪，我说点可操作的。"], ends2:["以上。","手机打字，写得仓促，将就看。","想到再补充，先说这么多。","不同意欢迎来杠，但请带数据。"], close:["总结一下：认清现实，然后依然热爱生活。","最后送一句话给刷到这个回答的人：种一棵树最好的时间是十年前，其次是现在。"] },
+  weibo: { mids:["真的会谢，这事儿太有共鸣了。","家人们谁懂啊，我上周刚经历过一模一样的。","评论区才是本体，笑不活了。","转发给身边的朋友，希望大家都别遇到这种事。","这个话题每年都要上一次热搜，但每次大家讨论得还是那么起劲。","不评价谁对谁错，只能说每家有自己的难处。"], ends2:["就这样，散会！","优雅，实在是太优雅了。","懂的都懂。","不允许还有人没看过这个。"], close:["以上就是全部内容，评论区蹲一个你们的经历。","更新：楼主已经在评论区笑晕了，大家轻点哈哈。"] },
+  xhs:   { mids:["姐妹们听我的，这么做真的会感谢自己！","亲测有效！已经安利给全办公室的人了。","手残党也不用怕，照着做零失败。","预算不多也能安排，学生党友好。","这篇笔记我断断续续写了一周，都是实打实用出来的经验。","不看后悔系列！早看到这篇能少走多少弯路啊。"], ends2:["码住慢慢看~","不许还有人不知道！","有空一定要试试！","评论区蹲姐妹反馈！"], close:["今天的分享就到这里，喜欢的话点赞收藏哦❤","关注我，下期分享更绝的！","有问题评论区问我，看到都会回~"] },
 };
 const PF_CMT = {
   wechat: ["写得太真实了，句句说到心坎里。","收藏了，明天就开始执行。","每天晚上十点的推送，是我一天中最安静的时刻。","作者一定是懂生活的人。","转发给了我妈，她比我还爱看这个号。","看完沉默了，反思了很久。","三年老粉，质量一直在线。"],
@@ -2881,8 +2881,16 @@ function loadHot(pf){
 /* 真实详情正文兜底：真实摘要/标题起头 + 通用段落（模拟层专用，不碰旧 pfParas） */
 function simParas(first, pf){
   const S = PF_SENT[pf] || PF_SENT.zhihu;
-  const m = pickN(S.mids, 2);
-  return [first, m[0] + " " + rnd(S.ends2), m[1] + " " + rnd(S.ends2), rnd(S.close)];
+  const m = pickN(S.mids, 3);
+  const extra = S.extra || [];
+  return [
+    first,
+    m[0],
+    (extra[0] || rnd(S.ends2)) + " " + m[1],
+    m[2] + " " + (extra[1] || rnd(S.ends2)),
+    rnd(S.mids) + " " + rnd(S.ends2),
+    rnd(S.close)
+  ];
 }
 /* ---------- 信息流广告（真实平台都有广告，没有反而穿帮） ---------- */
 const AD_COVER_POOL = () => [
@@ -2972,6 +2980,19 @@ function hotImg(url){
   /* 全部走本地 Python 服务的图片代理：服务端带 Referer 拉图，绕过防盗链，带磁盘缓存 */
   return url ? `<img loading="lazy" src="/img?url=${encodeURIComponent(url)}" onerror="this.remove()" alt="">` : "";
 }
+/* 真实条目文字扩写：detail 摘要太短时，从平台语料里补句子，让卡片文字饱满 */
+function padText(base, pf, minLen){
+  let t = (base || "").trim();
+  const S = PF_SENT[pf] || PF_SENT.zhihu;
+  const fillers = [...S.mids, ...S.mids];
+  let k = Math.floor(Math.random() * fillers.length);
+  let guard = 0;
+  while(t.length < (minLen || 120) && guard++ < 4){
+    const f = fillers[k % fillers.length]; k++;
+    t = t ? t + (Math.random() < 0.5 ? "" : " ") + f : f;
+  }
+  return t;
+}
 function simXhsList(){
   const hot = SIM_STATE.hot.xhs || [];
   const items = [];
@@ -3011,7 +3032,7 @@ function simZhihuList(){
         <div class="zh-qcard-row">
           <div class="zh-qcard-main">
             <div class="zh-qcard-t">${esc(h.t)}</div>
-            <div class="zh-qcard-x">${esc((h.d||"").slice(0,90))}</div>
+            <div class="zh-qcard-x">${esc(padText(h.d, "zhihu", 150))}</div>
             <div class="zh-qcard-m"><span>${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(800000,9800000))+" 热度")}</span><span>${rndN(30,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${rndN(120,18000)}</span></div>
           </div>
           <div class="zh-qcard-thumb">${h.cover ? hotImg(h.cover) : `<div style="width:100%; height:100%; background:linear-gradient(${rnd(SIM_GRADS)}); display:flex; align-items:center; justify-content:center; font-size:26px">🔍</div>`}</div>
@@ -3023,7 +3044,7 @@ function simZhihuList(){
       <div class="zh-qcard-row">
         <div class="zh-qcard-main">
           <div class="zh-qcard-t">${esc(z[0])}</div>
-          <div class="zh-qcard-x">${esc(z[1])}</div>
+          <div class="zh-qcard-x">${esc(padText(z[1], "zhihu", 150))}</div>
           <div class="zh-qcard-m"><span>${z[2]}</span><span>${rndN(20,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${z[3]}</span></div>
         </div>
         <div class="zh-qcard-thumb"><div style="width:100%; height:100%; background:linear-gradient(${rnd(SIM_GRADS)}); display:flex; align-items:center; justify-content:center; font-size:26px">${rnd(["💬","🤔","📊","🎓","☕","🧠","📈","🔬"])}</div></div>
@@ -3050,7 +3071,7 @@ function simWeiboList(){
         : `<div class="wb-imgs">${pickN(WB_IMGS, 3).map(x=>`<div style="background:linear-gradient(${rnd(SIM_GRADS)})">${x}</div>`).join("")}</div>`;
       return `<div class="wb-card" data-sim-open="weibo:${i}">
         <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${g})">${e}</span><div><div class="wb-cname">${name} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
-        <div class="wb-ctext">${esc(h.t)}</div>
+        <div class="wb-ctext">${esc("#"+h.t+"# ")}${esc(padText(h.d, "weibo", 160))}</div>
         ${imgHtml}
         <div class="wb-cacts"><span>🔁 转发 ${rndN(80,42000)}</span><span>💬 ${rndN(200,98000)}</span><span>👍 ${typeof h.hot==="number" ? fmtW(h.hot) : rndN(1000,300000)}</span></div>
       </div>`;
@@ -3058,7 +3079,7 @@ function simWeiboList(){
     const p = WB_POSTS_POOL[it.i];
     return `<div class="wb-card" data-sim-open="weibo:${i}">
       <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${p[2]})">${p[1]}</span><div><div class="wb-cname">${p[0]} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
-      <div class="wb-ctext">${p[3]}</div>
+      <div class="wb-ctext">${padText(p[3], "weibo", 150)}</div>
       <div class="wb-imgs">${pickN(WB_IMGS, 3).map(e=>`<div style="background:linear-gradient(${rnd(["135deg,#f7971e,#ffd200","135deg,#11998e,#38ef7d","135deg,#1a2980,#26d0ce","135deg,#ff5f6d,#ffc371"])})">${e}</div>`).join("")}</div>
       <div class="wb-cacts"><span>🔁 转发 ${p[4]}</span><span>💬 ${p[5]}</span><span>👍 ${p[6]}</span></div>
     </div>`;
@@ -3073,7 +3094,7 @@ function simWechatList(){
   pickN(WX_POOL.map((w,i)=>i), 10).forEach(i=> items.push({ real:0, i }));    // 兜底 10 篇
   SIM_STATE.items.wechat = items;
   const cards = items.map((it,i)=>{
-    const w = it.real ? { t:it.h.t, x:(it.h.d||"").slice(0,42) || "热点话题 · 点击查看全文", g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
+    const w = it.real ? { t:it.h.t, x:padText((it.h.d||"").slice(0,70) || "热点话题 · 点击查看全文", "wechat", 100), g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
     return `<div class="wx-li" data-sim-open="wechat:${i}">
       <span class="wx-li-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span>
       <div class="wx-li-body"><div class="wx-li-t"><span>${esc(w.t)}</span><span class="time">${rnd(["上午 9:02","下午 2:15","晚上 10:03","昨天","前天"])}</span></div><div class="wx-li-x">${esc(w.x)}</div></div>
@@ -3242,7 +3263,7 @@ function simWeiboDetail(i){
 function simWechatArticle(i){
   const it = (SIM_STATE.items.wechat||[])[i];
   const real = it && it.real;
-  const w = real ? { t:it.h.t, x:(it.h.d||"").slice(0,42) || "热点话题 · 点击查看全文", g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
+  const w = real ? { t:it.h.t, x:padText((it.h.d||"").slice(0,70) || "热点话题 · 点击查看全文", "wechat", 100), g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
   const paras = real ? simParas(esc(w.t) + "。昨天起，这件事在各个群里都被刷屏了，不少人第一反应是不敢相信。", "wechat")
                      : pfParas("wechat", w);
   const recs = pickN(WX_POOL.filter((_,j)=>j!==i).map((_,k)=>k), 3);
@@ -3251,7 +3272,7 @@ function simWechatArticle(i){
     <div class="wx-art">
       <div class="wx-art-t">${esc(w.t)}</div>
       <div class="wx-art-meta"><span class="wx-art-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span><span class="wx-art-gz">${w.g}</span><span style="font-size:12px; color:#b2b2b2">${rnd(TIME_STR)}</span><span style="margin-left:auto; color:#576b95; font-size:13px; cursor:pointer">关注</span></div>
-      <div class="wx-art-body">${pfParas("wechat", w).map(p=>`<p>${p}</p>`).join("")}</div>
+      <div class="wx-art-body">${paras.map(p=>`<p>${p}</p>`).join("")}</div>
       <div class="wx-art-acts"><span>👍 ${fmtW(rndN(500,60000))}</span><span>💛 在看 ${fmtW(rndN(300,20000))}</span><span>✈ 分享</span></div>
       <div class="wx-cmts"><div class="wx-cmts-t">精选留言（${rndN(30,600)}）</div>${pfComments("wechat", rndN(4,6))}</div>
       ${adWechatBanner()}
