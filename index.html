@@ -468,7 +468,7 @@ select option{background:var(--card); color:var(--text)}
 .wx-banner-img img{width:100%; height:100%; object-fit:cover; display:block; position:absolute; inset:0}
 .wx-banner-t{font-size:14px; font-weight:600; color:#191919; line-height:1.5}
 .wx-banner-s{font-size:12px; color:#9a9a9a; margin-top:5px}
-.wb-imgs div{height:116px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff}
+.wb-imgs div:not(.wb-img){height:116px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff}
 /* 相关推荐 */
 .pf-rel-title{font-size:16px; font-weight:700; color:var(--text); padding:16px 0 4px}
 .pf-rel{padding:12px 2px; border-bottom:1px solid var(--line); cursor:pointer}
@@ -1463,13 +1463,13 @@ function flip(dir){
     if(curPage > 0) curPage--;
     else if(curCh > 0){ curCh--; curPage = totalPages(curCh) - 1; }
   }
-  renderBar(dir); saveProgress();
+  renderBar(dir); saveProgress(); simNovelSync();
 }
 function gotoChapter(ci){
   if(!cur) return;
   curCh = Math.max(0, Math.min(cur.chapters.length - 1, ci));
   curPage = 0;
-  renderBar("next"); saveProgress(); fillChapterSelect();
+  renderBar("next"); saveProgress(); fillChapterSelect(); simNovelSync();
 }
 /* 点击 / 滚轮 */
 $("#zoneNext").addEventListener("click", ()=> flip("next"));
@@ -1583,19 +1583,11 @@ function setFavicon(emoji){
 setFavicon("📚");
 /* 手动老板键：顺带退出平台模拟页，露出完整学习站 */
 /* 手动老板键：
-   - 模拟平台页内（知乎/小红书/微博/微信）：Shift = 直接在页面上浮现/隐藏小说，不退出模拟层——正在刷热点本身就是最好的伪装
+   - 模拟平台页内：Shift = 融入式阅读开关——小说伪装成知乎回答/微博博文/小红书笔记/公众号文章直接长在页面里，别人看到的就是平台内容
    - 学习站界面：Shift = 经典伪装（Excel 标题 + 隐藏小说） */
 function bossToggle(){
   if(simOpen()){
-    const show = bar.classList.contains("info") || fb.classList.contains("hidden-bar") || !fb.classList.contains("open");   // 伪装中 / 浮窗没开 = 小说不可见 → 这次要显示
-    if(show){
-      setDisguise(false);                                 // 解除伪装（恢复标题/状态栏），模拟层本身不动
-      if(!fb.classList.contains("open")) toggleFb(true);  // 浮窗没开就自动打开，确保小说真的显示出来
-      else renderBar();
-    }else{
-      bar.classList.add("info");                          // 老板来了：小说秒隐，页面仍是干净的知乎/小红书
-      fb.classList.add("hidden-bar");
-    }
+    if(simNovelMode){ exitSimNovel(); }else{ enterSimNovel(); }
     return;
   }
   setDisguise(!disguised);
@@ -2251,6 +2243,15 @@ const WX_POOL = [
   { g:"下厨房", e:"🍳", c:"135deg,#f5515f,#9f041b", t:"10 分钟搞定的 5 款工作日早餐，第 3 款绝了", x:"打工人别再对付早餐了。食材前一天晚上备好，早上 10 分钟热腾腾出锅。", r:"3.9万" },
   { g:"槽值", e:"🧠", c:"135deg,#ff512f,#dd2476", t:"为什么你一到下午 3 点就特别想辞职？", x:"不是你矫情，是血糖、皮质醇和昼夜节律联合起来骗你。科学解释「下午的溃败感」。", r:"5.1万" },
   { g:"中国天气网", e:"🌤", c:"135deg,#1e9600,#fff95b", t:"今冬会是「冷冬」吗？权威预报来了", x:"拉尼娜事件已形成，但冷冬与否还要看环流。附各省今冬气温偏高/偏低预测图。", r:"4.7万" },
+  { g:"三联生活周刊", e:"📰", c:"135deg,#0f2027,#2c5364", t:"菜市场为什么越来越好玩了？", x:"年轻人重新走进菜市场，买的不只是菜，是一种「确定性」：看得见的新鲜，摸得着的物价。", r:"6.8万" },
+  { g:"果壳", e:"🔬", c:"135deg,#11998e,#38ef7d", t:"运动 30 分钟才开始燃脂？这是个流传 40 年的误解", x:"从第一分钟开始脂肪就在供能，只是比例不同。别再拿这句话劝退想运动的人了。", r:"7.3万" },
+  { g:"新周刊", e:"🗞", c:"135deg,#ff512f,#dd2476", t:"「微度假」爆火：为什么大家不去远方了？", x:"三个小时高铁圈、两天一夜、不做攻略。不是放弃了远方，是把休息本身当成了目的地。", r:"5.2万" },
+  { g:"混乱博物馆", e:"🧭", c:"135deg,#373b44,#4286f4", t:"地铁线路图为什么越来越像一团毛线？", x:"每加一条线都是多方博弈的结果。你以为的设计问题，其实全是历史遗留+现实妥协。", r:"3.9万" },
+  { g:"KnowYourself", e:"🧠", c:"135deg,#654ea3,#eaafc8", t:"「精神内耗」的尽头，是学会具体", x:"焦虑的反面不是平静，是具体。把「我很糟糕」翻译成「我今天要回三封邮件」，事情就开始好转。", r:"9.1万" },
+  { g:"看理想", e:"🎻", c:"135deg,#4b6cb7,#182848", t:"下班后的生活，决定了你是谁", x:"工作定义你的职业，下班后的四小时定义你这个人的浓度。哪怕只是安静地做一顿饭。", r:"4.6万" },
+  { g:"极昼工作室", e:"📷", c:"135deg,#232526,#414345", t:"县城咖啡店老板：我不是在创业，是在守店", x:"一年亏 12 万，关店的前一晚，熟客送来一箱苹果。「再撑撑」，他说，然后真的又撑了一年。", r:"3.4万" },
+  { g:"局部气候调查组", e:"🗺", c:"135deg,#134e5e,#71b280", t:"中国南北差异最大的省界，不在秦岭？", x:"普查数据说，饮食、方言、作息的分界线互相都不重合。所谓「南北分界」，是很多条渐变色。", r:"2.8万" },
+  { g:"GQ报道", e:"✒️", c:"135deg,#0f2027,#2c5364", t:"35 岁转行开货车的前程序员，现在怎么样了", x:"他说是这三年睡得最踏实的日子。「写代码时焦虑的是十年后，开车时焦虑的只有下一个路口。」", r:"8.4万" },
 ];
 /* ---- 平台模拟器：外壳 / 正文 / 评论 / 列表详情切换 ---- */
 const PF_BAR = {
@@ -2419,6 +2420,17 @@ const ZH_POOL = [
   ["上班摸鱼被领导发现了怎么办？","大方承认比慌张掩饰好。真正危险的不是摸鱼本身，是你摸鱼时那副「做贼心虚」的表情管理。","职场老油条", "4.7万"],
   ["如何看待「年轻人开始整顿周末」？","睡到自然醒、拒绝无效局、逛菜市场、citywalk。不是躺平，是把周末还给自己。","社会学研究生", "2.1万"],
   ["有什么道理是你工作了之后才懂的？","公司是个平台，不是家。你要带走的是能力、人脉和作品，而不是工牌和对工位的感情。","十年老兵", "7.5万"],
+  ["如何看待「月薪 2 万舍不得买李宁」的现象？","不是买不起，是突然开始算这笔钱值不值。消费观的成熟，往往就发生在某一次犹豫里。","球鞋行业观察者", "3.6万"],
+  ["为什么感觉现在的番茄没有小时候好吃了？","不是错觉。现在的品种优先选耐储运和外观，糖酸比是牺牲项。想吃小时候的味道，得买老品种。","农业相关从业者", "5.9万"],
+  ["有哪些事情坚持三年以上，真的会改变一个人？","写日记。三年后回头看，你会发现自己烦恼的东西根本没变过，变的是应对的心态。","坚持记录 1200 天", "4.4万"],
+  ["如何评价「年轻人不上进了」这种说法？","不是不上进，是上进的定义变了。从「升职加薪」变成「搞副业、攒技能、少负债」，方向没变，路径变了。","社会学搬砖人", "2.7万"],
+  ["为什么高铁上的人都很安静，火车上的人却爱聊天？","高铁上坐的是「赶时间的人」，火车上坐的是「在路上的人」。时间观不同，社交密度就不同。","铁路爱好者", "8.2万"],
+  ["有哪些外行看起来很牛，内行一眼就看出很水的职业？","一切以「战略」「顶层设计」开头但不能落地的岗位。真正干活的人，名片上只印部门。","互联网老兵", "3.9万"],
+  ["普通人存够 50 万需要多久？不吃不喝算吗？","不吃不喝没意义。按月存 3000 算，要 14 年——所以重点是提高收入上限，而不是压缩下限。","攒钱博主", "6.1万"],
+  ["你见过最聪明的迟到借口是什么？","最聪明的不是借口，是提前十分钟到公司的人——他们从来不需要借口。","职场观察日记", "1.5万"],
+  ["有哪些 once 看起来很高端、实际成本极低的东西？","健身私教课的「体态评估」、理财课的「免费诊断」、装修公司的「免费设计」。本质都是获客钩子。","行业内部人", "4.8万"],
+  ["为什么医院里的医生说话都那么简短？","一天看 80 个号，说长话的时间是挤出来的。而且他们知道：你记住的往往只有最后一句话。","三甲医院家属", "5.5万"],
+  ["如何看待越来越多人开始「电子断舍离」？","卸载 30 个 App 之后，屏幕时间从 7 小时降到 3 小时。删掉的不是 App，是焦虑源。","极简主义实践者", "3.3万"],
 ];
 function zhItem(z, i){
   return `<div class="zh-q pf-open" data-pf-open data-pf="zhihu" data-i="${i}"><div class="zh-title">${z[0]}</div><div class="zh-ans"><span class="zh-auth">${z[2]}：</span>${z[1]}</div><div class="zh-up"><span>👍 赞同 <b>${z[3]}</b></span><span>💬 ${rndN(120, 2600)} 评论</span><span>${rnd(TIME_STR)}</span></div></div>`;
@@ -2463,6 +2475,18 @@ const WB_POSTS_POOL = [
   ["科学边角料", "🔬", "135deg,#0f9b8e,#38ef7d", "冷知识：冰箱不是保险箱。李斯特菌在冷藏温度下照样慢慢繁殖，剩菜超过三天该扔就扔，别省那几块钱。", "1567", "6204", "5.1万"],
   ["养猫的程序员", "🐱", "135deg,#373b44,#4286f4", "改 bug 改到凌晨一点，一回头，猫把我的机械键盘当成了猫抓板。它抓得越起劲，我离脱发越近。", "921", "5120", "4.3万"],
   ["旅行计划废柴", "🎒", "135deg,#134e5e,#71b280", "做了 20 页攻略的青海行，最后在酒店旁边的小面馆连吃三天。所以说旅行的意义就是：计划是用来推翻的。", "1102", "3988", "3.7万"],
+  ["地铁观察员", "🚇", "135deg,#0f2027,#2c5364", "早高峰的地铁就是一种大型人类行为展览：有人背单词，有人补觉，有人对着手机傻笑。大家都在用自己的方式熬过这一小时。", "1780", "7214", "5.8万"],
+  ["减肥失败研究员", "🥗", "135deg,#11998e,#38ef7d", "今天宣布一个重大发现：沙拉酱的热量比沙拉本身高。我减的这三斤，全是酱料帮我攒回来的。", "645", "2910", "1.9万"],
+  ["职场显微镜", "🔍", "135deg,#232526,#414345", "会议定律：会前说「简单同步一下」的，至少开一小时；会上说「我补充一点」的，才是真正的重头戏。", "2311", "8902", "6.6万"],
+  ["周末摄影团", "📷", "135deg,#1a2980,#26d0ce", "拍日出最好的地方不是山顶，是床上——用手机看别人拍的，又暖和又出片。", "388", "1544", "8821"],
+  ["书店常驻民", "📖", "135deg,#4b6cb7,#182848", "书店里最真实的一幕：励志区没人，考试区挤满，文学区坐着三个睡着的。这就是生活本来的排序。", "923", "4306", "3.2万"],
+  ["装修踩坑实录", "🛠", "135deg,#ff512f,#dd2476", "全屋定制第 14 天：项目经理说「下周一定好」。第 21 天，还是这句话。我怀疑「下周」是他们公司的一个计量单位。", "1567", "6420", "4.7万"],
+  ["奶茶品鉴协会", "🧋", "135deg,#f7971e,#ffd200", "三分糖是这个时代最伟大的谎言之一——喝完还是齁，还是腻，还是第二天称体重时想穿越回去改成不另加糖。", "534", "2048", "1.6万"],
+  ["规律作息大使", "⏰", "135deg,#134e5e,#71b280", "连续早睡打卡第 7 天。目前成果：躺下后多想了 4 小时的人生，凌晨 1 点睡的。早睡是个系统工程，我只完成了「躺下」。", "712", "3355", "2.3万"],
+  ["蔬菜园丁老王", "🥬", "135deg,#11998e,#38ef7d", "阳台种菜一个月总结：生菜活了，香菜疯了，辣椒蔫了。最大的收成不是菜，是每天早上看它们一眼的快乐。", "289", "1207", "9421"],
+  ["情感树洞君", "💬", "135deg,#654ea3,#eaafc8", "成年人的崩溃都是静音模式：白天在工位上谈笑风生，晚上在车里坐十分钟才上楼。抱抱每一个撑着的你。", "3421", "12876", "8.9万"],
+  ["楼市看门人", "🏠", "135deg,#232526,#414345", "中介朋友圈现状：上半年「再不买就涨了」，下半年「业主诚心出售，价格好谈」。变的是话术，不变的是催你做决定。", "1876", "7504", "5.2万"],
+  ["考试周幸存者", "📝", "135deg,#373b44,#4286f4", "复习进度汇报：第三章看了三遍——第一遍是预习，第二遍是学习，第三遍是确认自己第一遍第二遍白看了。", "945", "4032", "3.1万"],
 ];
 function wbHotRow(h, i){
   const cls = h[1]==="爆"?"wb-bao":h[1]==="沸"?"wb-fei":h[1]==="热"?"wb-hot":h[1]==="新"?"wb-new":"wb-re";
@@ -2503,6 +2527,19 @@ const XHS_POOL = [
   ["💾", "135deg,#4b6cb7,#182848", "电脑桌面整理术，同事看了都问我是不是换工位了", "效率工具人", "1.7万"],
   ["🌧", "135deg,#4ca1af,#c4e0e5", "下雨天的正确打开方式：窗边+热茶+老电影", "宅家研究员", "2.2万"],
   ["💪", "135deg,#ff9a9e,#fecfef", "每天 10 分钟工位拉伸，富贵包真的会小!", "颈椎报警中", "3.8万"],
+  ["🥘", "135deg,#f7971e,#ffd200", "跟着妈妈学的红烧肉，办公室同事都来蹲菜谱", "厨房小白的逆袭", "5.5万"],
+  ["🧴", "135deg,#a1c4fd,#c2e9fb", "换季烂脸急救指南｜皮肤科朋友教我的三件事", "敏感肌自救中", "4.1万"],
+  ["🎬", "135deg,#2b5876,#4e4376", "最近看的 8 部高分冷门片，第一部就惊艳到了", "片荒救援队", "2.6万"],
+  ["🛏", "135deg,#d9a7c7,#fffcdc", "出租屋 200 块改造卧室，同事以为我搬家了", "租房美学研究员", "6.3万"],
+  ["🍜", "135deg,#fc4a1a,#f7b733", "本地人才知道的 5 家苍蝇馆子，人均不到 30", "街头觅食家", "7.2万"],
+  ["🚗", "135deg,#4b6cb7,#182848", "新手司机第一年，我总结了 10 条保命经验", "马路新学员", "1.8万"],
+  ["🧳", "135deg,#134e5e,#71b280", "两天一夜citywalk路线｜不赶时间才是旅行", "步行爱好者", "3.4万"],
+  ["☕", "135deg,#cfd9df,#e2ebf0", "公司楼下咖啡测评（第 12 家）：踩雷预警", "咖啡因依赖者", "2.1万"],
+  ["📸", "135deg,#fbc2eb,#a6c1ee", "手机也能拍出胶片感！设置截图全给你们了", "拍照废柴联盟", "5.7万"],
+  ["🪴", "135deg,#84fab0,#8fd3f4", "养不死系列绿植top5，租房也能拥有小森林", "植物杀手 rehab", "2.9万"],
+  ["💊", "135deg,#ff6b6b,#feca57", "打工人常备药清单，第 4 个真的别乱吃", "药学专业路人", "3.6万"],
+  ["🎧", "135deg,#232526,#414345", "通勤歌单分享｜戴上耳机就不想下车的程度", "音乐节蚁人", "4.4万"],
+  ["🧾", "135deg,#654ea3,#eaafc8", "记账一年后发现：真正吞钱的是这类支出", "存钱 simulation", "6.8万"],
 ];
 function xhsList(){
   let html = `<div class="xhs-grid" style="margin-top:10px">${pickN(XHS_POOL.map((x,i)=>i), 6).map(i=>xhsCard(XHS_POOL[i], i)).join("")}</div>`;
@@ -2801,7 +2838,7 @@ const simRoot = document.createElement("div");
 simRoot.id = "simRoot";
 document.body.appendChild(simRoot);
 const simOpen = ()=> simRoot.classList.contains("open");
-function closeSim(){ simRoot.classList.remove("open"); simRoot.innerHTML = ""; }
+function closeSim(){ simNovelMode = false; simRoot.classList.remove("open"); simRoot.innerHTML = ""; }
 
 /* ---------- 真实热榜抓取（nginx 同源反代 /hotapi/ → 60s.viki.moe） ---------- */
 /* 平台 → 数据源：知乎=知乎热榜、微博=微博热搜、小红书=抖音热点（生活方式类标题+真实封面）、微信=今日头条热榜 */
@@ -2938,8 +2975,8 @@ function hotImg(url){
 function simXhsList(){
   const hot = SIM_STATE.hot.xhs || [];
   const items = [];
-  hot.slice(0, 6).forEach(h=> items.push({ real:1, h }));
-  pickN(XHS_POOL.map((x,i)=>i), Math.max(3, 9-items.length)).forEach(i=> items.push({ real:0, i }));
+  hot.forEach(h=> items.push({ real:1, h }));                                  // 真实热榜全量
+  pickN(XHS_POOL.map((x,i)=>i), 12).forEach(i=> items.push({ real:0, i }));   // 兜底 12 篇
   SIM_STATE.items.xhs = items;
   const cards = items.map((it,i)=>{
     if(it.real){
@@ -2964,8 +3001,8 @@ function simXhsList(){
 function simZhihuList(){
   const hot = SIM_STATE.hot.zhihu || [];
   const items = [];
-  hot.slice(0, 5).forEach(h=> items.push({ real:1, h }));
-  pickN(ZH_POOL.map((z,i)=>i), Math.max(3, 7-items.length)).forEach(i=> items.push({ real:0, i }));
+  hot.forEach(h=> items.push({ real:1, h }));                                  // 真实热榜全量
+  pickN(ZH_POOL.map((z,i)=>i), 10).forEach(i=> items.push({ real:0, i }));    // 兜底 10 问
   SIM_STATE.items.zhihu = items;
   const cards = items.map((it,i)=>{
     if(it.real){
@@ -2977,15 +3014,20 @@ function simZhihuList(){
             <div class="zh-qcard-x">${esc((h.d||"").slice(0,90))}</div>
             <div class="zh-qcard-m"><span>${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(800000,9800000))+" 热度")}</span><span>${rndN(30,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${rndN(120,18000)}</span></div>
           </div>
-          ${h.cover ? `<div class="zh-qcard-thumb">${hotImg(h.cover)}</div>` : ""}
+          <div class="zh-qcard-thumb">${h.cover ? hotImg(h.cover) : `<div style="width:100%; height:100%; background:linear-gradient(${rnd(SIM_GRADS)}); display:flex; align-items:center; justify-content:center; font-size:26px">🔍</div>`}</div>
         </div>
       </div>`;
     }
     const z = ZH_POOL[it.i];
     return `<div class="zh-qcard" data-sim-open="zhihu:${i}">
-      <div class="zh-qcard-t">${esc(z[0])}</div>
-      <div class="zh-qcard-x">${esc(z[1])}</div>
-      <div class="zh-qcard-m"><span>${z[2]}</span><span>${rndN(20,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${z[3]}</span></div>
+      <div class="zh-qcard-row">
+        <div class="zh-qcard-main">
+          <div class="zh-qcard-t">${esc(z[0])}</div>
+          <div class="zh-qcard-x">${esc(z[1])}</div>
+          <div class="zh-qcard-m"><span>${z[2]}</span><span>${rndN(20,900)} 回答</span><span>${rnd(TIME_STR)}</span><span class="zh-qcard-v">▲ 赞同 ${z[3]}</span></div>
+        </div>
+        <div class="zh-qcard-thumb"><div style="width:100%; height:100%; background:linear-gradient(${rnd(SIM_GRADS)}); display:flex; align-items:center; justify-content:center; font-size:26px">${rnd(["💬","🤔","📊","🎓","☕","🧠","📈","🔬"])}</div></div>
+      </div>
     </div>`;
   });
   cards.splice(3, 0, adZhihuCard());        // 信息流第 4 条插广告卡
@@ -2995,8 +3037,8 @@ const WB_IMGS = ["🌅","🍜","🐱","📸","🌊","🌇","🎧","🍫","🐕",
 function simWeiboList(){
   const hot = SIM_STATE.hot.weibo || [];
   const items = [];
-  hot.slice(0, 4).forEach(h=> items.push({ real:1, h }));
-  pickN(WB_POSTS_POOL.map((p,i)=>i), Math.max(3, 6-items.length)).forEach(i=> items.push({ real:0, i }));
+  hot.forEach(h=> items.push({ real:1, h }));                                  // 真实热搜全量
+  pickN(WB_POSTS_POOL.map((p,i)=>i), 8).forEach(i=> items.push({ real:0, i }));// 兜底 8 博
   SIM_STATE.items.weibo = items;
   const cards = items.map((it,i)=>{
     if(it.real){
@@ -3027,8 +3069,8 @@ function simWeiboList(){
 function simWechatList(){
   const hot = SIM_STATE.hot.wechat || [];
   const items = [];
-  hot.slice(0, 5).forEach(h=> items.push({ real:1, h }));
-  pickN(WX_POOL.map((w,i)=>i), Math.max(3, 8-items.length)).forEach(i=> items.push({ real:0, i }));
+  hot.forEach(h=> items.push({ real:1, h }));                                  // 真实头条热榜全量
+  pickN(WX_POOL.map((w,i)=>i), 10).forEach(i=> items.push({ real:0, i }));    // 兜底 10 篇
   SIM_STATE.items.wechat = items;
   const cards = items.map((it,i)=>{
     const w = it.real ? { t:it.h.t, x:(it.h.d||"").slice(0,42) || "热点话题 · 点击查看全文", g:rnd(WX_POOL).g, c:rnd(SIM_GRADS) } : WX_POOL[it.i];
@@ -3069,8 +3111,8 @@ function simWeiboHeader(){
 function simZhihuSide(){
   const hot = SIM_STATE.hot.zhihu || [];
   const rows = hot.length
-    ? hot.slice(0, 8).map((h,i)=>`<div class="zh-hotrow" data-sim-open="zhihu:${i}"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(h.t)}</span><span class="zh-hot-v">${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(80000,9800000))+" 热度")}</span></div>`).join("")
-    : pickN(ZH_POOL.map(z=>z[0]), 8).map((t,i)=>`<div class="zh-hotrow"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(t)}</span><span class="zh-hot-v">${fmtW(rndN(80000, 9800000))} 热度</span></div>`).join("");
+    ? hot.slice(0, 15).map((h,i)=>`<div class="zh-hotrow" data-sim-open="zhihu:${i}"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(h.t)}</span><span class="zh-hot-v">${typeof h.hot==="number" ? fmtW(h.hot)+" 热度" : (h.hot||fmtW(rndN(80000,9800000))+" 热度")}</span></div>`).join("")
+    : pickN(ZH_POOL.map(z=>z[0]), 15).map((t,i)=>`<div class="zh-hotrow"><span class="zh-hot-n ${i<3?"top":""}">${i+1}</span><span class="zh-hot-t">${esc(t)}</span><span class="zh-hot-v">${fmtW(rndN(80000, 9800000))} 热度</span></div>`).join("");
   return `<div class="zh-card"><div class="zh-side-h">🔥 知乎热榜</div>
     ${rows}
   </div>
@@ -3081,7 +3123,7 @@ function simWeiboSide(){
   const hot = SIM_STATE.hot.weibo || [];
   const tagFor = i => i===0 ? "爆" : i===1 ? "沸" : i===2 ? "热" : i===3 ? "新" : "";
   const lines = hot.length
-    ? hot.slice(0, 10).map((h,i)=>{
+    ? hot.slice(0, 25).map((h,i)=>{
         const tg = tagFor(i);
         return `<div class="wb-hotline" data-sim-open="weibo:${i % SIM_STATE.items.weibo.length}"><span class="wb-hot-n ${i<3?"r"+(i+1):""}">${i+1}</span><span class="wb-hot-t">${esc(h.t)}</span>${tg?`<span class="wb-tag" style="${tags[tg]}">${tg}</span>`:""}<span class="wb-hot-v">${typeof h.hot==="number" ? fmtW(h.hot) : rndN(10, 990)+"万"}</span></div>`;
       }).join("")
@@ -3254,6 +3296,124 @@ function simWechat(){
 const SIM_BUILD = { xhs:simXhs, zhihu:simZhihu, weibo:simWeibo, wechat:simWechat };
 const SIM_OPENERS = { xhs:simXhsNote, zhihu:simZhihuQ, weibo:simWeiboDetail, wechat:simWechatArticle };
 
+/* ---------- 融入式小说模式：小说正文伪装成平台原生内容 ----------
+   别人看到的是一篇知乎回答 / 一条读书博主微博 / 一篇小红书笔记 / 一篇公众号文章，
+   实际显示的是小说当前页，点击/滚轮照常翻页。 */
+let simNovelMode = false;
+const NOVEL_FAKE_Q = ["有哪些小说让你读了一遍还想再读？","你看过三遍以上的小说是什么？","有没有一本让你熬夜也要看完的小说？","哪本小说的后劲让你缓了好多天？"];
+const NOVEL_BLOGGER = ["拾句小馆","深夜读书记","纸页之间","一页书斋","枕边书摘"];
+function chunkText(txt, n){
+  n = n || 90;
+  const out = []; let buf = "";
+  for(const s of txt.split(/(?<=[。！？；…])/g)){
+    buf += s;
+    if(buf.length >= n){ out.push(buf); buf = ""; }
+  }
+  if(buf) out.push(buf);
+  return out;
+}
+function novelParas(){
+  if(!cur) return ["在 设置 → 小说 中导入 TXT，即可开始阅读（仅存在本地）"];
+  return chunkText(pageStr(curCh, curPage) || "（本章完）");
+}
+function novelBookName(){ return cur ? (cur.name || "无名的书") : "未导入"; }
+function simNovelBodyHtml(){
+  return novelParas().map(p=>`<p>${esc(p)}</p>`).join("");
+}
+/* 知乎：伪装成一篇回答 */
+function simZhihuNovel(){
+  const q = rnd(NOVEL_FAKE_Q), who = rnd(NOVEL_BLOGGER);
+  return `<div class="zh-root">${simZhihuHeader()}
+    <div class="zh-main"><div class="zh-col">
+      <h1 class="zh-qtitle-big">${esc(q)}</h1>
+      <div class="zh-qmeta"><span>🔄 关注 ${fmtW(rndN(800,46000))}</span><span>👁 ${fmtW(rndN(200000,9800000))} 浏览</span><button class="zh-btn-blue">✏️ 写回答</button></div>
+      <div class="zh-ans">
+        <div class="pf-ameta" style="padding-top:0"><span class="pf-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376)">📖</span><div><div class="pf-aname">${who}</div><div class="pf-asub">${rndN(1,20)} 万人关注 · 优质答主</div></div></div>
+        <div class="zh-vote"><span>▲ 赞同 ${rndN(1200,32000)}</span><span>💬 ${rndN(200,2600)}</span></div>
+        <div class="zh-ansbody sim-novel-body">${simNovelBodyHtml()}</div>
+        <div class="zh-ansfoot">发布于 ${rnd(TIME_STR)} · 著作权归作者所有 · ${rndN(400,9000)} 次收藏</div>
+      </div>
+      <div class="zh-cmthead">${rndN(200,3400)} 条评论</div>
+      <div class="zh-card" style="padding:4px 20px 10px">${pfComments("zhihu", rndN(4,6))}</div>
+    </div>
+    <div class="zh-side">${simZhihuSide()}</div>
+    </div>
+  </div>`;
+}
+/* 微博：伪装成读书博主的夜读博文 */
+function simWeiboNovel(){
+  const who = rnd(NOVEL_BLOGGER), e = rnd(["📖","🌙","☕"]);
+  const g = rnd(SIM_GRADS);
+  return `<div class="wb-root">${simWeiboHeader()}
+    <div class="wb-main"><div class="wb-feed">
+      <div class="wb-card">
+        <div class="wb-chead"><span class="wb-cava" style="background:linear-gradient(${g})">${e}</span><div><div class="wb-cname">${who} <span class="wb-v">⚡</span></div><div class="wb-ctime">${rnd(TIME_STR)} · 来自微博网页版</div></div></div>
+        <div class="wb-ctext" style="font-size:15.5px">#夜读# 《${esc(novelBookName())}》<div class="sim-novel-body" style="margin-top:6px">${simNovelBodyHtml()}</div></div>
+        <div style="font-size:12px; color:#939393; padding:6px 0">${rndN(15,58)} 分钟前 · ${fmtW(rndN(30000,9000000))} 次阅读</div>
+        <div class="wb-cacts"><span>🔁 转发 ${rndN(300,42000)}</span><span>💬 ${rndN(500,98000)}</span><span>👍 ${rndN(2000,300000)}</span></div>
+      </div>
+      <div class="wb-card"><div style="font-size:14px; font-weight:700; color:#333; padding-bottom:6px">热评（${rndN(300,9000)}）</div>${pfComments("weibo", rndN(4,6))}</div>
+    </div>
+    <div class="wb-side">${simWeiboSide()}</div>
+    </div>
+  </div>`;
+}
+/* 小红书：瀑布流之上弹一篇"夜读书摘"笔记 */
+function simXhsNovel(){
+  return SIM_BUILD.xhs() + `<div class="xhs-mask" id="xhsModal">
+    <div class="xhs-modal">
+      <span class="xhs-x" data-sim-nexit>✕</span>
+      <div class="xhs-modal-cover" style="background:linear-gradient(${rnd(SIM_GRADS)})"><span style="font-size:100px">📖</span></div>
+      <div class="xhs-modal-body">
+        <div class="pf-ameta" style="padding:0 0 14px"><span class="pf-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376);width:44px;height:44px;font-size:20px">🌙</span><div><div class="pf-aname">${rnd(NOVEL_BLOGGER)}</div><div class="pf-asub">${rndN(12,96)} 篇笔记 · ${fmtW(rndN(2000,90000))} 粉丝</div></div><button class="xhs-follow">＋ 关注</button></div>
+        <div class="xhs-mtitle">夜读 | 《${esc(novelBookName())}》那些扎进心里的句子</div>
+        <div class="xhs-mbody sim-novel-body">${simNovelBodyHtml()}</div>
+        <div class="xhs-mdate">${rndN(1,28)} ${rnd(["10","12","14","16","18","20","21"])}:${rndN(10,59)} · IP 属地${rnd(["广东","浙江","江苏","上海","北京","四川","湖北","福建"])}</div>
+        <div class="xhs-mtags"><span># 夜读</span><span># 书摘</span><span># 治愈系</span></div>
+        <div class="xhs-macts"><span>❤ ${rndN(800,52000)}</span><span>⭐ ${fmtW(rndN(800,30000))}</span><span>💬 ${rndN(60,2400)}</span></div>
+        <div class="xhs-mcmts"><div class="xhs-mcmt-t">共 ${rndN(40,2200)} 条评论</div>${pfComments("xhs", rndN(4,6))}</div>
+      </div>
+    </div>
+  </div>`;
+}
+/* 微信：伪装成公众号连载文章 */
+function simWechatNovel(){
+  const gz = rnd(NOVEL_BLOGGER);
+  return `<div class="wx-root">
+    <div class="wxtop"><span>‹ 微信 ( ${rndN(1,9)} )</span><span class="wxtop-r"><span data-sim-nexit style="cursor:pointer">‹ 退出文章</span></span></div>
+    <div class="wx-art">
+      <div class="wx-art-t">《${esc(novelBookName())}》</div>
+      <div class="wx-art-meta"><span class="wx-art-ava" style="background:linear-gradient(135deg,#2b5876,#4e4376)">📖</span><span class="wx-art-gz">${gz}</span><span style="font-size:12px; color:#b2b2b2">${rnd(TIME_STR)}</span><span style="margin-left:auto; color:#576b95; font-size:13px; cursor:pointer">关注</span></div>
+      <div class="wx-art-body sim-novel-body">${simNovelBodyHtml()}</div>
+      <div class="wx-art-acts"><span>👍 ${fmtW(rndN(500,60000))}</span><span>💛 在看 ${fmtW(rndN(300,20000))}</span><span>✈ 分享</span></div>
+      <div class="wx-cmts"><div class="wx-cmts-t">精选留言（${rndN(30,600)}）</div>${pfComments("wechat", rndN(4,6))}</div>
+      ${adWechatBanner()}
+      <div style="padding:16px 4px 8px; font-size:14px; font-weight:700; color:#191919">喜欢此内容的人还喜欢</div>
+      ${pickN(WX_POOL, 3).map(w=>`<div class="wx-li"><span class="wx-li-ava" style="background:linear-gradient(${w.c})">${w.g[0]}</span><div class="wx-li-body"><div class="wx-li-t"><span>${esc(w.t)}</span></div><div class="wx-li-x">${esc(w.x)}</div></div></div>`).join("")}
+    </div>
+  </div>`;
+}
+const SIM_NOVEL_BUILD = { xhs:simXhsNovel, zhihu:simZhihuNovel, weibo:simWeiboNovel, wechat:simWechatNovel };
+function enterSimNovel(){
+  simNovelMode = true;
+  bar.classList.remove("info");
+  fb.classList.add("hidden-bar");               // 小说上页面了，浮窗隐藏
+  simRoot.innerHTML = SIM_NOVEL_BUILD[SIM_STATE.pf]();
+  simRoot.scrollTop = 0;
+}
+function exitSimNovel(){
+  simNovelMode = false;
+  fb.classList.remove("hidden-bar");            // 回普通平台页，浮窗恢复（若开着）
+  simRoot.innerHTML = SIM_BUILD[SIM_STATE.pf]();
+  simRoot.scrollTop = 0;
+}
+/* 翻页后同步融入区正文（flip 内调用） */
+function simNovelSync(){
+  if(!simNovelMode) return;
+  const body = document.querySelector("#simRoot .sim-novel-body");
+  if(body) body.innerHTML = simNovelBodyHtml();
+}
+
 function openSim(pf){
   SIM_STATE.pf = pf;
   SIM_STATE.hist = [];
@@ -3274,6 +3434,13 @@ function rndSimPf(){ return rnd(SIM_PFS); }
 
 /* ---------- 交互（事件委托） ---------- */
 simRoot.addEventListener("click", e=>{
+  /* 融入式阅读：点左 1/3 上一页、其余下一页；✕ / 退出文章 = 回普通平台页 */
+  if(simNovelMode){
+    if(e.target.closest("[data-sim-nexit]")){ exitSimNovel(); return; }
+    const r = simRoot.getBoundingClientRect();
+    flip((e.clientX - r.left) / r.width < 0.33 ? "prev" : "next");
+    return;
+  }
   const openEl = e.target.closest("[data-sim-open]");
   if(openEl){
     const [pf, i] = openEl.dataset.simOpen.split(":");
